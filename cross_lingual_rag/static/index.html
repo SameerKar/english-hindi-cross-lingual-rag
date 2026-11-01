@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Lingual Academic RAG — Interactive Studio & Live Console</title>
+  
+  <!-- Fonts: Inter for UI, JetBrains Mono for Code & Terminal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #07090e;
+      --bg-surface: #0d111a;
+      --bg-card: #121724;
+      --bg-card-hover: #171d2e;
+      --bg-input: #0a0d14;
+      --bg-terminal: #05060a;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.16);
+      --border-focus: #6366f1;
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --indigo: #6366f1;
+      --indigo-glow: rgba(99, 102, 241, 0.25);
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #a855f7;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-full: 9999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14.5px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(56, 189, 248, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Header Nav */
+    header.top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 9, 14, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--indigo), var(--cyan));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 0 16px var(--indigo-glow);
+    }
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+    .brand-text span {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .nav-status-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      outline: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--indigo), #4f46e5);
+      color: #fff;
+      box-shadow: 0 2px 10px var(--indigo-glow);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-medium);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .btn-danger {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #fb7185;
+    }
+    .btn-danger:hover {
+      background: rgba(244, 63, 94, 0.25);
+    }
+    .btn-sm { padding: 4px 10px; font-size: 11.5px; }
+
+    /* Layout Grid */
+    .main-container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+    @media (max-width: 1150px) {
+      .main-container { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Upload Zone */
+    .upload-dropzone {
+      border: 2px dashed rgba(99, 102, 241, 0.35);
+      background: rgba(99, 102, 241, 0.03);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--indigo);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: var(--indigo);
+    }
+    .upload-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .upload-hint {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .file-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .file-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--cyan);
+    }
+    .file-chip .remove-file {
+      cursor: pointer;
+      color: var(--rose);
+      font-weight: 700;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 13.5px;
+      transition: border 0.15s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--indigo);
+      box-shadow: 0 0 0 2px var(--indigo-glow);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 72px;
+    }
+
+    /* Quick Question Chips */
+    .sample-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .sample-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 3px 10px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .sample-chip:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: var(--text-main);
+    }
+
+    /* Results Grid */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 800px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+    .system-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      transition: border 0.15s ease;
+    }
+    .system-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .system-badge-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .sys-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.04em;
+    }
+    .sys-pill-c { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .sys-pill-d { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .sys-pill-b { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .sys-pill-a { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .latency-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+    }
+    .answer-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin-top: 8px;
+      color: #f1f5f9;
+    }
+    .chunk-list {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .chunk-item {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-secondary);
+    }
+
+    /* Terminal Window */
+    .terminal-card {
+      background: var(--bg-terminal);
+      border: 1px solid #1a2030;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 480px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+    }
+    .terminal-header {
+      background: #0a0d16;
+      border-bottom: 1px solid #182033;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .term-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .term-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .term-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+    .term-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-body {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .terminal-line {
+      margin-bottom: 2px;
+    }
+    .term-tag-upload { color: #38bdf8; font-weight: 600; }
+    .term-tag-ingest { color: #818cf8; font-weight: 600; }
+    .term-tag-embed { color: #c084fc; font-weight: 600; }
+    .term-tag-faiss { color: #34d399; font-weight: 600; }
+    .term-tag-sysc { color: #38bdf8; font-weight: 600; }
+    .term-tag-sysd { color: #10b981; font-weight: 600; }
+    .term-tag-query { color: #f59e0b; font-weight: 600; }
+    .term-tag-system { color: #94a3b8; font-weight: 600; }
+
+    /* Chunks Explorer List */
+    .chunks-scroll-area {
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .chunk-card-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+      transition: all 0.15s ease;
+    }
+    .chunk-card-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    .chunk-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* Modal Backdrop */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-card {
+      background: #0f1422;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      max-width: 650px;
+      width: 90%;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-close {
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="top-nav">
+    <div class="brand-wrap">
+      <div class="brand-logo">🔬</div>
+      <div class="brand-text">
+        <h1>Cross-Lingual Academic RAG Studio</h1>
+        <span>v2.5 · Single-Page Real-Time Live Architecture</span>
+      </div>
+    </div>
+
+    <div class="nav-status-group">
+      <div class="status-badge">
+        <div class="pulse-dot" id="ws-indicator"></div>
+        <span id="ws-status-text">Terminal Connected</span>
+      </div>
+      <div class="status-badge">
+        📚 <span id="stat-chunks-count">15</span> Chunks Active
+      </div>
+      <div class="status-badge" style="cursor: pointer;" onclick="openInfoModal()">
+        🤖 <span id="stat-model-mode">Deterministic Mock ($0)</span>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="openInfoModal()">
+        ℹ️ API & Model Info
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="restoreDefaultCorpus()">
+        🔄 Reset Default 5 Subjects
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Dashboard -->
+  <main class="main-container">
+
+    <!-- LEFT COLUMN: PDF Upload Studio & Query Lab -->
+    <div class="left-col">
+
+      <!-- 1. DYNAMIC PDF UPLOAD STUDIO -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">📥 Dynamic Multi-PDF Ingestion Studio</div>
+            <div class="card-subtitle">Upload any bunch of academic PDFs to extract pages, create page-aware chunks, and rebuild FAISS vector stores live.</div>
+          </div>
+        </div>
+
+        <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('pdf-file-input').click()">
+          <input type="file" id="pdf-file-input" multiple accept=".pdf" style="display: none;" onchange="handleFileSelect(event)">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">Drag & drop a bunch of PDFs here, or click to browse</div>
+          <div class="upload-hint">Upload 1, 2, 5, or 10 academic PDFs (Textbooks, Research Papers, Lecture Slides)</div>
+        </div>
+
+        <div class="file-chip-list" id="selected-files-list"></div>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px; margin-top: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Subject Category Name</label>
+            <input type="text" id="subject-input" class="form-input" value="custom_kb" placeholder="e.g. deep_learning, operating_systems">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Corpus Action Mode</label>
+            <select id="replace-corpus-select" class="form-select">
+              <option value="false">Append to Existing Corpus</option>
+              <option value="true">Replace Entire Corpus (Wipe old)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button class="btn btn-primary" id="btn-ingest" onclick="uploadAndIngestPDFs()" disabled>
+            ⚡ Ingest & Build Dual Vector Stores
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. INTERACTIVE QUERY LAB -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">💬 Cross-Lingual Question Lab (Systems A, B, C, D)</div>
+            <div class="card-subtitle">Formulate queries in Hindi to test System C (Translation) vs System D (Direct Multilingual) against your indexed PDFs.</div>
+          </div>
+        </div>
+
+        <!-- Quick Sample Chips -->
+        <div class="sample-chips">
+          <span style="font-size: 11px; color: var(--text-dim); margin-right: 4px;">Quick Benchmarks:</span>
+          <span class="sample-chip" onclick="loadSample('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail when a graph contains negative edge weights?', 'ALGO_01', 'Algorithms')">Dijkstra Negative Weights</span>
+          <span class="sample-chip" onclick="loadSample('डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman\'s conditions) क्या हैं?', 'What are Coffman\'s four necessary conditions for deadlock?', 'OS_01', 'Operating Systems')">Deadlock 4 Conditions</span>
+          <span class="sample-chip" onclick="loadSample('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों (properties) का पूरा अर्थ क्या है?', 'What do the ACID properties stand for in transaction processing?', 'DBMS_01', 'DBMS')">ACID Properties</span>
+          <span class="sample-chip" onclick="loadSample('टीसीपी 3-वे हैंडशेक (TCP 3-Way Handshake) के तीन चरण क्या हैं?', 'What are the three steps in the TCP 3-Way Handshake?', 'NET_01', 'Computer Networks')">TCP 3-Way Handshake</span>
+          <span class="sample-chip" onclick="loadSample('पेज रिप्लेसमेंट में बेलाडी की विसंगति (Belady\'s Anomaly) क्या है?', 'What is Belady\'s Anomaly in page replacement?', 'OS_02', 'Operating Systems')">Belady's Anomaly</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Hindi Question (Inputs for Systems C & D)</label>
+            <textarea id="query-hi-input" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">English Question (Optional Baseline for B)</label>
+            <textarea id="query-en-input" class="form-textarea" placeholder="English equivalent question for monolingual upper-bound baseline..."></textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <div style="display: flex; gap: 14px; font-size: 12px; color: var(--text-muted);">
+            <label style="cursor: pointer;"><input type="checkbox" id="chk-c" checked> System C</label>
+            <label style="cursor: pointer;"><input type="checkbox" id="chk-d" checked> System D</label>
+            <label style="cursor: pointer;"><input type="checkbox" id="chk-b" checked> System B</label>
+            <label style="cursor: pointer;"><input type="checkbox" id="chk-a" checked> System A</label>
+          </div>
+          <button class="btn btn-primary" id="btn-run-query" onclick="executeCrossLingualQuery()">
+            🚀 Run Query Across Systems
+          </button>
+        </div>
+
+        <!-- Results Display Cards -->
+        <div class="results-grid" id="results-container" style="display: none;">
+          
+          <!-- System C -->
+          <div class="system-card" id="card-sys-c">
+            <div class="system-badge-header">
+              <span class="sys-pill sys-pill-c">SYSTEM C · TRANSLATION RAG</span>
+              <span class="latency-pill" id="lat-sys-c">0.0 ms</span>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 4px;">
+              <strong>Translated Query:</strong> <span id="trans-query-c" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace;">-</span>
+            </div>
+            <div class="answer-box" id="ans-sys-c">Awaiting execution...</div>
+            <div class="chunk-list" id="chunks-sys-c"></div>
+          </div>
+
+          <!-- System D -->
+          <div class="system-card" id="card-sys-d">
+            <div class="system-badge-header">
+              <span class="sys-pill sys-pill-d">SYSTEM D · DIRECT MULTILINGUAL RAG</span>
+              <span class="latency-pill" id="lat-sys-d">0.0 ms</span>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 4px;">
+              <strong>Bridging:</strong> <span style="color: var(--emerald);">Zero-Shot Vector Space Alignment (No MT)</span>
+            </div>
+            <div class="answer-box" id="ans-sys-d">Awaiting execution...</div>
+            <div class="chunk-list" id="chunks-sys-d"></div>
+          </div>
+
+          <!-- System B -->
+          <div class="system-card" id="card-sys-b">
+            <div class="system-badge-header">
+              <span class="sys-pill sys-pill-b">SYSTEM B · MONOLINGUAL ENGLISH RAG</span>
+              <span class="latency-pill" id="lat-sys-b">0.0 ms</span>
+            </div>
+            <div class="answer-box" id="ans-sys-b">Awaiting execution...</div>
+            <div class="chunk-list" id="chunks-sys-b"></div>
+          </div>
+
+          <!-- System A -->
+          <div class="system-card" id="card-sys-a">
+            <div class="system-badge-header">
+              <span class="sys-pill sys-pill-a">SYSTEM A · DIRECT LLM BASELINE</span>
+              <span class="latency-pill" id="lat-sys-a">0.0 ms</span>
+            </div>
+            <div class="answer-box" id="ans-sys-a">Awaiting execution...</div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Live Terminal & Active Chunks Explorer -->
+    <div class="right-col">
+
+      <!-- 3. LIVE TERMINAL WINDOW -->
+      <section class="terminal-card">
+        <div class="terminal-header">
+          <div class="term-dots">
+            <div class="term-dot dot-red"></div>
+            <div class="term-dot dot-yellow"></div>
+            <div class="term-dot dot-green"></div>
+          </div>
+          <div class="term-title">bash — cross_lingual_rag.live_terminal</div>
+          <div class="term-actions">
+            <button class="btn btn-outline btn-sm" onclick="runPytestCommand()">🧪 Run Pytest</button>
+            <button class="btn btn-outline btn-sm" onclick="runBenchmarkCommand()">📊 Benchmark</button>
+            <button class="btn btn-outline btn-sm" onclick="clearTerminal()">🧹 Clear</button>
+          </div>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-line">[SYSTEM] Initializing Cross-Lingual Academic RAG Live Terminal...</div>
+          <div class="terminal-line">[SYSTEM] English Embedder: sentence-transformers/all-mpnet-base-v2 (768d)</div>
+          <div class="terminal-line">[SYSTEM] Multilingual Embedder: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (384d)</div>
+          <div class="terminal-line">[SYSTEM] Terminal socket listening on ws://localhost:8000/ws/terminal.</div>
+        </div>
+      </section>
+
+      <!-- 4. ACTIVE CHUNKS EXPLORER -->
+      <section class="card" style="margin-top: 20px;">
+        <div class="card-header">
+          <div>
+            <div class="card-title">📚 Active Chunks & Vector Store Explorer</div>
+            <div class="card-subtitle">Real-time inspection of all page-aware chunks indexed in the FAISS vector stores.</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="fetchChunksList()">🔄 Refresh</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+          <input type="text" id="chunk-search-input" class="form-input" placeholder="🔍 Search chunk text..." oninput="filterChunksDisplay()">
+          <select id="chunk-subject-select" class="form-select" onchange="filterChunksDisplay()">
+            <option value="all">All Subjects</option>
+          </select>
+        </div>
+
+        <div class="chunks-scroll-area" id="chunks-container">
+          <div style="text-align: center; padding: 20px; color: var(--text-dim);">Loading active chunks...</div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- AI Model & API Transparency Modal -->
+  <div class="modal-overlay" id="info-modal" onclick="if(event.target===this) closeInfoModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size: 16px; font-weight: 700;">🤖 AI Model & API Key Transparency Guide</h3>
+        <span class="modal-close" onclick="closeInfoModal()">&times;</span>
+      </div>
+      <div style="font-size: 13.5px; line-height: 1.7; color: var(--text-muted);">
+        <p><strong>1. Why does `gpt-4o-mini` appear in `config.yaml`?</strong><br>
+        `gpt-4o-mini` is the default model configuration label in the project's hyperparameter config file.</p>
+        
+        <p style="margin-top: 10px;"><strong>2. Did it use an API key or charge anything?</strong><br>
+        <span style="color: var(--emerald); font-weight: 600;">No! Absolutely not.</span> In <code>src/generation.py</code>, the code inspects <code>OPENAI_API_KEY</code>. Since no key was set in your environment, it automatically switched to <strong>Deterministic Context-Grounded Synthesis</strong> ($0 cost). It parses the top retrieved chunk passage and cites the facts directly without calling external APIs.</p>
+
+        <p style="margin-top: 10px;"><strong>3. Can I connect a Real Free LLM?</strong><br>
+        Yes! You can use <strong>Google Gemini 2.0 Flash</strong> (100% Free at Google AI Studio) or <strong>Ollama</strong> (100% Free offline local LLM). Just set:
+        <pre style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 4px; margin-top: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--cyan);">$env:GEMINI_API_KEY = "YOUR_FREE_KEY"</pre>
+        and the generator will connect to Gemini live at $0 cost!</p>
+      </div>
+      <div style="margin-top: 18px; text-align: right;">
+        <button class="btn btn-primary btn-sm" onclick="closeInfoModal()">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Client -->
+  <script>
+    let ws = null;
+    let selectedFiles = [];
+    let allChunksCache = [];
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initWebSocket();
+      fetchSystemStatus();
+      fetchChunksList();
+      setupDragDrop();
+    });
+
+    // WebSocket Management
+    function initWebSocket() {
+      const loc = window.location;
+      const wsUri = (loc.protocol === "https:" ? "wss:" : "ws:") + "//" + loc.host + "/ws/terminal";
+      ws = new WebSocket(wsUri);
+
+      ws.onopen = () => {
+        document.getElementById('ws-status-text').innerText = "Terminal Connected";
+        document.getElementById('ws-indicator').style.background = "#10b981";
+      };
+
+      ws.onmessage = (event) => {
+        appendTerminalLine(event.data);
+      };
+
+      ws.onclose = () => {
+        document.getElementById('ws-status-text').innerText = "Reconnecting...";
+        document.getElementById('ws-indicator').style.background = "#ef4444";
+        setTimeout(initWebSocket, 2500);
+      };
+    }
+
+    function appendTerminalLine(text) {
+      const termBody = document.getElementById('terminal-body');
+      const div = document.createElement('div');
+      div.className = 'terminal-line';
+
+      // Syntax highlight tags
+      let html = text
+        .replace(/\[UPLOAD\]/g, '<span class="term-tag-upload">[UPLOAD]</span>')
+        .replace(/\[INGEST\]/g, '<span class="term-tag-ingest">[INGEST]</span>')
+        .replace(/\[CHUNK\]/g, '<span class="term-tag-embed">[CHUNK]</span>')
+        .replace(/\[EMBED\]/g, '<span class="term-tag-embed">[EMBED]</span>')
+        .replace(/\[FAISS\]/g, '<span class="term-tag-faiss">[FAISS]</span>')
+        .replace(/\[SYS-C\]/g, '<span class="term-tag-sysc">[SYS-C]</span>')
+        .replace(/\[SYS-D\]/g, '<span class="term-tag-sysd">[SYS-D]</span>')
+        .replace(/\[QUERY\]/g, '<span class="term-tag-query">[QUERY]</span>')
+        .replace(/\[PYTEST\]/g, '<span class="term-tag-embed">[PYTEST]</span>')
+        .replace(/\[BENCHMARK\]/g, '<span class="term-tag-query">[BENCHMARK]</span>');
+
+      div.innerHTML = html;
+      termBody.appendChild(div);
+      termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    function clearTerminal() {
+      document.getElementById('terminal-body').innerHTML = '<div class="terminal-line">[SYSTEM] Terminal console cleared.</div>';
+    }
+
+    // Drag and Drop Handling
+    function setupDragDrop() {
+      const dz = document.getElementById('dropzone');
+      ['dragenter', 'dragover'].forEach(name => {
+        dz.addEventListener(name, (e) => { e.preventDefault(); dz.classList.add('dragover'); }, false);
+      });
+      ['dragleave', 'drop'].forEach(name => {
+        dz.addEventListener(name, (e) => { e.preventDefault(); dz.classList.remove('dragover'); }, false);
+      });
+      dz.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = Array.from(dt.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+        addFiles(files);
+      });
+    }
+
+    function handleFileSelect(e) {
+      const files = Array.from(e.target.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+      addFiles(files);
+    }
+
+    function addFiles(files) {
+      files.forEach(f => {
+        if (!selectedFiles.some(cur => cur.name === f.name)) {
+          selectedFiles.push(f);
+        }
+      });
+      renderFileChips();
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      renderFileChips();
+    }
+
+    function renderFileChips() {
+      const list = document.getElementById('selected-files-list');
+      list.innerHTML = '';
+      selectedFiles.forEach((f, idx) => {
+        const chip = document.createElement('div');
+        chip.className = 'file-chip';
+        chip.innerHTML = `📄 ${f.name} (${(f.size/1024).toFixed(0)} KB) <span class="remove-file" onclick="removeFile(${idx})">&times;</span>`;
+        list.appendChild(chip);
+      });
+      document.getElementById('btn-ingest').disabled = selectedFiles.length === 0;
+    }
+
+    // Upload & Ingest PDFs
+    async function uploadAndIngestPDFs() {
+      if (selectedFiles.length === 0) return;
+      const btn = document.getElementById('btn-ingest');
+      btn.disabled = true;
+      btn.innerText = '⚡ Ingesting & Building FAISS...';
+
+      const formData = new FormData();
+      selectedFiles.forEach(f => formData.append('files', f));
+      formData.append('subject', document.getElementById('subject-input').value.trim() || 'custom_kb');
+      formData.append('replace_corpus', document.getElementById('replace-corpus-select').value);
+
+      try {
+        const resp = await fetch('/api/upload-pdfs', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (resp.ok) {
+          selectedFiles = [];
+          renderFileChips();
+          document.getElementById('pdf-file-input').value = '';
+          fetchSystemStatus();
+          fetchChunksList();
+        } else {
+          alert('Upload failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Network error during upload: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '⚡ Ingest & Build Dual Vector Stores';
+      }
+    }
+
+    // Execute Cross-Lingual Query
+    async function executeCrossLingualQuery() {
+      const qHi = document.getElementById('query-hi-input').value.trim();
+      const qEn = document.getElementById('query-en-input').value.trim();
+      if (!qHi) {
+        alert('Please enter a query in Hindi.');
+        return;
+      }
+
+      const systems = [];
+      if (document.getElementById('chk-c').checked) systems.push('C');
+      if (document.getElementById('chk-d').checked) systems.push('D');
+      if (document.getElementById('chk-b').checked) systems.push('B');
+      if (document.getElementById('chk-a').checked) systems.push('A');
+
+      const btn = document.getElementById('btn-run-query');
+      btn.disabled = true;
+      btn.innerText = '⏳ Executing...';
+
+      const resultsBox = document.getElementById('results-container');
+      resultsBox.style.display = 'grid';
+
+      try {
+        const resp = await fetch('/api/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question_hi: qHi, question_en: qEn, systems: systems })
+        });
+        const data = await resp.json();
+        if (resp.ok && data.results) {
+          renderQueryResults(data.results);
+        } else {
+          alert('Query failed.');
+        }
+      } catch (err) {
+        alert('Network error executing query: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '🚀 Run Query Across Systems';
+      }
+    }
+
+    function renderQueryResults(res) {
+      // System C
+      if (res.C) {
+        document.getElementById('card-sys-c').style.display = 'block';
+        document.getElementById('lat-sys-c').innerText = `${res.C.latencies.total_latency_ms.toFixed(1)} ms`;
+        document.getElementById('trans-query-c').innerText = res.C.translated_question || 'None';
+        document.getElementById('ans-sys-c').innerText = res.C.generated_answer || 'No answer generated.';
+        renderChunksMini('chunks-sys-c', res.C.retrieved_chunks, res.C.retrieval_scores);
+      } else {
+        document.getElementById('card-sys-c').style.display = 'none';
+      }
+
+      // System D
+      if (res.D) {
+        document.getElementById('card-sys-d').style.display = 'block';
+        document.getElementById('lat-sys-d').innerText = `${res.D.latencies.total_latency_ms.toFixed(1)} ms (Zero MT)`;
+        document.getElementById('ans-sys-d').innerText = res.D.generated_answer || 'No answer generated.';
+        renderChunksMini('chunks-sys-d', res.D.retrieved_chunks, res.D.retrieval_scores);
+      } else {
+        document.getElementById('card-sys-d').style.display = 'none';
+      }
+
+      // System B
+      if (res.B) {
+        document.getElementById('card-sys-b').style.display = 'block';
+        document.getElementById('lat-sys-b').innerText = `${res.B.latencies.total_latency_ms.toFixed(1)} ms`;
+        document.getElementById('ans-sys-b').innerText = res.B.generated_answer || 'No answer generated.';
+        renderChunksMini('chunks-sys-b', res.B.retrieved_chunks, res.B.retrieval_scores);
+      } else {
+        document.getElementById('card-sys-b').style.display = 'none';
+      }
+
+      // System A
+      if (res.A) {
+        document.getElementById('card-sys-a').style.display = 'block';
+        document.getElementById('lat-sys-a').innerText = `${res.A.latencies.total_latency_ms.toFixed(1)} ms`;
+        document.getElementById('ans-sys-a').innerText = res.A.generated_answer || 'No answer generated.';
+      } else {
+        document.getElementById('card-sys-a').style.display = 'none';
+      }
+    }
+
+    function renderChunksMini(containerId, chunks, scores) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      if (!chunks || chunks.length === 0) return;
+      chunks.slice(0, 3).forEach((chunkId, idx) => {
+        const sc = (scores && scores[idx] !== undefined) ? scores[idx].toFixed(4) : '0.0000';
+        const div = document.createElement('div');
+        div.className = 'chunk-item';
+        div.innerHTML = `<span>Rank ${idx+1}: <code>${chunkId}</code></span> <span>Score: ${sc}</span>`;
+        container.appendChild(div);
+      });
+    }
+
+    // Sample Question Loader
+    function loadSample(qHi, qEn, qid, subj) {
+      document.getElementById('query-hi-input').value = qHi;
+      document.getElementById('query-en-input').value = qEn;
+      appendTerminalLine(`[QUERY] Loaded sample benchmark question: ${qid} (${subj})`);
+    }
+
+    // System Status & Chunks
+    async function fetchSystemStatus() {
+      try {
+        const resp = await fetch('/api/system-status');
+        const data = await resp.json();
+        document.getElementById('stat-chunks-count').innerText = data.total_chunks_indexed || 0;
+        document.getElementById('stat-model-mode').innerText = data.active_mode;
+
+        // Populate subjects in filter
+        const sel = document.getElementById('chunk-subject-select');
+        sel.innerHTML = '<option value="all">All Subjects</option>';
+        (data.subjects || []).forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.innerText = s;
+          sel.appendChild(opt);
+        });
+      } catch (e) {
+        console.error('Failed to fetch system status', e);
+      }
+    }
+
+    async function fetchChunksList() {
+      const container = document.getElementById('chunks-container');
+      try {
+        const resp = await fetch('/api/chunks');
+        const data = await resp.json();
+        allChunksCache = data.chunks || [];
+        filterChunksDisplay();
+      } catch (e) {
+        container.innerHTML = '<div style="color: var(--rose); padding: 12px;">Failed to load chunks.</div>';
+      }
+    }
+
+    function filterChunksDisplay() {
+      const container = document.getElementById('chunks-container');
+      const subj = document.getElementById('chunk-subject-select').value;
+      const search = document.getElementById('chunk-search-input').value.toLowerCase().trim();
+
+      let filtered = allChunksCache;
+      if (subj !== 'all') {
+        filtered = filtered.filter(c => (c.subject || '').toLowerCase() === subj.toLowerCase());
+      }
+      if (search) {
+        filtered = filtered.filter(c => 
+          (c.text || '').toLowerCase().includes(search) || 
+          (c.chunk_id || '').toLowerCase().includes(search)
+        );
+      }
+
+      container.innerHTML = '';
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-dim); padding: 20px;">No chunks match filter.</div>';
+        return;
+      }
+
+      filtered.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'chunk-card-item';
+        div.innerHTML = `
+          <div class="chunk-meta">
+            <span><strong>${c.chunk_id}</strong> (Page ${c.page || '1'})</span>
+            <span style="color: var(--cyan);">${c.subject || 'general'} · ${c.token_count || 0} tokens</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">${(c.text || '').substring(0, 180)}...</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function restoreDefaultCorpus() {
+      if (!confirm('Are you sure you want to restore the original 5 Computer Science textbook corpus?')) return;
+      try {
+        const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
+        const data = await resp.json();
+        if (resp.ok) {
+          fetchSystemStatus();
+          fetchChunksList();
+        }
+      } catch (e) {
+        alert('Restore failed: ' + e.message);
+      }
+    }
+
+    // Commands triggered from Terminal
+    async function runPytestCommand() {
+      try {
+        await fetch('/api/run-pytest', { method: 'POST' });
+      } catch (e) {
+        alert('Failed to trigger pytest: ' + e.message);
+      }
+    }
+
+    async function runBenchmarkCommand() {
+      try {
+        await fetch('/api/run-benchmark', { method: 'POST' });
+      } catch (e) {
+        alert('Failed to trigger benchmark: ' + e.message);
+      }
+    }
+
+    // Info Modal
+    function openInfoModal() {
+      document.getElementById('info-modal').style.display = 'flex';
+    }
+    function closeInfoModal() {
+      document.getElementById('info-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+
