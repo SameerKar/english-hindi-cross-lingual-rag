@@ -289,6 +289,7 @@ class QueryRequest(BaseModel):
     category: Optional[str] = "general"
     question_id: Optional[str] = "LIVE_Q"
     systems: List[str] = ["A", "B", "C", "D"]
+    subject_filter: Optional[str] = "all"
 
 
 @app.post("/api/query")
@@ -303,8 +304,9 @@ async def execute_query(req: QueryRequest):
     qid = req.question_id or "LIVE_01"
     subj = req.subject or "general"
     cat = req.category or "general"
+    s_filter = req.subject_filter or "all"
 
-    await terminal.broadcast(f"[QUERY] Received query: '{q_hi[:60]}...' (Subject: {subj})")
+    await terminal.broadcast(f"[QUERY] Received query: '{q_hi[:60]}...' (Scope Filter: {s_filter})")
 
     results: Dict[str, Any] = {}
 
@@ -312,28 +314,30 @@ async def execute_query(req: QueryRequest):
     if "C" in req.systems:
         await terminal.broadcast("[SYS-C] Step 1/3: Translating Hindi query to English...")
         t0 = time.perf_counter()
-        res_c = orch.execute_system_C(q_hi, qid, subj, cat)
+        res_c = orch.execute_system_C(q_hi, qid, subj, cat, subject_filter=s_filter)
         dur_c = round((time.perf_counter() - t0) * 1000.0, 1)
         trans_q = res_c.get("translated_question", "")
         top_chunk = res_c.get("retrieved_chunks", ["NONE"])[0]
+        top_score = res_c.get("retrieval_scores", [0.0])[0] if res_c.get("retrieval_scores") else 0.0
         await terminal.broadcast(f"[SYS-C] Translated: '{trans_q}'")
-        await terminal.broadcast(f"[SYS-C] Top-1 Chunk: `{top_chunk}` in {dur_c}ms")
+        await terminal.broadcast(f"[SYS-C] Top-1 Chunk: `{top_chunk}` (Score: {top_score:.4f}) in {dur_c}ms")
         results["C"] = res_c
 
     # System D: Direct Multilingual RAG
     if "D" in req.systems:
         await terminal.broadcast("[SYS-D] Zero-Shot Multilingual Search (No translation)...")
         t0 = time.perf_counter()
-        res_d = orch.execute_system_D(q_hi, qid, subj, cat)
+        res_d = orch.execute_system_D(q_hi, qid, subj, cat, subject_filter=s_filter)
         dur_d = round((time.perf_counter() - t0) * 1000.0, 1)
         top_chunk_d = res_d.get("retrieved_chunks", ["NONE"])[0]
-        await terminal.broadcast(f"[SYS-D] Top-1 Chunk: `{top_chunk_d}` in {dur_d}ms")
+        top_score_d = res_d.get("retrieval_scores", [0.0])[0] if res_d.get("retrieval_scores") else 0.0
+        await terminal.broadcast(f"[SYS-D] Top-1 Chunk: `{top_chunk_d}` (Score: {top_score_d:.4f}) in {dur_d}ms")
         results["D"] = res_d
 
     # System B: Monolingual English RAG
     if "B" in req.systems:
         await terminal.broadcast("[SYS-B] Running Monolingual English Upper-Bound RAG...")
-        res_b = orch.execute_system_B(q_en, qid, subj, cat)
+        res_b = orch.execute_system_B(q_en, qid, subj, cat, subject_filter=s_filter)
         results["B"] = res_b
 
     # System A: Direct LLM Baseline

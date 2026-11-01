@@ -1,0 +1,78 @@
+{
+  "trace_id": "ecd167de-4c2a-4035-9b9b-8b77c3c11517",
+  "run_id": "ecd167de-4c2a-4035-9b9b-8b77c3c11517",
+  "question_id": "NET_03",
+  "system_id": "D",
+  "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "start_time": "2026-11-01T21:08:08.752147+00:00",
+  "end_time": "2026-11-01T21:08:08.770157+00:00",
+  "total_latency_ms": 17.34,
+  "spans": [
+    {
+      "span_id": "ac150b31-5f02-4632-846e-fc0e223ecc8a",
+      "trace_id": "ecd167de-4c2a-4035-9b9b-8b77c3c11517",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T21:08:08.752147+00:00",
+      "end_time": "2026-11-01T21:08:08.769160+00:00",
+      "latency_ms": 17.18,
+      "inputs": {
+        "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "computer_networks_computer_networks_p3_c0",
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p2_c0",
+          "algorithms_algorithms_fundamentals_p1_c0",
+          "computer_networks_computer_networks_p1_c0"
+        ],
+        "scores": [
+          0.5655050277709961,
+          0.34906065464019775,
+          0.34454572200775146,
+          0.3055518567562103,
+          0.2503895163536072
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "a9d05095-7d96-481a-97de-0e124577a481",
+      "trace_id": "ecd167de-4c2a-4035-9b9b-8b77c3c11517",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:08:08.769160+00:00",
+      "end_time": "2026-11-01T21:08:08.770157+00:00",
+      "latency_ms": 0.16,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 3 | ID: custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p2_c0 | Page: 2 | Subject: custom_kb] ---\n● AI Models: ○ TTS: Sarvam Bulbul V3 (Hindi/English). ○ STT: Sarvam Saaras (Streaming). ○ Analytics: Gemini Flash / GPT-4o-mini. 2. Chapter 1: The \"Indian\" Model Layer To build a robust system, we must not hardcode Sarvam. We use the Provider Pattern . This allows us to swap Sarvam for Deepgram or OpenAI later if needed, but defaults to Sarvam for now. 2.1 Abstract Base Classes Create a file app/services/ai_providers.py: from abc import ABC, abstractmethod from typing import AsyncGenerator, Optional class STTProvider(ABC): \"\"\"Abstract Speech-to-Text Provider\"\"\" @abstractmethod async def connect(self): \"\"\"Establish connection to the provider\"\"\" pass @abstractmethod async def send_audio(self, audio_chunk: bytes): \"\"\"Send raw audio bytes\"\"\" pass @abstractmethod async def receive_text(self) -> AsyncGenerator[str, None]: \"\"\"Yield transcribed text\"\"\" pass class TTSProvider(ABC): \"\"\"Abstract Text-to-Speech Provider\"\"\" @abstractmethod async def generate_audio(self, text: str, voice_id: str, language: str) -> bytes: \"\"\"Return audio bytes for the given text\"\"\" pass\n\n--- [Document Passage 4 | ID: algorithms_algorithms_fundamentals_p1_c0 | Page: 1 | Subject: algorithms] ---\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).\n\n--- [Document Passage 5 | ID: computer_networks_computer_networks_p1_c0 | Page: 1 | Subject: computer_networks] ---\nComputer Networks: Transport Layer Protocols and TCP 3-Way Handshake The Transmission Control Protocol (TCP) is a connection-oriented, reliable, byte-stream transport layer protocol defined in RFC 793. Unlike UDP, which is connectionless and best-effort, TCP provides guaranteed in-order delivery, flow control, and congestion control. Before data transfer begins, TCP establishes a virtual connection between client and server using a Three-Way Handshake: 1. SYN: The active client generates a randomly chosen Initial Sequence Number (ISN_client = x) and sends a TCP segment with the SYN control flag set to 1. 2. SYN-ACK: The passive server receives the SYN segment, allocates connection buffers and state variables, generates its own Initial Sequence Number (ISN_server = y), and transmits a segment with SYN=1 and ACK=1, where the acknowledgment number is set to x + 1. 3. ACK: The client receives the SYN-ACK, transitions to the ESTABLISHED state, and transmits an ACK segment with ACK=1 and acknowledgment number set to y + 1. Data payloads can accompany this third packet.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p3_c0 (पृष्ठ 3) के अनुसार, OSI मॉडल में 7 परतें (Layers) होती हैं, जबकि TCP/IP मॉडल में 4 परतें होती हैं।",
+        "tokens": {
+          "prompt_tokens": 933,
+          "completion_tokens": 23,
+          "total_tokens": 956
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p3_c0 (पृष्ठ 3) के अनुसार, OSI मॉडल में 7 परतें (Layers) होती हैं, जबकि TCP/IP मॉडल में 4 परतें होती हैं।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

@@ -1,0 +1,76 @@
+{
+  "run_id": "101ed49d-752d-4cfc-970b-f856a1d95c58",
+  "timestamp": "2026-11-01T21:07:59.742034+00:00",
+  "question_id": "NET_03",
+  "system_id": "B",
+  "subject": "Computer Networks",
+  "category": "Factual/definition",
+  "original_question": "How many layers are in the OSI model versus the TCP/IP model?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "computer_networks_computer_networks_p3_c0",
+    "computer_networks_computer_networks_p1_c0",
+    "computer_networks_computer_networks_p2_c0",
+    "dbms_database_systems_p1_c0",
+    "dbms_database_systems_p2_c0"
+  ],
+  "retrieval_scores": [
+    0.7653286457061768,
+    0.42099058628082275,
+    0.29142671823501587,
+    0.21968244016170502,
+    0.21614070236682892
+  ],
+  "source_documents": [
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 3,
+      "chunk_id": "computer_networks_computer_networks_p3_c0",
+      "subject": "computer_networks",
+      "rank": 1
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 2
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 2,
+      "chunk_id": "computer_networks_computer_networks_p2_c0",
+      "subject": "computer_networks",
+      "rank": 3
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 1,
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "subject": "dbms",
+      "rank": 4
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 2,
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "subject": "dbms",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "According to retrieved passage computer_networks_computer_networks_p3_c0 (Page 3), the theoretical OSI reference model comprises 7 distinct layers, whereas the practical TCP/IP protocol suite is structured into 4 layers.",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 37.52,
+    "generation_latency_ms": 0.14,
+    "total_latency_ms": 37.78
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

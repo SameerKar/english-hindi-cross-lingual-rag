@@ -1,0 +1,76 @@
+{
+  "run_id": "1e412c94-71ba-480f-a432-da706d280d37",
+  "timestamp": "2026-11-01T21:06:10.144758+00:00",
+  "question_id": "AUTO_02",
+  "system_id": "B",
+  "subject": "Automata",
+  "category": "Conceptual explanation",
+  "original_question": "Does an NFA have more computational power than a DFA?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "automata_automata_theory_p1_c0",
+    "automata_automata_theory_p2_c0",
+    "automata_automata_theory_p3_c0",
+    "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p1_c0",
+    "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p9_c0"
+  ],
+  "retrieval_scores": [
+    0.5346428155899048,
+    0.19258563220500946,
+    0.13909223675727844,
+    0.12492640316486359,
+    0.10783469676971436
+  ],
+  "source_documents": [
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 1,
+      "chunk_id": "automata_automata_theory_p1_c0",
+      "subject": "automata",
+      "rank": 1
+    },
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 2,
+      "chunk_id": "automata_automata_theory_p2_c0",
+      "subject": "automata",
+      "rank": 2
+    },
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 3,
+      "chunk_id": "automata_automata_theory_p3_c0",
+      "subject": "automata",
+      "rank": 3
+    },
+    {
+      "doc_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+      "page": 1,
+      "chunk_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p1_c0",
+      "subject": "custom_kb",
+      "rank": 4
+    },
+    {
+      "doc_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+      "page": 9,
+      "chunk_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p9_c0",
+      "subject": "custom_kb",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 34.7,
+    "generation_latency_ms": 0.16,
+    "total_latency_ms": 34.99
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

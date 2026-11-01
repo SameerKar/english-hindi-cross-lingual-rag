@@ -1,0 +1,44 @@
+{
+  "trace_id": "28dbf6fc-b631-4c85-b4fb-b72ee373c303",
+  "run_id": "28dbf6fc-b631-4c85-b4fb-b72ee373c303",
+  "question_id": "AUTO_01",
+  "system_id": "A",
+  "query": "एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?",
+  "start_time": "2026-11-01T21:05:59.816838+00:00",
+  "end_time": "2026-11-01T21:05:59.816838+00:00",
+  "total_latency_ms": 0.05,
+  "spans": [
+    {
+      "span_id": "bb4c9bfb-97f2-481c-b1d2-9e8f39232365",
+      "trace_id": "28dbf6fc-b631-4c85-b4fb-b72ee373c303",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:05:59.816838+00:00",
+      "end_time": "2026-11-01T21:05:59.816838+00:00",
+      "latency_ms": 0.05,
+      "inputs": {
+        "prompt": "You are an academic Computer Science question-answering assistant.\nAnswer the following question directly, accurately, and concisely based on your knowledge of fundamental Computer Science principles.\nDo not use any retrieved context. If the question is in Hindi, formulate your answer in Hindi. If the question is in English, answer in English.\n\nQuestion: एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?\n\nGive a concise, technically accurate answer.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "कंप्यूटर साइंस के बुनियादी सिद्धांतों के आधार पर, यह मानक अकादमिक नियमों और औपचारिक प्रक्रियाओं का पालन करता है। यह अवधारणा सिस्टम और एल्गोरिदम के सुचारू संचालन के लिए अत्यंत महत्वपूर्ण है।",
+        "tokens": {
+          "prompt_tokens": 72,
+          "completion_tokens": 32,
+          "total_tokens": 104
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Automata",
+    "category": "Factual/definition",
+    "final_output": "कंप्यूटर साइंस के बुनियादी सिद्धांतों के आधार पर, यह मानक अकादमिक नियमों और औपचारिक प्रक्रियाओं का पालन करता है। यह अवधारणा सिस्टम और एल्गोरिदम के सुचारू संचालन के लिए अत्यंत महत्वपूर्ण है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

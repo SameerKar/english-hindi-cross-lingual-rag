@@ -125,26 +125,29 @@ class FAISSVectorStore:
 
         return False
 
-    def search(self, query_vector: np.ndarray, top_k: int = 5) -> List[Tuple[DocumentChunk, float]]:
+    def search(self, query_vector: np.ndarray, top_k: int = 5, subject_filter: Optional[str] = None) -> List[Tuple[DocumentChunk, float]]:
         """
         Searches index using query vector. Returns top_k (DocumentChunk, score) tuples.
+        Supports filtering by subject or scope.
         """
         if query_vector.ndim == 1:
             query_vector = np.expand_dims(query_vector, axis=0)
 
         num_items = len(self.metadata_map)
-        k = min(top_k, num_items)
-        if k == 0:
+        if num_items == 0:
             return []
 
+        # If filtering, search over more candidates to find top-k matches within filter
+        k_search = min(num_items, max(top_k * 5, 25)) if (subject_filter and subject_filter != "all") else min(top_k, num_items)
+
         if FAISS_AVAILABLE and self.index is not None:
-            distances, indices = self.index.search(query_vector.astype(np.float32), k)
+            distances, indices = self.index.search(query_vector.astype(np.float32), k_search)
             scores = distances[0]
             idx_list = indices[0]
         elif self.vectors_np is not None:
             # Exact Dot-Product Search
             sims = np.dot(self.vectors_np, query_vector.T).flatten()
-            idx_list = np.argsort(-sims)[:k]
+            idx_list = np.argsort(-sims)[:k_search]
             scores = sims[idx_list]
         else:
             return []
@@ -154,7 +157,19 @@ class FAISSVectorStore:
             if vec_id in self.metadata_map and vec_id != -1:
                 chunk = self.metadata_map[vec_id]
                 score = float(scores[rank_idx])
+
+                # Apply scope / subject filter
+                if subject_filter and subject_filter != "all":
+                    if subject_filter == "uploaded_only":
+                        default_subs = {"algorithms", "automata", "computer_networks", "dbms", "operating_systems"}
+                        if chunk.subject.lower() in default_subs:
+                            continue
+                    elif chunk.subject.lower() != subject_filter.lower():
+                        continue
+
                 results.append((chunk, score))
+                if len(results) >= top_k:
+                    break
 
         return results
 

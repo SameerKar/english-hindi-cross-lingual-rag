@@ -1,0 +1,76 @@
+{
+  "run_id": "40f5de69-8915-4d9e-bd49-026f79de14b8",
+  "timestamp": "2026-11-01T21:05:20.854970+00:00",
+  "question_id": "ALGO_01",
+  "system_id": "C",
+  "subject": "Algorithms",
+  "category": "Conceptual explanation",
+  "original_question": "डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ पर क्यों विफल हो जाता है?",
+  "translated_question": "Why does Dijkstra's algorithm fail when a graph contains negative edge weights?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "algorithms_algorithms_fundamentals_p3_c0",
+    "computer_networks_computer_networks_p3_c0",
+    "computer_networks_computer_networks_p1_c0"
+  ],
+  "retrieval_scores": [
+    0.7222844362258911,
+    0.5468020439147949,
+    0.26181432604789734,
+    0.08971317112445831,
+    0.08871761709451675
+  ],
+  "source_documents": [
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 3,
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "subject": "algorithms",
+      "rank": 3
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 3,
+      "chunk_id": "computer_networks_computer_networks_p3_c0",
+      "subject": "computer_networks",
+      "rank": 4
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ algorithms_algorithms_fundamentals_p2_c0 (पृष्ठ 2) के अनुसार, डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ़ पर विफल हो जाता है क्योंकि इसका ग्रीडी विकल्प दूरियों को स्थायी मान लेता है। इसके स्थान पर Bellman-Ford एल्गोरिदम का उपयोग किया जाना चाहिए, जो O(V * E) समय में चलता है और ऋणात्मक चक्रों का पता लगाता है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 9067.67,
+    "retrieval_latency_ms": 36.48,
+    "generation_latency_ms": 0.17,
+    "total_latency_ms": 9104.72
+  },
+  "error_status": "FAILURE",
+  "error_message": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function"
+}

@@ -1,0 +1,78 @@
+{
+  "trace_id": "609a7533-dd0b-41a6-8873-c76b8555b415",
+  "run_id": "609a7533-dd0b-41a6-8873-c76b8555b415",
+  "question_id": "SMOKE_01",
+  "system_id": "D",
+  "query": "डेडलॉक की चार आवश्यक शर्तें क्या हैं?",
+  "start_time": "2026-11-01T21:17:23.836315+00:00",
+  "end_time": "2026-11-01T21:17:27.877897+00:00",
+  "total_latency_ms": 4041.39,
+  "spans": [
+    {
+      "span_id": "e7fecd72-349f-4af0-b41c-be53dfd0b987",
+      "trace_id": "609a7533-dd0b-41a6-8873-c76b8555b415",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T21:17:23.836315+00:00",
+      "end_time": "2026-11-01T21:17:23.862602+00:00",
+      "latency_ms": 26.41,
+      "inputs": {
+        "query": "डेडलॉक की चार आवश्यक शर्तें क्या हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "operating_systems_operating_systems_p2_c0",
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p11_c0",
+          "algorithms_algorithms_fundamentals_p1_c0",
+          "dbms_database_systems_p2_c0"
+        ],
+        "scores": [
+          0.4886714220046997,
+          0.3557417094707489,
+          0.34004420042037964,
+          0.31511610746383667,
+          0.27840930223464966
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "088a2dcb-756a-468d-b880-c8f906bfdf11",
+      "trace_id": "609a7533-dd0b-41a6-8873-c76b8555b415",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:17:23.862602+00:00",
+      "end_time": "2026-11-01T21:17:27.876895+00:00",
+      "latency_ms": 4014.98,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: डेडलॉक की चार आवश्यक शर्तें क्या हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: operating_systems_operating_systems_p2_c0 | Page: 2 | Subject: operating_systems] ---\nCoffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 3 | ID: custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p11_c0 | Page: 11 | Subject: custom_kb] ---\n{{ \"sentiment\": \"Positive\" | \"Neutral\" | \"Negative\", \"success\": boolean, \"summary\": \"string\", \"action_items\": [\"item1\", \"item2\"] }} Transcript: {transcript} \"\"\" # Call Gemini Flash or GPT-4o result = await call_llm(prompt) # Save to Firestore db.collection('calls').add(result) 7. Chapter 6: Deployment Strategy Since you specifically asked about Firebase deployment: 7.1 Frontend (Firebase Hosting) 1. Build the Next.js app: npm run build. 2. Configure firebase.json: { \"hosting\": { \"source\": \".\", \"ignore\": [\"firebase.json\", \"**/.*\", \"**/node_modules/**\"], \"frameworksBackend\": { \"region\": \"asia-south1\" } } } 3. Deploy: firebase deploy --only hosting. 7.2 Backend (Google Cloud Run) Standard Firebase Functions (Gen 2) have a timeout of 60 minutes, which is okay for calls, but Cloud Run is safer for WebSockets and cheaper for high concurrency. 1. Dockerfile: FROM python:3.11-slim WORKDIR /app COPY requirements.txt .\n\n--- [Document Passage 4 | ID: algorithms_algorithms_fundamentals_p1_c0 | Page: 1 | Subject: algorithms] ---\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).\n\n--- [Document Passage 5 | ID: dbms_database_systems_p2_c0 | Page: 2 | Subject: dbms] ---\nTwo-Phase Locking (2PL) and Serializability Serializability is the standard criterion for the correctness of concurrent transaction execution. A concurrent schedule is conflict serializable if it is conflict equivalent to some serial schedule, which can be verified by constructing a precedence (or serialization) graph: a schedule is conflict serializable if and only if its precedence graph has no directed cycles. The Two-Phase Locking (2PL) protocol is a concurrency control mechanism that guarantees conflict serializability. Under basic 2PL: - Growing Phase: A transaction may acquire locks (shared or exclusive), but cannot release any lock. - Shrinking Phase: A transaction may release locks, but cannot acquire any new lock. Strict 2PL further requires that all exclusive locks held by a transaction be released only after the transaction commits or aborts, which prevents cascading rollbacks. Rigorous 2PL requires both shared and exclusive locks to be held until commit.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 2, खंड: `operating_systems_operating_systems_p2_c0`) के अनुसार:\n\nगतिरोध के लिए कॉफमैन की चार शर्तें एक गतिरोध एक ऐसी स्थिति है जिसमें एक सेट में प्रत्येक प्रक्रिया एक ऐसी घटना की प्रतीक्षा कर रही है जो सेट में केवल एक अन्य प्रक्रिया का कारण बन सकती है। औपचारिक रूप से कहा गया है कि गतिरोध की स्थिति तब उत्पन्न हो सकती है जब और केवल तभी जब निम्नलिखित सभी चार शर्तें एक साथ हों: 1. पारस्परिक बहिष्करण: कम से कम एक संसाधन को गैर - साझा मोड में रखा जाना चाहिए (एक समय में केवल एक प्रक्रिया संसाधन का उपयोग कर सकती है)।\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 917,
+          "completion_tokens": 120,
+          "total_tokens": 1037
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Operating Systems",
+    "category": "Factual",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 2, खंड: `operating_systems_operating_systems_p2_c0`) के अनुसार:\n\nगतिरोध के लिए कॉफमैन की चार शर्तें एक गतिरोध एक ऐसी स्थिति है जिसमें एक सेट में प्रत्येक प्रक्रिया एक ऐसी घटना की प्रतीक्षा कर रही है जो सेट में केवल एक अन्य प्रक्रिया का कारण बन सकती है। औपचारिक रूप से कहा गया है कि गतिरोध की स्थिति तब उत्पन्न हो सकती है जब और केवल तभी जब निम्नलिखित सभी चार शर्तें एक साथ हों: 1. पारस्परिक बहिष्करण: कम से कम एक संसाधन को गैर - साझा मोड में रखा जाना चाहिए (एक समय में केवल एक प्रक्रिया संसाधन का उपयोग कर सकती है)।\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

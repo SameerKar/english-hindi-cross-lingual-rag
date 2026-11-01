@@ -122,7 +122,7 @@ class PipelineOrchestrator:
             error_message=err
         )
 
-    def execute_system_B(self, question_en: str, question_id: str, subject: str = "general", category: str = "general") -> Dict[str, Any]:
+    def execute_system_B(self, question_en: str, question_id: str, subject: str = "general", category: str = "general", subject_filter: Optional[str] = None) -> Dict[str, Any]:
         """
         System B: Monolingual English RAG (Upper-bound baseline).
         """
@@ -131,7 +131,7 @@ class PipelineOrchestrator:
 
         # 1. Span: English Retrieval
         span_ret = self.tracer.start_span("english_retrieval", "retriever", {"query": question_en, "top_k": self.eng_retriever.top_k})
-        chunks, scores, ret_lat = self.eng_retriever.retrieve(question_en)
+        chunks, scores, ret_lat = self.eng_retriever.retrieve(question_en, subject_filter=subject_filter)
         context = self.eng_retriever.format_context(chunks)
         self.tracer.end_span(span_ret, {"retrieved_chunks": [c.chunk_id for c in chunks], "scores": scores})
 
@@ -169,7 +169,7 @@ class PipelineOrchestrator:
             error_message=err
         )
 
-    def execute_system_C(self, question_hi: str, question_id: str, subject: str = "general", category: str = "general") -> Dict[str, Any]:
+    def execute_system_C(self, question_hi: str, question_id: str, subject: str = "general", category: str = "general", subject_filter: Optional[str] = None) -> Dict[str, Any]:
         """
         System C: Translation-Mediated RAG.
         Hindi Query -> Translate to English -> English Retrieval -> Hindi Generation.
@@ -184,7 +184,7 @@ class PipelineOrchestrator:
 
         # 2. Span: English Retrieval using Translated Query
         span_ret = self.tracer.start_span("english_retrieval", "retriever", {"query": translated_en, "top_k": self.eng_retriever.top_k})
-        chunks, scores, ret_lat = self.eng_retriever.retrieve(translated_en)
+        chunks, scores, ret_lat = self.eng_retriever.retrieve(translated_en, subject_filter=subject_filter)
         context = self.eng_retriever.format_context(chunks)
         self.tracer.end_span(span_ret, {"retrieved_chunks": [c.chunk_id for c in chunks], "scores": scores})
 
@@ -225,7 +225,7 @@ class PipelineOrchestrator:
             error_message=err
         )
 
-    def execute_system_D(self, question_hi: str, question_id: str, subject: str = "general", category: str = "general") -> Dict[str, Any]:
+    def execute_system_D(self, question_hi: str, question_id: str, subject: str = "general", category: str = "general", subject_filter: Optional[str] = None) -> Dict[str, Any]:
         """
         System D: Direct Multilingual RAG.
         Hindi Query directly encoded by Multilingual Embedder -> Multi FAISS Index -> Hindi Generation.
@@ -239,7 +239,7 @@ class PipelineOrchestrator:
             "model": self.multi_model_name,
             "top_k": self.multi_retriever.top_k
         })
-        chunks, scores, ret_lat = self.multi_retriever.retrieve(question_hi)
+        chunks, scores, ret_lat = self.multi_retriever.retrieve(question_hi, subject_filter=subject_filter)
         context = self.multi_retriever.format_context(chunks)
         self.tracer.end_span(span_ret, {"retrieved_chunks": [c.chunk_id for c in chunks], "scores": scores})
 

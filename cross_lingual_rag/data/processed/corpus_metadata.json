@@ -27,6 +27,24 @@
     "language": "en"
   },
   {
+    "document_id": "computer_science_enterprise_voice_ai_architecture",
+    "file_name": "Enterprise_Voice_AI_Architecture.pdf",
+    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\computer_science\\Enterprise_Voice_AI_Architecture.pdf",
+    "subject": "computer_science",
+    "total_pages": 10,
+    "total_chunks": 0,
+    "language": "en"
+  },
+  {
+    "document_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+    "file_name": "Indian Voice Agent Platform_ Architecture & Implementation Guide.pdf",
+    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\custom_kb\\Indian Voice Agent Platform_ Architecture & Implementation Guide.pdf",
+    "subject": "custom_kb",
+    "total_pages": 12,
+    "total_chunks": 12,
+    "language": "en"
+  },
+  {
     "document_id": "dbms_database_systems",
     "file_name": "database_systems.txt",
     "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\dbms\\database_systems.txt",

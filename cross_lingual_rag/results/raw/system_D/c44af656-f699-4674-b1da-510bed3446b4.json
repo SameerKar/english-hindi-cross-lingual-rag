@@ -1,0 +1,128 @@
+{
+  "run_id": "c44af656-f699-4674-b1da-510bed3446b4",
+  "timestamp": "2026-11-01T21:17:27.878901+00:00",
+  "question_id": "SMOKE_01",
+  "system_id": "D",
+  "subject": "Operating Systems",
+  "category": "Factual",
+  "original_question": "डेडलॉक की चार आवश्यक शर्तें क्या हैं?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "operating_systems_operating_systems_p2_c0",
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p11_c0",
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "dbms_database_systems_p2_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "doc_id": "operating_systems_operating_systems",
+      "subject": "operating_systems",
+      "page": 2,
+      "score": 0.4887,
+      "relevance_pct": "48.9%",
+      "text": "Coffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).",
+      "token_count": 223
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 2,
+      "score": 0.3557,
+      "relevance_pct": "35.6%",
+      "text": "Limitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.",
+      "token_count": 196
+    },
+    {
+      "chunk_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p11_c0",
+      "doc_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+      "subject": "custom_kb",
+      "page": 11,
+      "score": 0.34,
+      "relevance_pct": "34.0%",
+      "text": "{{ \"sentiment\": \"Positive\" | \"Neutral\" | \"Negative\", \"success\": boolean, \"summary\": \"string\", \"action_items\": [\"item1\", \"item2\"] }} Transcript: {transcript} \"\"\" # Call Gemini Flash or GPT-4o result = await call_llm(prompt) # Save to Firestore db.collection('calls').add(result) 7. Chapter 6: Deployment Strategy Since you specifically asked about Firebase deployment: 7.1 Frontend (Firebase Hosting) 1. Build the Next.js app: npm run build. 2. Configure firebase.json: { \"hosting\": { \"source\": \".\", \"ignore\": [\"firebase.json\", \"**/.*\", \"**/node_modules/**\"], \"frameworksBackend\": { \"region\": \"asia-south1\" } } } 3. Deploy: firebase deploy --only hosting. 7.2 Backend (Google Cloud Run) Standard Firebase Functions (Gen 2) have a timeout of 60 minutes, which is okay for calls, but Cloud Run is safer for WebSockets and cheaper for high concurrency. 1. Dockerfile: FROM python:3.11-slim WORKDIR /app COPY requirements.txt .",
+      "token_count": 161
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 1,
+      "score": 0.3151,
+      "relevance_pct": "31.5%",
+      "text": "Algorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).",
+      "token_count": 215
+    },
+    {
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "doc_id": "dbms_database_systems",
+      "subject": "dbms",
+      "page": 2,
+      "score": 0.2784,
+      "relevance_pct": "27.8%",
+      "text": "Two-Phase Locking (2PL) and Serializability Serializability is the standard criterion for the correctness of concurrent transaction execution. A concurrent schedule is conflict serializable if it is conflict equivalent to some serial schedule, which can be verified by constructing a precedence (or serialization) graph: a schedule is conflict serializable if and only if its precedence graph has no directed cycles. The Two-Phase Locking (2PL) protocol is a concurrency control mechanism that guarantees conflict serializability. Under basic 2PL: - Growing Phase: A transaction may acquire locks (shared or exclusive), but cannot release any lock. - Shrinking Phase: A transaction may release locks, but cannot acquire any new lock. Strict 2PL further requires that all exclusive locks held by a transaction be released only after the transaction commits or aborts, which prevents cascading rollbacks. Rigorous 2PL requires both shared and exclusive locks to be held until commit.",
+      "token_count": 187
+    }
+  ],
+  "retrieval_scores": [
+    0.4886714220046997,
+    0.3557417094707489,
+    0.34004420042037964,
+    0.31511610746383667,
+    0.27840930223464966
+  ],
+  "source_documents": [
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 2,
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "subject": "operating_systems",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+      "page": 11,
+      "chunk_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p11_c0",
+      "subject": "custom_kb",
+      "rank": 3
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 4
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 2,
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "subject": "dbms",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 2, खंड: `operating_systems_operating_systems_p2_c0`) के अनुसार:\n\nगतिरोध के लिए कॉफमैन की चार शर्तें एक गतिरोध एक ऐसी स्थिति है जिसमें एक सेट में प्रत्येक प्रक्रिया एक ऐसी घटना की प्रतीक्षा कर रही है जो सेट में केवल एक अन्य प्रक्रिया का कारण बन सकती है। औपचारिक रूप से कहा गया है कि गतिरोध की स्थिति तब उत्पन्न हो सकती है जब और केवल तभी जब निम्नलिखित सभी चार शर्तें एक साथ हों: 1. पारस्परिक बहिष्करण: कम से कम एक संसाधन को गैर - साझा मोड में रखा जाना चाहिए (एक समय में केवल एक प्रक्रिया संसाधन का उपयोग कर सकती है)।\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 26.39,
+    "generation_latency_ms": 4014.98,
+    "total_latency_ms": 4041.52
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

@@ -52,6 +52,7 @@ class ExperimentLogger:
         scores = [float(s) for s in (retrieval_scores or [])]
         
         source_documents = []
+        chunk_details = []
         if retrieved_chunks:
             for rank, c in enumerate(retrieved_chunks, 1):
                 source_documents.append({
@@ -60,6 +61,18 @@ class ExperimentLogger:
                     "chunk_id": c.chunk_id,
                     "subject": c.subject,
                     "rank": rank
+                })
+            for idx, c in enumerate(retrieved_chunks):
+                sc = retrieval_scores[idx] if (retrieval_scores and idx < len(retrieval_scores)) else 0.0
+                chunk_details.append({
+                    "chunk_id": c.chunk_id,
+                    "doc_id": c.doc_id,
+                    "subject": c.subject,
+                    "page": c.page,
+                    "score": round(float(sc), 4),
+                    "relevance_pct": f"{min(max(float(sc) * 100.0, 0.0), 100.0):.1f}%",
+                    "text": c.text,
+                    "token_count": c.token_count
                 })
 
         record = {
@@ -73,6 +86,7 @@ class ExperimentLogger:
             "translated_question": translated_question,
             "top_k": top_k,
             "retrieved_chunks": chunk_ids,
+            "retrieved_chunks_details": chunk_details,
             "retrieval_scores": scores,
             "source_documents": source_documents,
             "generated_answer": generated_answer,

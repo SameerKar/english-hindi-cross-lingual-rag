@@ -1,0 +1,98 @@
+{
+  "trace_id": "1e659b48-4fcf-4f5d-8f7d-3b6ab16e8426",
+  "run_id": "1e659b48-4fcf-4f5d-8f7d-3b6ab16e8426",
+  "question_id": "AUTO_02",
+  "system_id": "C",
+  "query": "क्या NFA के पास DFA की तुलना में अधिक कम्प्यूटेशनल शक्ति होती है?",
+  "start_time": "2026-11-01T21:06:10.145759+00:00",
+  "end_time": "2026-11-01T21:06:18.001039+00:00",
+  "total_latency_ms": 7854.92,
+  "spans": [
+    {
+      "span_id": "3d2299ec-b951-4bed-ac58-00b8505e0c2b",
+      "trace_id": "1e659b48-4fcf-4f5d-8f7d-3b6ab16e8426",
+      "name": "machine_translation",
+      "span_type": "tool",
+      "start_time": "2026-11-01T21:06:10.145759+00:00",
+      "end_time": "2026-11-01T21:06:17.968020+00:00",
+      "latency_ms": 7822.69,
+      "inputs": {
+        "source_query": "क्या NFA के पास DFA की तुलना में अधिक कम्प्यूटेशनल शक्ति होती है?",
+        "from": "hi",
+        "to": "en"
+      },
+      "outputs": {
+        "translated_query": "Does an NFA have more computational power than a DFA?"
+      },
+      "metadata": {},
+      "status": "ERROR",
+      "error": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function",
+      "parent_span_id": null
+    },
+    {
+      "span_id": "8b7a56f2-0194-4821-857c-42c9e42475aa",
+      "trace_id": "1e659b48-4fcf-4f5d-8f7d-3b6ab16e8426",
+      "name": "english_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T21:06:17.968020+00:00",
+      "end_time": "2026-11-01T21:06:18.000063+00:00",
+      "latency_ms": 32.06,
+      "inputs": {
+        "query": "Does an NFA have more computational power than a DFA?",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "automata_automata_theory_p1_c0",
+          "automata_automata_theory_p2_c0",
+          "automata_automata_theory_p3_c0",
+          "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p1_c0",
+          "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p9_c0"
+        ],
+        "scores": [
+          0.5346428155899048,
+          0.19258563220500946,
+          0.13909223675727844,
+          0.12492640316486359,
+          0.10783469676971436
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "bea32509-b41f-40a3-b2d5-9784d332d0bf",
+      "trace_id": "1e659b48-4fcf-4f5d-8f7d-3b6ab16e8426",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:06:18.001039+00:00",
+      "end_time": "2026-11-01T21:06:18.001039+00:00",
+      "latency_ms": 0.17,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: क्या NFA के पास DFA की तुलना में अधिक कम्प्यूटेशनल शक्ति होती है?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: automata_automata_theory_p1_c0 | Page: 1 | Subject: automata] ---\nTheory of Computation: Finite Automata and Regular Languages A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. A Non-Deterministic Finite Automaton (NFA) differs in its transition function, which maps Q x (Sigma union {epsilon}) to the power set 2^Q, allowing state transitions on empty strings (epsilon transitions) or multiple possible subsequent states for a single symbol. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.\n\n--- [Document Passage 2 | ID: automata_automata_theory_p2_c0 | Page: 2 | Subject: automata] ---\nContext-Free Grammars and Pushdown Automata Context-Free Grammars (CFGs) generate the class of context-free languages, which strictly subsume regular languages. A CFG is a 4-tuple (V, Sigma, R, S), where V is a finite set of non-terminal variables, Sigma is the terminal alphabet, R is a finite set of production rules of the form A -> alpha with A in V and alpha in (V union Sigma)*, and S is the start symbol. A Pushdown Automaton (PDA) is the mechanical equivalent of a CFG. It extends a finite state machine with an unbounded Last-In-First-Out (LIFO) stack storage. Deterministic Pushdown Automata (DPDAs) recognize deterministic context-free languages, which form a strict subset of context-free languages recognized by non-deterministic PDAs (e.g., the language of palindromes {w w^R}).\n\n--- [Document Passage 3 | ID: automata_automata_theory_p3_c0 | Page: 3 | Subject: automata] ---\nTuring Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).\n\n--- [Document Passage 4 | ID: custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p1_c0 | Page: 1 | Subject: custom_kb] ---\nIndian Voice Agent Platform: Complete Implementation Guide Version: 1.0 Target Stack: FastAPI (Backend), Next.js + React Flow (Frontend), Sarvam AI (Models), Firebase + Cloud Run (Deployment) Table of Contents 1. Executive Summary & Architecture 2. Chapter 1: The \"Indian\" Model Layer (Sarvam Integration) 3. Chapter 2: The Core Engine (FastAPI + Twilio) 4. Chapter 3: The Workflow Engine (Logic & State) 5. Chapter 4: The Frontend Builder (React Flow) 6. Chapter 5: Post-Call Analytics (Oration Style) 7. Chapter 6: Deployment Strategy (Firebase & Cloud Run) 1. Executive Summary & Architecture This platform enables users to visually design voice agents (ElevenLabs style) that are specifically optimized for Indian languages (Hindi, Hinglish, Tamil, etc.) using Sarvam AI's models. High-Level Data Flow 1. Phone Call: Customer calls a Twilio number. 2. WebSocket: Twilio connects to our FastAPI backend via WebSocket. 3. STT (Ear): Incoming audio (Mulaw) is transcoded and sent to Sarvam Saaras (via WebSocket) for real-time transcription. 4. Brain: The Workflow Engine processes the text against the user-defined JSON graph. 5. TTS (Mouth): Response text is sent to Sarvam Bulbul V3 . 6. Output: Audio is played back to the caller. 7. Analysis: After the call, the transcript is sent to an LLM for \"Oration-style\" extraction (Sentiment, Intent, Action Items). Tech Stack ● Backend: Python 3.11, FastAPI, Uvicorn, Websockets. ● Frontend: Next.js 14, React Flow, TailwindCSS, Shadcn UI. ● Database: Firestore (for storing agent configurations and call logs). ● Telephony: Twilio (Media Streams).\n\n--- [Document Passage 5 | ID: custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p9_c0 | Page: 9 | Subject: custom_kb] ---\nnext_node_id = intent['next'] self.current_node_id = next_node_id return await self.process_node(next_node_id) 5. Chapter 4: The Frontend Builder We use Next.js and React Flow . 5.1 Directory Structure /frontend /components /builder Canvas.tsx # The main React Flow area Sidebar.tsx # Drag items (Speak, Listen, API) /nodes SpeakNode.tsx # Custom Node UI ListenNode.tsx /app /dashboard page.tsx # List of Agents /builder/[id] page.tsx # The Editor 5.2 Custom Node: SpeakNode.tsx This mimics the ElevenLabs node design. import { Handle, Position } from 'reactflow'; export default function SpeakNode({ data }) { return ( <div className=\"bg-white border-2 border-blue-500 rounded-lg p-4 shadow-md w-64\"> <div className=\"font-bold mb-2 text-gray-700\"> 🤖 Agent Says</div> <textarea className=\"w-full text-sm border p-2 rounded\" placeholder=\"Enter text (e.g., Namaste...)\" defaultValue={data.text} onChange={(e) => data.onChange(e.target.value)} /> <div className=\"text-xs text-gray-400 mt-2\">Voice: Sarvam / Meera</div>\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।",
+        "tokens": {
+          "prompt_tokens": 965,
+          "completion_tokens": 49,
+          "total_tokens": 1014
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Automata",
+    "category": "Conceptual explanation",
+    "final_output": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।"
+  },
+  "status": "ERROR",
+  "error": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function"
+}

@@ -1,0 +1,98 @@
+{
+  "trace_id": "2c8d3635-1eee-4e7e-946e-c372372a2709",
+  "run_id": "2c8d3635-1eee-4e7e-946e-c372372a2709",
+  "question_id": "NET_03",
+  "system_id": "C",
+  "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "start_time": "2026-11-01T21:07:59.742034+00:00",
+  "end_time": "2026-11-01T21:08:08.750147+00:00",
+  "total_latency_ms": 9007.52,
+  "spans": [
+    {
+      "span_id": "53b5692a-6e3b-4183-a05e-a1dbf6996eb5",
+      "trace_id": "2c8d3635-1eee-4e7e-946e-c372372a2709",
+      "name": "machine_translation",
+      "span_type": "tool",
+      "start_time": "2026-11-01T21:07:59.742034+00:00",
+      "end_time": "2026-11-01T21:08:08.717122+00:00",
+      "latency_ms": 8974.23,
+      "inputs": {
+        "source_query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+        "from": "hi",
+        "to": "en"
+      },
+      "outputs": {
+        "translated_query": "How many layers are in the OSI model versus the TCP/IP model?"
+      },
+      "metadata": {},
+      "status": "ERROR",
+      "error": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function",
+      "parent_span_id": null
+    },
+    {
+      "span_id": "99661bdc-6de1-413e-8cd4-3d9b94bb3d4c",
+      "trace_id": "2c8d3635-1eee-4e7e-946e-c372372a2709",
+      "name": "english_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T21:08:08.717122+00:00",
+      "end_time": "2026-11-01T21:08:08.750147+00:00",
+      "latency_ms": 33.06,
+      "inputs": {
+        "query": "How many layers are in the OSI model versus the TCP/IP model?",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "computer_networks_computer_networks_p3_c0",
+          "computer_networks_computer_networks_p1_c0",
+          "computer_networks_computer_networks_p2_c0",
+          "dbms_database_systems_p1_c0",
+          "dbms_database_systems_p2_c0"
+        ],
+        "scores": [
+          0.7653286457061768,
+          0.42099058628082275,
+          0.29142671823501587,
+          0.21968244016170502,
+          0.21614070236682892
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "7edd9a21-7d9e-4eb2-8833-44b7ee08c109",
+      "trace_id": "2c8d3635-1eee-4e7e-946e-c372372a2709",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:08:08.750147+00:00",
+      "end_time": "2026-11-01T21:08:08.750147+00:00",
+      "latency_ms": 0.23,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n--- [Document Passage 2 | ID: computer_networks_computer_networks_p1_c0 | Page: 1 | Subject: computer_networks] ---\nComputer Networks: Transport Layer Protocols and TCP 3-Way Handshake The Transmission Control Protocol (TCP) is a connection-oriented, reliable, byte-stream transport layer protocol defined in RFC 793. Unlike UDP, which is connectionless and best-effort, TCP provides guaranteed in-order delivery, flow control, and congestion control. Before data transfer begins, TCP establishes a virtual connection between client and server using a Three-Way Handshake: 1. SYN: The active client generates a randomly chosen Initial Sequence Number (ISN_client = x) and sends a TCP segment with the SYN control flag set to 1. 2. SYN-ACK: The passive server receives the SYN segment, allocates connection buffers and state variables, generates its own Initial Sequence Number (ISN_server = y), and transmits a segment with SYN=1 and ACK=1, where the acknowledgment number is set to x + 1. 3. ACK: The client receives the SYN-ACK, transitions to the ESTABLISHED state, and transmits an ACK segment with ACK=1 and acknowledgment number set to y + 1. Data payloads can accompany this third packet.\n\n--- [Document Passage 3 | ID: computer_networks_computer_networks_p2_c0 | Page: 2 | Subject: computer_networks] ---\nTCP Flow Control vs Congestion Control It is vital to distinguish between flow control and congestion control in computer networks: - Flow Control is a speed-matching service that prevents a fast sender from overwhelming a slow receiver's buffer space. TCP implements flow control using a receive window (`rwnd`) field in the TCP header. The receiver explicitly informs the sender of how many spare bytes of buffer space are currently available (`rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]`). The sender ensures that the unacknowledged data never exceeds `rwnd`. - Congestion Control prevents senders from injecting too much traffic into the network subnet, avoiding packet loss and queue collapse in intermediate routers. TCP maintains a congestion window (`cwnd`). The effective transmission window is $\\min(\\text{cwnd}, \\text{rwnd})$. TCP congestion control algorithms (such as TCP Reno and Tahoe) employ four phases: Slow Start (exponential window growth), Congestion Avoidance (additive increase / multiplicative decrease, AIMD), Fast Retransmit, and Fast Recovery.\n\n--- [Document Passage 4 | ID: dbms_database_systems_p1_c0 | Page: 1 | Subject: dbms] ---\nDatabase Management Systems: ACID Transactions and Concurrency Control A transaction in a database management system is a logical unit of database processing that includes one or more database access operations. Transactions must satisfy the ACID properties: 1. Atomicity: Either all operations of the transaction are executed and reflected in the database, or none are. Handled by the write-ahead logging (WAL) recovery manager. 2. Consistency: Execution of a transaction in isolation preserves database consistency invariants and integrity constraints. 3. Isolation: Even if multiple transactions execute concurrently, the system guarantees that for every pair of transactions T_i and T_j, it appears to T_i that either T_j finished execution before T_i started, or T_j started execution after T_i finished. 4. Durability: Once a transaction successfully commits, the updates made to the database persist even in the event of system crashes.\n\n--- [Document Passage 5 | ID: dbms_database_systems_p2_c0 | Page: 2 | Subject: dbms] ---\nTwo-Phase Locking (2PL) and Serializability Serializability is the standard criterion for the correctness of concurrent transaction execution. A concurrent schedule is conflict serializable if it is conflict equivalent to some serial schedule, which can be verified by constructing a precedence (or serialization) graph: a schedule is conflict serializable if and only if its precedence graph has no directed cycles. The Two-Phase Locking (2PL) protocol is a concurrency control mechanism that guarantees conflict serializability. Under basic 2PL: - Growing Phase: A transaction may acquire locks (shared or exclusive), but cannot release any lock. - Shrinking Phase: A transaction may release locks, but cannot acquire any new lock. Strict 2PL further requires that all exclusive locks held by a transaction be released only after the transaction commits or aborts, which prevents cascading rollbacks. Rigorous 2PL requires both shared and exclusive locks to be held until commit.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p3_c0 (पृष्ठ 3) के अनुसार, OSI मॉडल में 7 परतें (Layers) होती हैं, जबकि TCP/IP मॉडल में 4 परतें होती हैं।",
+        "tokens": {
+          "prompt_tokens": 909,
+          "completion_tokens": 23,
+          "total_tokens": 932
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p3_c0 (पृष्ठ 3) के अनुसार, OSI मॉडल में 7 परतें (Layers) होती हैं, जबकि TCP/IP मॉडल में 4 परतें होती हैं।"
+  },
+  "status": "ERROR",
+  "error": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function"
+}

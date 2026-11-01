@@ -1,0 +1,44 @@
+{
+  "trace_id": "ce7fa836-5fe3-414f-aeae-968292687366",
+  "run_id": "ce7fa836-5fe3-414f-aeae-968292687366",
+  "question_id": "SMOKE_01",
+  "system_id": "A",
+  "query": "डेडलॉक की चार आवश्यक शर्तें क्या हैं?",
+  "start_time": "2026-11-01T21:17:11.516682+00:00",
+  "end_time": "2026-11-01T21:17:11.517681+00:00",
+  "total_latency_ms": 0.5,
+  "spans": [
+    {
+      "span_id": "88f4fae3-f8a1-4cc2-9a10-85bcf14b1f34",
+      "trace_id": "ce7fa836-5fe3-414f-aeae-968292687366",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:17:11.516682+00:00",
+      "end_time": "2026-11-01T21:17:11.517681+00:00",
+      "latency_ms": 0.5,
+      "inputs": {
+        "prompt": "You are an academic Computer Science question-answering assistant.\nAnswer the following question directly, accurately, and concisely based on your knowledge of fundamental Computer Science principles.\nDo not use any retrieved context. If the question is in Hindi, formulate your answer in Hindi. If the question is in English, answer in English.\n\nQuestion: डेडलॉक की चार आवश्यक शर्तें क्या हैं?\n\nGive a concise, technically accurate answer.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "कंप्यूटर और संबंधित विषय के सिद्धांतों के आधार पर, 'डेडलॉक की चार आवश्यक शर्तें क्या हैं?' एक मानक अवधारणा है। डायरेक्ट एलएलएम (बिना दस्तावेज़ खोज) मोड में, यह मानक तकनीकी विनिर्देशों के अनुसार संचालित होता है।",
+        "tokens": {
+          "prompt_tokens": 65,
+          "completion_tokens": 36,
+          "total_tokens": 101
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Operating Systems",
+    "category": "Factual",
+    "final_output": "कंप्यूटर और संबंधित विषय के सिद्धांतों के आधार पर, 'डेडलॉक की चार आवश्यक शर्तें क्या हैं?' एक मानक अवधारणा है। डायरेक्ट एलएलएम (बिना दस्तावेज़ खोज) मोड में, यह मानक तकनीकी विनिर्देशों के अनुसार संचालित होता है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

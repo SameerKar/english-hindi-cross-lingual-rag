@@ -1,0 +1,78 @@
+{
+  "trace_id": "355c3a8d-52db-4e5e-83e6-ee01284b03f7",
+  "run_id": "355c3a8d-52db-4e5e-83e6-ee01284b03f7",
+  "question_id": "OS_01",
+  "system_id": "D",
+  "query": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+  "start_time": "2026-11-01T21:07:24.846325+00:00",
+  "end_time": "2026-11-01T21:07:24.862850+00:00",
+  "total_latency_ms": 16.95,
+  "spans": [
+    {
+      "span_id": "2cee3720-ca90-4e6a-9573-a2a6066e1bd7",
+      "trace_id": "355c3a8d-52db-4e5e-83e6-ee01284b03f7",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T21:07:24.846325+00:00",
+      "end_time": "2026-11-01T21:07:24.862850+00:00",
+      "latency_ms": 16.8,
+      "inputs": {
+        "query": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "operating_systems_operating_systems_p2_c0",
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "operating_systems_operating_systems_p1_c0",
+          "automata_automata_theory_p3_c0",
+          "dbms_database_systems_p2_c0"
+        ],
+        "scores": [
+          0.5121431350708008,
+          0.3432212471961975,
+          0.2666621208190918,
+          0.23841369152069092,
+          0.2257240116596222
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "931c2b12-4a2e-4fd1-92b5-6302c41fa6de",
+      "trace_id": "355c3a8d-52db-4e5e-83e6-ee01284b03f7",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:07:24.862850+00:00",
+      "end_time": "2026-11-01T21:07:24.862850+00:00",
+      "latency_ms": 0.15,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: operating_systems_operating_systems_p2_c0 | Page: 2 | Subject: operating_systems] ---\nCoffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 3 | ID: operating_systems_operating_systems_p1_c0 | Page: 1 | Subject: operating_systems] ---\nOperating Systems: Process Synchronization and Deadlocks In multiprogramming environments, concurrent access to shared data can lead to data inconsistency. A race condition arises when several processes access and manipulate the same data concurrently and the outcome depends on the particular order in which access takes place. The critical-section problem requires three structural conditions to be satisfied: 1. Mutual Exclusion: If process P_i is executing in its critical section, then no other processes can be executing in their critical sections. 2. Progress: If no process is executing in its critical section and there exist some processes that wish to enter their critical section, then only those processes not executing in their remainder sections can participate in deciding which will enter next. 3. Bounded Waiting: There must be a bound on the number of times other processes are allowed to enter their critical sections after a process has made a request to enter and before that request is granted.\n\n--- [Document Passage 4 | ID: automata_automata_theory_p3_c0 | Page: 3 | Subject: automata] ---\nTuring Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).\n\n--- [Document Passage 5 | ID: dbms_database_systems_p2_c0 | Page: 2 | Subject: dbms] ---\nTwo-Phase Locking (2PL) and Serializability Serializability is the standard criterion for the correctness of concurrent transaction execution. A concurrent schedule is conflict serializable if it is conflict equivalent to some serial schedule, which can be verified by constructing a precedence (or serialization) graph: a schedule is conflict serializable if and only if its precedence graph has no directed cycles. The Two-Phase Locking (2PL) protocol is a concurrency control mechanism that guarantees conflict serializability. Under basic 2PL: - Growing Phase: A transaction may acquire locks (shared or exclusive), but cannot release any lock. - Shrinking Phase: A transaction may release locks, but cannot acquire any new lock. Strict 2PL further requires that all exclusive locks held by a transaction be released only after the transaction commits or aborts, which prevents cascading rollbacks. Rigorous 2PL requires both shared and exclusive locks to be held until commit.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ operating_systems_operating_systems_p2_c0 (पृष्ठ 2) के अनुसार, डेडलॉक (Deadlock) की चार आवश्यक कॉफमैन शर्तें हैं: Mutual Exclusion, Hold and Wait, No Preemption, और Circular Wait।",
+        "tokens": {
+          "prompt_tokens": 947,
+          "completion_tokens": 25,
+          "total_tokens": 972
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Operating Systems",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त संदर्भ operating_systems_operating_systems_p2_c0 (पृष्ठ 2) के अनुसार, डेडलॉक (Deadlock) की चार आवश्यक कॉफमैन शर्तें हैं: Mutual Exclusion, Hold and Wait, No Preemption, और Circular Wait।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

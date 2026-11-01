@@ -20,7 +20,7 @@ class Retriever:
         self.embedder = embedder
         self.top_k = top_k
 
-    def retrieve(self, query: str, top_k: Optional[int] = None) -> Tuple[List[DocumentChunk], List[float], float]:
+    def retrieve(self, query: str, top_k: Optional[int] = None, subject_filter: Optional[str] = None) -> Tuple[List[DocumentChunk], List[float], float]:
         """
         Encodes query string, searches vector store, and returns:
         (retrieved_chunks, similarity_scores, retrieval_latency_ms)
@@ -32,7 +32,7 @@ class Retriever:
         query_vec = self.embedder.embed_query(query)
 
         # Execute search in vector store
-        search_results = self.vector_store.search(query_vec, top_k=k)
+        search_results = self.vector_store.search(query_vec, top_k=k, subject_filter=subject_filter)
 
         latency_ms = (time.perf_counter() - start_time) * 1000.0
 

@@ -1,0 +1,44 @@
+{
+  "trace_id": "194bdfe9-e189-4862-949d-d5e8adb06345",
+  "run_id": "194bdfe9-e189-4862-949d-d5e8adb06345",
+  "question_id": "NET_03",
+  "system_id": "A",
+  "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "start_time": "2026-11-01T21:07:59.701006+00:00",
+  "end_time": "2026-11-01T21:07:59.701006+00:00",
+  "total_latency_ms": 0.06,
+  "spans": [
+    {
+      "span_id": "fede6f09-5119-4d6b-8239-1155e2a58690",
+      "trace_id": "194bdfe9-e189-4862-949d-d5e8adb06345",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T21:07:59.701006+00:00",
+      "end_time": "2026-11-01T21:07:59.701006+00:00",
+      "latency_ms": 0.06,
+      "inputs": {
+        "prompt": "You are an academic Computer Science question-answering assistant.\nAnswer the following question directly, accurately, and concisely based on your knowledge of fundamental Computer Science principles.\nDo not use any retrieved context. If the question is in Hindi, formulate your answer in Hindi. If the question is in English, answer in English.\n\nQuestion: ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?\n\nGive a concise, technically accurate answer.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "कंप्यूटर साइंस के बुनियादी सिद्धांतों के आधार पर, यह मानक अकादमिक नियमों और औपचारिक प्रक्रियाओं का पालन करता है। यह अवधारणा सिस्टम और एल्गोरिदम के सुचारू संचालन के लिए अत्यंत महत्वपूर्ण है।",
+        "tokens": {
+          "prompt_tokens": 70,
+          "completion_tokens": 32,
+          "total_tokens": 102
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Factual/definition",
+    "final_output": "कंप्यूटर साइंस के बुनियादी सिद्धांतों के आधार पर, यह मानक अकादमिक नियमों और औपचारिक प्रक्रियाओं का पालन करता है। यह अवधारणा सिस्टम और एल्गोरिदम के सुचारू संचालन के लिए अत्यंत महत्वपूर्ण है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

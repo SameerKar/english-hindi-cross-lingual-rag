@@ -1,0 +1,76 @@
+{
+  "run_id": "3f97c07e-8c3d-47fe-95f1-93537400b293",
+  "timestamp": "2026-11-01T21:08:08.771162+00:00",
+  "question_id": "NET_03",
+  "system_id": "D",
+  "subject": "Computer Networks",
+  "category": "Factual/definition",
+  "original_question": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "computer_networks_computer_networks_p3_c0",
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p2_c0",
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "computer_networks_computer_networks_p1_c0"
+  ],
+  "retrieval_scores": [
+    0.5655050277709961,
+    0.34906065464019775,
+    0.34454572200775146,
+    0.3055518567562103,
+    0.2503895163536072
+  ],
+  "source_documents": [
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 3,
+      "chunk_id": "computer_networks_computer_networks_p3_c0",
+      "subject": "computer_networks",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
+      "page": 2,
+      "chunk_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide_p2_c0",
+      "subject": "custom_kb",
+      "rank": 3
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 4
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p3_c0 (पृष्ठ 3) के अनुसार, OSI मॉडल में 7 परतें (Layers) होती हैं, जबकि TCP/IP मॉडल में 4 परतें होती हैं।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 17.16,
+    "generation_latency_ms": 0.16,
+    "total_latency_ms": 17.45
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

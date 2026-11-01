@@ -1,0 +1,28 @@
+{
+  "run_id": "8894ed52-0f56-472e-a008-57b19d09cd60",
+  "timestamp": "2026-11-01T21:06:18.023108+00:00",
+  "question_id": "AUTO_03",
+  "system_id": "A",
+  "subject": "Automata",
+  "category": "Factual/definition",
+  "original_question": "पुशडाउन ऑटोमेटन (PDA) किस प्रकार के स्टोरेज का उपयोग करता है?",
+  "translated_question": null,
+  "top_k": 0,
+  "retrieved_chunks": [],
+  "retrieval_scores": [],
+  "source_documents": [],
+  "generated_answer": "कंप्यूटर साइंस के बुनियादी सिद्धांतों के आधार पर, यह मानक अकादमिक नियमों और औपचारिक प्रक्रियाओं का पालन करता है। यह अवधारणा सिस्टम और एल्गोरिदम के सुचारू संचालन के लिए अत्यंत महत्वपूर्ण है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "none",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 0.0,
+    "generation_latency_ms": 0.04,
+    "total_latency_ms": 0.09
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}
