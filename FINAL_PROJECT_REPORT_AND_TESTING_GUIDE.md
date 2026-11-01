@@ -162,3 +162,4 @@ streamlit run cross_lingual_rag/app.py
 | `cross_lingual_rag/src/evaluation.py` | Computes `Recall@1/3/5`, `MRR`, `nDCG@5`, and `E1–E4` taxonomy | `EvaluationHarness.run_evaluation()` |
 | `cross_lingual_rag/run_complete_experiment.py` | Single-command end-to-end test, benchmark & report runner | `main()`, `run_pytest_suite()` |
 | `cross_lingual_rag/app.py` | 3-Tab Streamlit interactive experimentation & trace UI | `get_orchestrator()` |
+
