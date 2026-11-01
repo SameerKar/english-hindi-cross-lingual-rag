@@ -1,0 +1,76 @@
+{
+  "run_id": "9a8bf966-8abd-4fd5-8b4b-4c02c6046466",
+  "timestamp": "2026-11-01T18:13:48.352281+00:00",
+  "question_id": "DBMS_03",
+  "system_id": "D",
+  "subject": "DBMS",
+  "category": "Conceptual explanation",
+  "original_question": "3NF और BCNF के बीच प्राथमिक अंतर क्या है?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "dbms_database_systems_p3_c0",
+    "computer_networks_computer_networks_p1_c0",
+    "computer_networks_computer_networks_p2_c0",
+    "computer_networks_computer_networks_p3_c0",
+    "automata_automata_theory_p2_c0"
+  ],
+  "retrieval_scores": [
+    0.5170499086380005,
+    0.4472341537475586,
+    0.35955947637557983,
+    0.3468778133392334,
+    0.29315176606178284
+  ],
+  "source_documents": [
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 3,
+      "chunk_id": "dbms_database_systems_p3_c0",
+      "subject": "dbms",
+      "rank": 1
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 2
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 2,
+      "chunk_id": "computer_networks_computer_networks_p2_c0",
+      "subject": "computer_networks",
+      "rank": 3
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 3,
+      "chunk_id": "computer_networks_computer_networks_p3_c0",
+      "subject": "computer_networks",
+      "rank": 4
+    },
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 2,
+      "chunk_id": "automata_automata_theory_p2_c0",
+      "subject": "automata",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ dbms_database_systems_p3_c0 (पृष्ठ 3) के अनुसार, 3NF और BCNF के बीच प्राथमिक अंतर यह है कि BCNF में प्रत्येक कार्यात्मक निर्भरता X -> A के लिए X का सुपरकी (superkey) होना अनिवार्य है, जबकि 3NF में A एक प्राइम एट्रिब्यूट हो सकता है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 15.78,
+    "generation_latency_ms": 0.18,
+    "total_latency_ms": 16.12
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

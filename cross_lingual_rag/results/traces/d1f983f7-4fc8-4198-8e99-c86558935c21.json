@@ -1,0 +1,78 @@
+{
+  "trace_id": "d1f983f7-4fc8-4198-8e99-c86558935c21",
+  "run_id": "d1f983f7-4fc8-4198-8e99-c86558935c21",
+  "question_id": "ALGO_03",
+  "system_id": "D",
+  "query": "बाइनरी मिन-हीप का उपयोग करके डाइक्स्ट्रा के एल्गोरिदम की समय जटिलता (time complexity) क्या है?",
+  "start_time": "2026-11-01T18:12:44.813056+00:00",
+  "end_time": "2026-11-01T18:12:44.833110+00:00",
+  "total_latency_ms": 20.72,
+  "spans": [
+    {
+      "span_id": "920dc1e6-9710-47b3-89b9-5e76c338824e",
+      "trace_id": "d1f983f7-4fc8-4198-8e99-c86558935c21",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T18:12:44.813056+00:00",
+      "end_time": "2026-11-01T18:12:44.833110+00:00",
+      "latency_ms": 20.55,
+      "inputs": {
+        "query": "बाइनरी मिन-हीप का उपयोग करके डाइक्स्ट्रा के एल्गोरिदम की समय जटिलता (time complexity) क्या है?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "automata_automata_theory_p1_c0",
+          "automata_automata_theory_p3_c0",
+          "algorithms_algorithms_fundamentals_p3_c0",
+          "algorithms_algorithms_fundamentals_p1_c0",
+          "dbms_database_systems_p2_c0"
+        ],
+        "scores": [
+          0.4439026415348053,
+          0.43938812613487244,
+          0.4318065047264099,
+          0.4316468834877014,
+          0.41666680574417114
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "042970ad-6e07-4801-acdb-1885f3767f0c",
+      "trace_id": "d1f983f7-4fc8-4198-8e99-c86558935c21",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T18:12:44.833110+00:00",
+      "end_time": "2026-11-01T18:12:44.833110+00:00",
+      "latency_ms": 0.17,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: बाइनरी मिन-हीप का उपयोग करके डाइक्स्ट्रा के एल्गोरिदम की समय जटिलता (time complexity) क्या है?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: automata_automata_theory_p1_c0 | Page: 1 | Subject: automata] ---\nTheory of Computation: Finite Automata and Regular Languages A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. A Non-Deterministic Finite Automaton (NFA) differs in its transition function, which maps Q x (Sigma union {epsilon}) to the power set 2^Q, allowing state transitions on empty strings (epsilon transitions) or multiple possible subsequent states for a single symbol. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.\n\n--- [Document Passage 2 | ID: automata_automata_theory_p3_c0 | Page: 3 | Subject: automata] ---\nTuring Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).\n\n--- [Document Passage 3 | ID: algorithms_algorithms_fundamentals_p3_c0 | Page: 3 | Subject: algorithms] ---\nDynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.\n\n--- [Document Passage 4 | ID: algorithms_algorithms_fundamentals_p1_c0 | Page: 1 | Subject: algorithms] ---\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).\n\n--- [Document Passage 5 | ID: dbms_database_systems_p2_c0 | Page: 2 | Subject: dbms] ---\nTwo-Phase Locking (2PL) and Serializability Serializability is the standard criterion for the correctness of concurrent transaction execution. A concurrent schedule is conflict serializable if it is conflict equivalent to some serial schedule, which can be verified by constructing a precedence (or serialization) graph: a schedule is conflict serializable if and only if its precedence graph has no directed cycles. The Two-Phase Locking (2PL) protocol is a concurrency control mechanism that guarantees conflict serializability. Under basic 2PL: - Growing Phase: A transaction may acquire locks (shared or exclusive), but cannot release any lock. - Shrinking Phase: A transaction may release locks, but cannot acquire any new lock. Strict 2PL further requires that all exclusive locks held by a transaction be released only after the transaction commits or aborts, which prevents cascading rollbacks. Rigorous 2PL requires both shared and exclusive locks to be held until commit.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।",
+        "tokens": {
+          "prompt_tokens": 944,
+          "completion_tokens": 49,
+          "total_tokens": 993
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Algorithms",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

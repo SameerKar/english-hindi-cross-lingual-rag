@@ -1,0 +1,20 @@
+=== PAGE 1 ===
+Theory of Computation: Finite Automata and Regular Languages
+
+A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. 
+
+A Non-Deterministic Finite Automaton (NFA) differs in its transition function, which maps Q x (Sigma union {epsilon}) to the power set 2^Q, allowing state transitions on empty strings (epsilon transitions) or multiple possible subsequent states for a single symbol. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.
+
+=== PAGE 2 ===
+Context-Free Grammars and Pushdown Automata
+
+Context-Free Grammars (CFGs) generate the class of context-free languages, which strictly subsume regular languages. A CFG is a 4-tuple (V, Sigma, R, S), where V is a finite set of non-terminal variables, Sigma is the terminal alphabet, R is a finite set of production rules of the form A -> alpha with A in V and alpha in (V union Sigma)*, and S is the start symbol. 
+
+A Pushdown Automaton (PDA) is the mechanical equivalent of a CFG. It extends a finite state machine with an unbounded Last-In-First-Out (LIFO) stack storage. Deterministic Pushdown Automata (DPDAs) recognize deterministic context-free languages, which form a strict subset of context-free languages recognized by non-deterministic PDAs (e.g., the language of palindromes {w w^R}).
+
+=== PAGE 3 ===
+Turing Machines and the Halting Problem
+
+A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine.
+
+The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).

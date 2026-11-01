@@ -1,0 +1,76 @@
+{
+  "run_id": "9921fc13-e38f-4e20-a6fe-fa3445f50b23",
+  "timestamp": "2026-11-01T18:13:40.416296+00:00",
+  "question_id": "DBMS_02",
+  "system_id": "C",
+  "subject": "DBMS",
+  "category": "Conceptual explanation",
+  "original_question": "सख्त 2PL (Strict Two-Phase Locking) कैस्केडिंग रोलबैक को कैसे रोकता है?",
+  "translated_question": "How does strict Two-Phase Locking (2PL) prevent cascading rollbacks?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "dbms_database_systems_p2_c0",
+    "dbms_database_systems_p1_c0",
+    "operating_systems_operating_systems_p1_c0",
+    "operating_systems_operating_systems_p2_c0",
+    "operating_systems_operating_systems_p3_c0"
+  ],
+  "retrieval_scores": [
+    0.6733828186988831,
+    0.5077065229415894,
+    0.43977293372154236,
+    0.40862420201301575,
+    0.24606497585773468
+  ],
+  "source_documents": [
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 2,
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "subject": "dbms",
+      "rank": 1
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 1,
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "subject": "dbms",
+      "rank": 2
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 1,
+      "chunk_id": "operating_systems_operating_systems_p1_c0",
+      "subject": "operating_systems",
+      "rank": 3
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 2,
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "subject": "operating_systems",
+      "rank": 4
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 3,
+      "chunk_id": "operating_systems_operating_systems_p3_c0",
+      "subject": "operating_systems",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ dbms_database_systems_p2_c0 (पृष्ठ 2) के अनुसार, सख्त 2PL (Strict Two-Phase Locking) सभी अनन्य लॉक्स (exclusive locks) को ट्रांजेक्शन के कमिट या एबॉर्शन तक बनाए रखकर कैस्केडिंग रोलबैक (cascading rollbacks) को रोकता है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 7965.66,
+    "retrieval_latency_ms": 38.73,
+    "generation_latency_ms": 0.2,
+    "total_latency_ms": 8004.79
+  },
+  "error_status": "FAILURE",
+  "error_message": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function"
+}

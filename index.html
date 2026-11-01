@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Lingual Academic RAG — Research Hub & Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090d;
+      --card-bg: #10131d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.5);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #8b5cf6;
+      --accent-emerald: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background-image: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+    }
+    .hub-container {
+      max-width: 960px;
+      width: 100%;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    p.subtitle {
+      font-size: 15.5px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 36px auto;
+      line-height: 1.6;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      text-align: left;
+    }
+    @media (max-width: 800px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+    .portal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    }
+    .portal-card.primary {
+      border-color: rgba(56, 189, 248, 0.3);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(16, 19, 29, 0.9) 100%);
+    }
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .card-footer-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+  <div class="hub-container">
+    <div class="badge">Open Source Research Platform</div>
+    <h1>Cross-Lingual Academic RAG Portal</h1>
+    <p class="subtitle">
+      Select your preferred documentation experience to explore the Hindi-to-English textbook retrieval architecture, testing workflows, and benchmarks.
+    </p>
+
+    <div class="cards-grid">
+      <!-- Card 1: testit.html -->
+      <a href="testit.html" class="portal-card primary">
+        <div>
+          <div class="card-tag" style="color: var(--accent-blue);">Testing &amp; Guide</div>
+          <div class="card-title">🧪 Beginner-to-Intermediate Manual</div>
+          <p class="card-desc">
+            Clean editorial presentation guide inspired by analytics slides. Features big bento stats (17.2&times;, 193ms), minimal timeline stepper, module breakdowns, and live tester.
+          </p>
+        </div>
+        <div class="card-footer-action" style="color: var(--accent-blue);">Launch Manual &rarr;</div>
+      </a>
+
+      <!-- Card 2: documentation.html -->
+      <a href="documentation.html" class="portal-card">
+        <div>
+          <div class="card-tag" style="color: var(--accent-purple);">Interactive Lab</div>
+          <div class="card-title">🔬 Visual Architecture Lab</div>
+          <p class="card-desc">
+            Dual intuitive/technical explanations, interactive flowcharts with pathway toggle buttons, and on-page pipeline simulation observer.
+          </p>
+        </div>
+        <div class="card-footer-action" style="color: var(--accent-purple);">Open Visual Lab &rarr;</div>
+      </a>
+
+      <!-- Card 3: research_paper.html -->
+      <a href="research_paper.html" class="portal-card">
+        <div>
+          <div class="card-tag" style="color: var(--accent-emerald);">Scientific Report</div>
+          <div class="card-title">📄 Formal Research Paper</div>
+          <p class="card-desc">
+            Publication-grade Distill/arXiv format with mathematical derivations (Cosine, L2 norm, nDCG@5), author affiliations, and BibTeX citation.
+          </p>
+        </div>
+        <div class="card-footer-action" style="color: var(--accent-emerald);">Read Research Paper &rarr;</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

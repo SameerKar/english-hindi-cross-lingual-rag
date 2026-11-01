@@ -1,0 +1,78 @@
+{
+  "trace_id": "bbe8f46f-1969-43e8-ad50-f5adb6322cf2",
+  "run_id": "bbe8f46f-1969-43e8-ad50-f5adb6322cf2",
+  "question_id": "ALGO_01",
+  "system_id": "D",
+  "query": "डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ पर क्यों विफल हो जाता है?",
+  "start_time": "2026-11-01T18:12:29.294239+00:00",
+  "end_time": "2026-11-01T18:12:29.335691+00:00",
+  "total_latency_ms": 41.55,
+  "spans": [
+    {
+      "span_id": "2baf0971-2254-4703-8900-70cb92c1180f",
+      "trace_id": "bbe8f46f-1969-43e8-ad50-f5adb6322cf2",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T18:12:29.294239+00:00",
+      "end_time": "2026-11-01T18:12:29.334693+00:00",
+      "latency_ms": 41.32,
+      "inputs": {
+        "query": "डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ पर क्यों विफल हो जाता है?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "algorithms_algorithms_fundamentals_p1_c0",
+          "algorithms_algorithms_fundamentals_p3_c0",
+          "dbms_database_systems_p3_c0",
+          "operating_systems_operating_systems_p3_c0"
+        ],
+        "scores": [
+          0.7925060987472534,
+          0.5374336838722229,
+          0.3065623342990875,
+          0.2743024230003357,
+          0.21588444709777832
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "c91de65b-f40b-4530-aacb-9fe00214e110",
+      "trace_id": "bbe8f46f-1969-43e8-ad50-f5adb6322cf2",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T18:12:29.335691+00:00",
+      "end_time": "2026-11-01T18:12:29.335691+00:00",
+      "latency_ms": 0.23,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ पर क्यों विफल हो जाता है?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p1_c0 | Page: 1 | Subject: algorithms] ---\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).\n\n--- [Document Passage 3 | ID: algorithms_algorithms_fundamentals_p3_c0 | Page: 3 | Subject: algorithms] ---\nDynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.\n\n--- [Document Passage 4 | ID: dbms_database_systems_p3_c0 | Page: 3 | Subject: dbms] ---\nRelational Database Normalization: 1NF to BCNF Normalization is the systematic design process of organizing data to eliminate insertion, update, and deletion anomalies while minimizing data redundancy. - First Normal Form (1NF): A relation is in 1NF if every attribute domain contains only atomic (indivisible) values and each row is unique. - Second Normal Form (2NF): A relation is in 2NF if it is in 1NF and no non-prime attribute is partially dependent on any candidate key. - Third Normal Form (3NF): A relation is in 3NF if it is in 2NF and no non-prime attribute is transitively dependent on candidate keys (for every functional dependency X -> A, either X is a superkey or A is a prime attribute). - Boyce-Codd Normal Form (BCNF): A stricter version of 3NF where for every non-trivial functional dependency X -> A, X must be a superkey.\n\n--- [Document Passage 5 | ID: operating_systems_operating_systems_p3_c0 | Page: 3 | Subject: operating_systems] ---\nVirtual Memory and Page Replacement Algorithms Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. Memory is organized into fixed-size blocks called pages (in logical memory) and frames (in physical memory). When a process attempts to access a page not currently residing in physical RAM, the memory management unit (MMU) generates a page fault hardware interrupt. When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out: - FIFO (First-In, First-Out): Replaces the oldest page loaded in memory. Can suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults. - Optimal (OPT / Belady's Min): Replaces the page that will not be used for the longest period of time in the future. Provides the lowest page fault rate but is impossible to implement in practice because future references cannot be known. - Least Recently Used (LRU): Replaces the page that has not been used for the longest period in the past. Approximates the optimal algorithm by using past temporal locality.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ algorithms_algorithms_fundamentals_p2_c0 (पृष्ठ 2) के अनुसार, डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ़ पर विफल हो जाता है क्योंकि इसका ग्रीडी विकल्प दूरियों को स्थायी मान लेता है। इसके स्थान पर Bellman-Ford एल्गोरिदम का उपयोग किया जाना चाहिए, जो O(V * E) समय में चलता है और ऋणात्मक चक्रों का पता लगाता है।",
+        "tokens": {
+          "prompt_tokens": 977,
+          "completion_tokens": 57,
+          "total_tokens": 1034
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Algorithms",
+    "category": "Conceptual explanation",
+    "final_output": "पुनर्प्राप्त संदर्भ algorithms_algorithms_fundamentals_p2_c0 (पृष्ठ 2) के अनुसार, डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों (negative edge weights) वाले ग्राफ़ पर विफल हो जाता है क्योंकि इसका ग्रीडी विकल्प दूरियों को स्थायी मान लेता है। इसके स्थान पर Bellman-Ford एल्गोरिदम का उपयोग किया जाना चाहिए, जो O(V * E) समय में चलता है और ऋणात्मक चक्रों का पता लगाता है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

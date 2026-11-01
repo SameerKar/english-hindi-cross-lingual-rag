@@ -1,0 +1,76 @@
+{
+  "run_id": "e5387c39-2a39-469c-8ac7-0d109610ef04",
+  "timestamp": "2026-11-01T18:13:56.371125+00:00",
+  "question_id": "OS_01",
+  "system_id": "C",
+  "subject": "Operating Systems",
+  "category": "Factual/definition",
+  "original_question": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+  "translated_question": "What are Coffman's four necessary conditions for deadlock?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "operating_systems_operating_systems_p2_c0",
+    "operating_systems_operating_systems_p1_c0",
+    "dbms_database_systems_p2_c0",
+    "dbms_database_systems_p1_c0",
+    "computer_networks_computer_networks_p1_c0"
+  ],
+  "retrieval_scores": [
+    0.834980845451355,
+    0.5927215814590454,
+    0.4404745101928711,
+    0.4278123378753662,
+    0.30104926228523254
+  ],
+  "source_documents": [
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 2,
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "subject": "operating_systems",
+      "rank": 1
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 1,
+      "chunk_id": "operating_systems_operating_systems_p1_c0",
+      "subject": "operating_systems",
+      "rank": 2
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 2,
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "subject": "dbms",
+      "rank": 3
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 1,
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "subject": "dbms",
+      "rank": 4
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ operating_systems_operating_systems_p2_c0 (पृष्ठ 2) के अनुसार, डेडलॉक (Deadlock) की चार आवश्यक कॉफमैन शर्तें हैं: Mutual Exclusion, Hold and Wait, No Preemption, और Circular Wait।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 7942.94,
+    "retrieval_latency_ms": 33.57,
+    "generation_latency_ms": 0.15,
+    "total_latency_ms": 7976.85
+  },
+  "error_status": "FAILURE",
+  "error_message": "Web MT rate-limited; utilized fallback academic dictionary. Notice: Server Error: You made too many requests to the server.According to google, you are allowed to make 5 requests per secondand up to 200k requests per day. You can wait and try again later oryou can try the translate_batch function"
+}

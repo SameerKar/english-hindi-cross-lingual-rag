@@ -1,0 +1,76 @@
+{
+  "run_id": "ed9d47a5-fbb9-460a-b005-13717385e59b",
+  "timestamp": "2026-11-01T18:12:44.876450+00:00",
+  "question_id": "ALGO_04",
+  "system_id": "B",
+  "subject": "Algorithms",
+  "category": "Conceptual explanation",
+  "original_question": "What are the two core properties required for dynamic programming to apply to an optimization problem?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "algorithms_algorithms_fundamentals_p3_c0",
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "operating_systems_operating_systems_p1_c0",
+    "computer_networks_computer_networks_p2_c0"
+  ],
+  "retrieval_scores": [
+    0.48373177647590637,
+    0.24236661195755005,
+    0.1827571839094162,
+    0.18058893084526062,
+    0.14236478507518768
+  ],
+  "source_documents": [
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 3,
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "subject": "algorithms",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 3
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 1,
+      "chunk_id": "operating_systems_operating_systems_p1_c0",
+      "subject": "operating_systems",
+      "rank": 4
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 2,
+      "chunk_id": "computer_networks_computer_networks_p2_c0",
+      "subject": "computer_networks",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "According to retrieved passage algorithms_algorithms_fundamentals_p3_c0 (Page 3), the two core properties required for dynamic programming are optimal substructure and overlapping subproblems (e.g., in the 0/1 Knapsack recurrence DP[i][w] with O(n * W) pseudo-polynomial complexity).",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 39.58,
+    "generation_latency_ms": 0.15,
+    "total_latency_ms": 39.84
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

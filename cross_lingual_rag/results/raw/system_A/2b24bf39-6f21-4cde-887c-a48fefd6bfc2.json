@@ -1,0 +1,28 @@
+{
+  "run_id": "2b24bf39-6f21-4cde-887c-a48fefd6bfc2",
+  "timestamp": "2026-11-01T18:13:48.353278+00:00",
+  "question_id": "OS_01",
+  "system_id": "A",
+  "subject": "Operating Systems",
+  "category": "Factual/definition",
+  "original_question": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+  "translated_question": null,
+  "top_k": 0,
+  "retrieved_chunks": [],
+  "retrieval_scores": [],
+  "source_documents": [],
+  "generated_answer": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें हैं: Mutual Exclusion, Hold and Wait, No Preemption, और Circular Wait।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "none",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 0.0,
+    "generation_latency_ms": 0.02,
+    "total_latency_ms": 0.07
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

@@ -1,0 +1,116 @@
+{
+  "timestamp_utc": "2026-11-01T18:14:35.604527+00:00",
+  "pytest_verification": {
+    "passed": true,
+    "return_code": 0,
+    "duration_sec": 26.65,
+    "stdout_summary": "============================= 7 passed in 24.29s =============================="
+  },
+  "total_benchmark_questions": 17,
+  "total_pipeline_runs": 68,
+  "system_metrics_summary": {
+    "A": {
+      "num_questions": 17,
+      "recall_at_1": null,
+      "recall_at_3": null,
+      "recall_at_5": null,
+      "mrr": null,
+      "ndcg_at_5": null,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 0.0,
+      "mean_generation_latency_ms": 0.07,
+      "mean_total_latency_ms": 0.12,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 17
+      }
+    },
+    "B": {
+      "num_questions": 17,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 43.07,
+      "mean_generation_latency_ms": 0.16,
+      "mean_total_latency_ms": 43.36,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 17
+      }
+    },
+    "C": {
+      "num_questions": 17,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_translation_latency_ms": 7802.11,
+      "mean_retrieval_latency_ms": 36.3,
+      "mean_generation_latency_ms": 0.2,
+      "mean_total_latency_ms": 7838.81,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 17
+      }
+    },
+    "D": {
+      "num_questions": 17,
+      "recall_at_1": 0.7059,
+      "recall_at_3": 0.8235,
+      "recall_at_5": 0.9412,
+      "mrr": 0.7912,
+      "ndcg_at_5": 0.8282,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 20.53,
+      "mean_generation_latency_ms": 0.18,
+      "mean_total_latency_ms": 20.85,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 1,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 16
+      }
+    }
+  },
+  "subject_wise_mrr": {
+    "Algorithms": {
+      "B": 1.0,
+      "C": 1.0,
+      "D": 0.6875
+    },
+    "Automata": {
+      "B": 1.0,
+      "C": 1.0,
+      "D": 0.75
+    },
+    "Computer Networks": {
+      "B": 1.0,
+      "C": 1.0,
+      "D": 1.0
+    },
+    "DBMS": {
+      "B": 1.0,
+      "C": 1.0,
+      "D": 1.0
+    },
+    "Operating Systems": {
+      "B": 1.0,
+      "C": 1.0,
+      "D": 0.5667
+    }
+  }
+}

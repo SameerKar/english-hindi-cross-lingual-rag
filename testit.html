@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Lingual Academic RAG — Testing Manual & Architectural Deep-Dive</title>
+
+  <!-- Typography: Inter for UI & Content, JetBrains Mono for Code & Terminal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       EDITORIAL DESIGN SYSTEM (Sleek Dark, High Contrast, Ultra-Readable)
+       ========================================================================== */
+    :root {
+      --bg-base: #08090d;
+      --bg-surface: #0e111a;
+      --bg-card: #121522;
+      --bg-card-hover: #171b2d;
+      --bg-code: #050608;
+      --bg-subtle: rgba(255, 255, 255, 0.03);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-medium: rgba(255, 255, 255, 0.15);
+      --border-accent: rgba(99, 102, 241, 0.4);
+
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --accent-blue: #2563eb;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-purple: #8b5cf6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --max-width: 1100px;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 15.5px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 85%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Top Sticky Navigation Bar */
+    header.doc-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 9, 13, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 24px;
+    }
+
+    .doc-nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .nav-brand-pill {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--accent-indigo);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-brand-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .nav-menu-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-menu-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: var(--border-medium);
+    }
+
+    /* Main Container */
+    main.doc-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 40px 24px 140px 24px;
+    }
+
+    /* Hero Section (Editorial Big-Number Grid Inspired by Image 2 & 3) */
+    .hero-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px 42px;
+      margin-bottom: 44px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    h1.hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      margin-bottom: 14px;
+    }
+
+    p.hero-summary {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 900px;
+      margin-bottom: 32px;
+    }
+
+    /* Bento Stats Grid */
+    .bento-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 26px;
+    }
+
+    @media (max-width: 860px) {
+      .bento-stats { grid-template-columns: repeat(2, 1fr); }
+      h1.hero-title { font-size: 26px; }
+      .hero-panel { padding: 26px 20px; }
+    }
+
+    @media (max-width: 500px) {
+      .bento-stats { grid-template-columns: 1fr; }
+    }
+
+    .bento-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+    }
+
+    .bento-card.blue-focus {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(14, 17, 26, 0.4) 100%);
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    .bento-num {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .bento-num.cyan { color: var(--accent-cyan); }
+    .bento-num.emerald { color: var(--accent-emerald); }
+    .bento-num.amber { color: var(--accent-amber); }
+
+    .bento-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 10px;
+    }
+
+    .bento-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    /* Table of Contents Grid */
+    .toc-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+      margin-bottom: 44px;
+    }
+
+    .toc-header {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 28px;
+      font-size: 13.5px;
+    }
+
+    @media (max-width: 720px) {
+      .toc-grid { grid-template-columns: 1fr; }
+    }
+
+    .toc-grid a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      transition: color 0.15s ease;
+    }
+
+    .toc-grid a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .toc-num {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    /* Core Section Containers */
+    section.doc-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px;
+      margin-bottom: 44px;
+    }
+
+    @media (max-width: 768px) {
+      section.doc-section { padding: 24px 18px; }
+    }
+
+    .section-title-bar {
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .title-left h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-left p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .sec-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    h3.sub-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 30px 0 12px 0;
+    }
+
+    h4.sub-sub-heading {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 18px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Two-Column Comparison Cards */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .split-grid { grid-template-columns: 1fr; }
+    }
+
+    .split-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .split-box.amber-accent { border-top: 3px solid var(--accent-amber); }
+    .split-box.cyan-accent { border-top: 3px solid var(--accent-cyan); }
+    .split-box.indigo-accent { border-top: 3px solid var(--accent-indigo); }
+
+    .split-box-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .split-box.amber-accent .split-box-tag { color: var(--accent-amber); }
+    .split-box.cyan-accent .split-box-tag { color: var(--accent-cyan); }
+    .split-box.indigo-accent .split-box-tag { color: var(--accent-indigo); }
+
+    .query-callout {
+      background: rgba(0, 0, 0, 0.45);
+      border-left: 3px solid var(--accent-amber);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    /* Horizontal Minimal Timeline (Inspired by Image 1) */
+    .timeline-bar {
+      margin: 28px 0 24px 0;
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 24px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      border-top: 2px dashed rgba(255, 255, 255, 0.15);
+      z-index: 1;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 860px) {
+      .timeline-line { display: none; }
+      .timeline-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+
+    .t-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .t-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .t-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .t-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 3px;
+    }
+
+    /* Terminal & Code Blocks */
+    .terminal-wrapper {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .terminal-top {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .t-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .t-dot.r { background: #ef4444; }
+    .t-dot.y { background: #f59e0b; }
+    .t-dot.g { background: #10b981; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    .copy-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .copy-pill:hover {
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    pre.code-terminal {
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+
+    pre.output-terminal {
+      padding: 14px 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.55;
+      color: #94a3b8;
+      background: #06070a;
+      border-top: 1px dashed var(--border-subtle);
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #f8fafc;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    /* Publication Clean Tables */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1.5px solid var(--border-medium);
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    table.data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    table.data-table tr:last-child td { border-bottom: none; }
+    table.data-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    /* Module Detailed Cards (Section 5) */
+    .module-full-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      margin-bottom: 28px;
+      transition: border-color 0.2s ease;
+    }
+
+    .module-full-card:hover {
+      border-color: var(--border-medium);
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .module-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mod-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .mod-badge.blue { background: rgba(37, 99, 235, 0.15); color: var(--accent-cyan); border: 1px solid rgba(37, 99, 235, 0.3); }
+    .mod-badge.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+    .mod-badge.emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .mod-badge.amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .module-h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .callout-box {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 13.5px;
+    }
+
+    .callout-box.info {
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    .callout-box.tip {
+      border-left: 3px solid var(--accent-emerald);
+    }
+
+    .callout-box.warning {
+      border-left: 3px solid var(--accent-amber);
+    }
+
+    /* Crisp Vector SVG Graphics */
+    svg.doc-svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 18px auto;
+    }
+
+    @keyframes dashStream {
+      from { stroke-dashoffset: 40; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    .stream-anim {
+      stroke-dasharray: 6 5;
+      animation: dashStream 2s linear infinite;
+    }
+
+    .icon-inline {
+      width: 16px;
+      height: 16px;
+      vertical-align: -2px;
+      display: inline-block;
+    }
+
+    /* Checklist */
+    .checklist-list {
+      list-style: none;
+      margin: 14px 0;
+    }
+
+    .checklist-list li {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .checklist-check {
+      color: var(--accent-emerald);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="doc-nav">
+    <div class="doc-nav-inner">
+      <div class="nav-brand-group">
+        <span class="nav-brand-pill">🧪 Testit Manual</span>
+        <span class="nav-brand-text">Cross-Lingual Academic RAG</span>
+      </div>
+      <div class="nav-menu-links">
+        <a href="#problem" class="nav-menu-btn">§ 1 Problem</a>
+        <a href="#systems" class="nav-menu-btn">§ 2 Systems</a>
+        <a href="#quickstart" class="nav-menu-btn">§ 3 Quickstart</a>
+        <a href="#dataflow" class="nav-menu-btn">§ 4 Architecture</a>
+        <a href="#modules" class="nav-menu-btn">§ 5 All 15 Modules</a>
+        <a href="#taxonomy" class="nav-menu-btn">§ 6 E1–E4 Errors</a>
+        <a href="#recipes" class="nav-menu-btn">§ 7 Recipes</a>
+        <a href="#troubleshooting" class="nav-menu-btn">§ 8 FAQ</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="doc-container" id="top">
+
+    <!-- HERO SECTION (Editorial Style Inspired by Image 2 & 3) -->
+    <section class="hero-panel">
+      <div class="hero-kicker">
+        <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span>Architectural Testing &amp; Verification Manual</span>
+      </div>
+
+      <h1 class="hero-title">English–Hindi Academic RAG: The Complete Testing Guide</h1>
+
+      <p class="hero-summary">
+        An end-to-end, visual guide designed for software engineers and AI developers. 
+        Learn how Hindi inquiries retrieve verified answers from English university textbooks, 
+        execute the 6-step testing ladder with copyable PowerShell commands, explore all 15 Python modules, and diagnose failure modes.
+      </p>
+
+      <!-- Bento Stat Cards -->
+      <div class="bento-stats">
+        <div class="bento-card blue-focus">
+          <div class="bento-num cyan">17.2&times;</div>
+          <div class="bento-label">System D Speedup</div>
+          <div class="bento-sub">vs Sequential Translation (193ms vs 3.3s)</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-num">193<span style="font-size: 24px;">ms</span></div>
+          <div class="bento-label">Mean Latency</div>
+          <div class="bento-sub">Sub-200ms real-time bilingual retrieval</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-num emerald">7 / 7</div>
+          <div class="bento-label">Pytest Health Tests</div>
+          <div class="bento-sub">100% unit &amp; pipeline tests passing</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-num amber">$0.00</div>
+          <div class="bento-label">Infrastructure Cost</div>
+          <div class="bento-sub">100% Free / Local Stack (CPU FAISS + Ollama/Gemini)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <nav class="toc-card">
+      <div class="toc-header">
+        <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span>Table of Contents</span>
+      </div>
+      <div class="toc-grid">
+        <a href="#problem"><span class="toc-num">§ 1.</span> The Big Picture: What Problem Are We Solving?</a>
+        <a href="#systems"><span class="toc-num">§ 2.</span> The 4 Systems at a Glance</a>
+        <a href="#quickstart"><span class="toc-num">§ 3.</span> Quickstart: How to Test the Project in 5 Minutes</a>
+        <a href="#dataflow"><span class="toc-num">§ 4.</span> Master End-to-End Dataflow Diagram</a>
+        <a href="#modules"><span class="toc-num">§ 5.</span> Module-by-Module Deep Dive (All 15 Modules)</a>
+        <a href="#taxonomy"><span class="toc-num">§ 6.</span> The E1–E4 Scientific Error Taxonomy</a>
+        <a href="#recipes"><span class="toc-num">§ 7.</span> Hands-On Manual Testing Recipes</a>
+        <a href="#troubleshooting"><span class="toc-num">§ 8.</span> Troubleshooting &amp; Common Gotchas</a>
+      </div>
+    </nav>
+
+    <!-- =========================================================================
+         SECTION 1: THE BIG PICTURE
+         ========================================================================= -->
+    <section class="doc-section" id="problem">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 1. The Big Picture: What Problem Are We Solving?</h2>
+          <p>Connecting Hindi conceptual inquiries to English university textbooks</p>
+        </div>
+        <span class="sec-badge">Foundations</span>
+      </div>
+
+      <p>
+        Imagine an Indian engineering undergraduate preparing for university Computer Science exams.
+        The student thinks, deliberates, and asks conceptual questions in <strong>Hindi</strong>:
+      </p>
+
+      <div class="query-callout">
+        "डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों पर क्यों विफल हो जाता है?"
+      </div>
+      <p style="font-size: 13.5px; color: var(--text-dim); font-family: var(--font-mono); margin-bottom: 20px;">
+        Literal English Translation: "Why does Dijkstra's algorithm fail on negative edge weights?"
+      </p>
+
+      <p>
+        Meanwhile, standard university textbooks—Cormen (Algorithms), Silberschatz (Operating Systems), 
+        Tanenbaum (Computer Networks)—are written entirely in <strong>English</strong>:
+      </p>
+
+      <!-- SVG Visual: The Language Gap -->
+      <svg class="doc-svg" viewBox="0 0 880 200" width="880" height="200">
+        <g transform="translate(30, 20)">
+          <rect width="260" height="85" rx="8" fill="#141724" stroke="#8b5cf6" stroke-width="1.5" />
+          <text x="16" y="26" font-size="12" font-weight="700" fill="#a78bfa">STUDENT'S BRAIN (Hindi)</text>
+          <text x="16" y="48" font-size="12" fill="#cbd5e1">"डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक</text>
+          <text x="16" y="66" font-size="12" fill="#cbd5e1">किनारों पर क्यों विफल हो जाता है?"</text>
+        </g>
+
+        <path d="M 290 62 L 570 62" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" class="stream-anim" />
+        <rect x="360" y="47" width="140" height="30" rx="4" fill="#1e131d" stroke="#ef4444" stroke-width="1" />
+        <text x="375" y="67" font-size="11" font-weight="700" fill="#f87171">LANGUAGE GAP</text>
+
+        <g transform="translate(580, 20)">
+          <rect width="270" height="85" rx="8" fill="#141724" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="16" y="26" font-size="12" font-weight="700" fill="#38bdf8">TEXTBOOKS (English)</text>
+          <text x="16" y="48" font-size="11.5" fill="#cbd5e1">"Dijkstra's algorithm fails on</text>
+          <text x="16" y="66" font-size="11.5" fill="#cbd5e1">negative edge weights because..."</text>
+        </g>
+
+        <text x="440" y="145" text-anchor="middle" font-size="13" font-weight="600" fill="#94a3b8">
+          How do we bridge this Hindi question to the exact English textbook page?
+        </text>
+
+        <path d="M 440 155 L 440 185" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)" />
+      </svg>
+
+      <p style="margin-top: 10px;">There are two primary ways an AI system can solve this:</p>
+
+      <div class="split-grid">
+        <div class="split-box amber-accent">
+          <div class="split-box-tag">Strategy 1: Sequential Translation (System C)</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Two-Stage Mediation</h3>
+          <p style="font-size: 13.5px;">
+            1. Translate Hindi question to English first using Google Translate.<br>
+            2. Search the English FAISS vector index with translated English words.<br>
+            3. Feed retrieved English textbook context to LLM &amp; synthesize answer in Hindi.
+          </p>
+          <div class="callout-box warning" style="margin-bottom: 0;">
+            <strong>Tradeoff:</strong> Slower (3,327 ms), and translation errors can mislead retrieval.
+          </div>
+        </div>
+
+        <div class="split-box cyan-accent">
+          <div class="split-box-tag">Strategy 2: Direct Multilingual (System D) ⚡</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Shared Bilingual Vector Space</h3>
+          <p style="font-size: 13.5px;">
+            1. Don't translate words at all!<br>
+            2. Project both Hindi and English into the <strong>same shared mathematical vector space</strong>.<br>
+            3. Directly search English passages with the Hindi vector &amp; synthesize in Hindi.
+          </p>
+          <div class="callout-box tip" style="margin-bottom: 0;">
+            <strong>Tradeoff:</strong> Lightning fast (193 ms, 17.2&times; faster), zero translation step!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 2: THE 4 SYSTEMS AT A GLANCE
+         ========================================================================= -->
+    <section class="doc-section" id="systems">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 2. The 4 Systems at a Glance</h2>
+          <p>Controlled comparison matrix across isolated topologies</p>
+        </div>
+        <span class="sec-badge">Topologies</span>
+      </div>
+
+      <!-- Topology Diagram SVG -->
+      <svg class="doc-svg" viewBox="0 0 920 280" width="920" height="280">
+        <!-- System A -->
+        <g transform="translate(10, 10)">
+          <rect width="210" height="250" rx="8" fill="#121522" stroke="#64748b" stroke-width="1.2" />
+          <rect x="10" y="10" width="190" height="24" rx="4" fill="#1e2235" />
+          <text x="105" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#cbd5e1">SYSTEM A: DIRECT BASELINE</text>
+          
+          <rect x="25" y="55" width="160" height="32" rx="4" fill="#0b0d14" stroke="#64748b" />
+          <text x="105" y="75" text-anchor="middle" font-size="10.5" fill="#f8fafc">Hindi Question</text>
+
+          <path d="M 105 87 L 105 120" stroke="#64748b" stroke-width="1.5" />
+
+          <rect x="25" y="120" width="160" height="40" rx="4" fill="#1c1f2e" stroke="#f43f5e" stroke-width="1.5" />
+          <text x="105" y="137" text-anchor="middle" font-size="11" font-weight="700" fill="#f43f5e">LLM Brain (Closed-Book)</text>
+          <text x="105" y="152" text-anchor="middle" font-size="9" fill="#94a3b8">No Books Consulted!</text>
+
+          <path d="M 105 160 L 105 190" stroke="#64748b" stroke-width="1.5" />
+
+          <rect x="25" y="190" width="160" height="32" rx="4" fill="#0b0d14" stroke="#64748b" />
+          <text x="105" y="210" text-anchor="middle" font-size="10.5" fill="#f8fafc">Hindi Answer</text>
+
+          <text x="105" y="244" text-anchor="middle" font-size="9.5" fill="#f87171">High Hallucination Risk [E3]</text>
+        </g>
+
+        <!-- System B -->
+        <g transform="translate(235, 10)">
+          <rect width="210" height="250" rx="8" fill="#121522" stroke="#38bdf8" stroke-width="1.2" />
+          <rect x="10" y="10" width="190" height="24" rx="4" fill="#1e2235" />
+          <text x="105" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#38bdf8">SYSTEM B: ENGLISH CONTROL</text>
+
+          <rect x="25" y="50" width="160" height="28" rx="4" fill="#0b0d14" stroke="#38bdf8" />
+          <text x="105" y="68" text-anchor="middle" font-size="10" fill="#f8fafc">English Question</text>
+
+          <path d="M 105 78 L 105 95" stroke="#38bdf8" stroke-width="1.2" />
+
+          <rect x="25" y="95" width="160" height="28" rx="4" fill="#141c28" stroke="#38bdf8" />
+          <text x="105" y="113" text-anchor="middle" font-size="10" fill="#38bdf8">English FAISS (768d)</text>
+
+          <path d="M 105 123 L 105 140" stroke="#38bdf8" stroke-width="1.2" />
+
+          <rect x="25" y="140" width="160" height="34" rx="4" fill="#1c1f2e" stroke="#38bdf8" />
+          <text x="105" y="156" text-anchor="middle" font-size="10.5" font-weight="700" fill="#38bdf8">LLM Grounded</text>
+          <text x="105" y="168" text-anchor="middle" font-size="9" fill="#94a3b8">English Context</text>
+
+          <path d="M 105 174 L 105 190" stroke="#38bdf8" stroke-width="1.2" />
+
+          <rect x="25" y="190" width="160" height="28" rx="4" fill="#0b0d14" stroke="#38bdf8" />
+          <text x="105" y="208" text-anchor="middle" font-size="10" fill="#f8fafc">English Answer</text>
+
+          <text x="105" y="244" text-anchor="middle" font-size="9.5" fill="#38bdf8">Gold Standard Ceiling</text>
+        </g>
+
+        <!-- System C -->
+        <g transform="translate(460, 10)">
+          <rect width="210" height="250" rx="8" fill="#121522" stroke="#f59e0b" stroke-width="1.2" />
+          <rect x="10" y="10" width="190" height="24" rx="4" fill="#1e2235" />
+          <text x="105" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">SYSTEM C: TRANSLATOR</text>
+
+          <rect x="25" y="46" width="160" height="25" rx="4" fill="#0b0d14" stroke="#f59e0b" />
+          <text x="105" y="63" text-anchor="middle" font-size="10" fill="#f8fafc">Hindi Question</text>
+
+          <path d="M 105 71 L 105 83" stroke="#f59e0b" stroke-width="1.2" />
+
+          <rect x="25" y="83" width="160" height="25" rx="4" fill="#251c14" stroke="#f59e0b" />
+          <text x="105" y="99" text-anchor="middle" font-size="10" fill="#f59e0b">Google MT (3,076 ms)</text>
+
+          <path d="M 105 108 L 105 120" stroke="#f59e0b" stroke-width="1.2" />
+
+          <rect x="25" y="120" width="160" height="25" rx="4" fill="#141c28" stroke="#38bdf8" />
+          <text x="105" y="136" text-anchor="middle" font-size="10" fill="#38bdf8">English FAISS (768d)</text>
+
+          <path d="M 105 145 L 105 157" stroke="#f59e0b" stroke-width="1.2" />
+
+          <rect x="25" y="157" width="160" height="28" rx="4" fill="#1c1f2e" stroke="#f59e0b" />
+          <text x="105" y="174" text-anchor="middle" font-size="10" font-weight="700" fill="#f59e0b">LLM Answer in Hindi</text>
+
+          <path d="M 105 185 L 105 197" stroke="#f59e0b" stroke-width="1.2" />
+
+          <rect x="25" y="197" width="160" height="25" rx="4" fill="#0b0d14" stroke="#f59e0b" />
+          <text x="105" y="213" text-anchor="middle" font-size="10" fill="#f8fafc">Hindi Answer</text>
+
+          <text x="105" y="244" text-anchor="middle" font-size="9.5" fill="#f59e0b">Slow (3.3s), Translation Drift [E1]</text>
+        </g>
+
+        <!-- System D -->
+        <g transform="translate(685, 10)">
+          <rect width="225" height="250" rx="8" fill="#141829" stroke="#10b981" stroke-width="1.8" />
+          <rect x="10" y="10" width="205" height="24" rx="4" fill="#12251f" />
+          <text x="112" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#34d399">SYSTEM D: MULTILINGUAL ⚡</text>
+
+          <rect x="30" y="50" width="165" height="28" rx="4" fill="#0b0d14" stroke="#10b981" />
+          <text x="112" y="68" text-anchor="middle" font-size="10" fill="#f8fafc">Hindi Question</text>
+
+          <path d="M 112 78 L 112 95" stroke="#10b981" stroke-width="1.5" class="stream-anim" />
+
+          <rect x="30" y="95" width="165" height="35" rx="4" fill="#12241d" stroke="#10b981" stroke-width="1.5" />
+          <text x="112" y="112" text-anchor="middle" font-size="10" font-weight="700" fill="#34d399">Multi FAISS (384d)</text>
+          <text x="112" y="124" text-anchor="middle" font-size="8.5" fill="#94a3b8">Zero Translation Step!</text>
+
+          <path d="M 112 130 L 112 145" stroke="#10b981" stroke-width="1.5" />
+
+          <rect x="30" y="145" width="165" height="34" rx="4" fill="#1c1f2e" stroke="#10b981" />
+          <text x="112" y="161" text-anchor="middle" font-size="10.5" font-weight="700" fill="#34d399">LLM Answer in Hindi</text>
+          <text x="112" y="173" text-anchor="middle" font-size="8.5" fill="#94a3b8">English Textbook Context</text>
+
+          <path d="M 112 179 L 112 192" stroke="#10b981" stroke-width="1.5" />
+
+          <rect x="30" y="192" width="165" height="28" rx="4" fill="#0b0d14" stroke="#10b981" />
+          <text x="112" y="210" text-anchor="middle" font-size="10" fill="#f8fafc">Hindi Answer</text>
+
+          <text x="112" y="244" text-anchor="middle" font-size="9.5" font-weight="700" fill="#34d399">17.2&times; Faster (193 ms!)</text>
+        </g>
+      </svg>
+
+      <!-- Table Matrix -->
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>System Architecture</th>
+              <th>Pipeline Classification</th>
+              <th>Translation Stage</th>
+              <th>Vector Store &amp; Embedding Model</th>
+              <th>Mean Latency</th>
+              <th>Primary Scientific Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>System A</strong></td>
+              <td>Direct LLM Baseline (Closed-Book)</td>
+              <td>None (Direct Hindi)</td>
+              <td><em>None (Parametric only)</em></td>
+              <td><code>~850.0 ms</code></td>
+              <td><code>[E3] Generation Failure (Hallucination)</code></td>
+            </tr>
+            <tr>
+              <td><strong>System B</strong></td>
+              <td>Monolingual English RAG (Ceiling)</td>
+              <td>None (Direct English)</td>
+              <td>English FAISS (<code>all-mpnet-base-v2</code>, 768d)</td>
+              <td><code>~820.0 ms</code></td>
+              <td>Language barrier: Inaccessible in Hindi</td>
+            </tr>
+            <tr>
+              <td><strong>System C</strong></td>
+              <td>Translation-Mediated RAG</td>
+              <td>deep-translator Google MT (~3,076 ms)</td>
+              <td>English FAISS (<code>all-mpnet-base-v2</code>, 768d)</td>
+              <td><code>3,327.6 ms</code></td>
+              <td><code>[E1] Translation Drift:</code> Technical terms distorted</td>
+            </tr>
+            <tr>
+              <td><strong>System D</strong></td>
+              <td>Direct Multilingual RAG ⚡</td>
+              <td><em>None (Zero-Shot Vectors)</em></td>
+              <td>Multi FAISS (<code>paraphrase-MiniLM-L12</code>, 384d)</td>
+              <td><code>193.0 ms ⚡</code></td>
+              <td>Isolated <code>[E2] Recall Miss</code> on niche terms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 3: QUICKSTART & 6-STEP TESTING LADDER
+         ========================================================================= -->
+    <section class="doc-section" id="quickstart">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 3. Quickstart: How to Test the Project in 5 Minutes</h2>
+          <p>Run these exact terminal commands in order from PowerShell in <code>d:\ai projects\rag research</code></p>
+        </div>
+        <span class="sec-badge">Runbook</span>
+      </div>
+
+      <!-- Minimal Timeline Stepper (Inspired by Image 1) -->
+      <div class="timeline-bar">
+        <div class="timeline-line"></div>
+        <div class="timeline-grid">
+          <div class="t-step">
+            <div class="t-circle">01</div>
+            <div class="t-name">Pytest Health</div>
+            <div class="t-sub">7 Tests (22s)</div>
+          </div>
+          <div class="t-step">
+            <div class="t-circle">02</div>
+            <div class="t-name">Ingest Books</div>
+            <div class="t-sub">chunks_manifest</div>
+          </div>
+          <div class="t-step">
+            <div class="t-circle">03</div>
+            <div class="t-name">Build FAISS</div>
+            <div class="t-sub">Dual Stores</div>
+          </div>
+          <div class="t-step">
+            <div class="t-circle">04</div>
+            <div class="t-name">Run Pipelines</div>
+            <div class="t-sub">A, B, C, &amp; D</div>
+          </div>
+          <div class="t-step">
+            <div class="t-circle">05</div>
+            <div class="t-name">Evaluate</div>
+            <div class="t-sub">Recall@k &amp; MRR</div>
+          </div>
+          <div class="t-step">
+            <div class="t-circle">06</div>
+            <div class="t-name">Launch UI</div>
+            <div class="t-sub">Streamlit Lab</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1 Details -->
+      <h3 class="sub-heading">Step 1: Run the Automated Health-Check Tests</h3>
+      <p>Checks unit normalization, page chunking, FAISS search, translation, and JSON schemas:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Automated Health Checks</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step1')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step1">python -m pytest cross_lingual_rag/tests/test_basic_pipeline.py -v</pre>
+        <pre class="output-terminal">collected 7 items
+test_page_aware_chunking               PASSED [ 14%]
+test_embeddings_normalization          PASSED [ 28%]
+test_vector_store_build_and_search     PASSED [ 42%]
+test_translation_service               PASSED [ 57%]
+test_all_four_pipelines                PASSED [ 71%]
+test_json_logging_schema               PASSED [ 85%]
+test_evaluation_metrics_computation    PASSED [100%]
+================ 7 passed in 22.15s ================</pre>
+      </div>
+
+      <!-- Step 2 Details -->
+      <h3 class="sub-heading">Step 2: Ingest Textbooks &amp; Generate Chunks Manifest</h3>
+      <p>Scans <code>data/corpus/</code>, parses PDFs, cleans OCR hyphen line breaks, and builds page-bounded flashcards:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Ingestion Pipeline</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step2')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step2">python -m cross_lingual_rag.src.ingestion</pre>
+        <pre class="output-terminal">[Ingestion] Scanning data/corpus across 5 subjects...
+[Ingestion] Ingested 15 documents. Total Chunks: 84
+[Ingestion] Saved manifest to: data/processed/chunks_manifest.json
+[Ingestion] Saved metadata to: data/processed/corpus_metadata.json</pre>
+      </div>
+
+      <!-- Step 3 Details -->
+      <h3 class="sub-heading">Step 3: Build the Dual FAISS Vector Indexes</h3>
+      <p>Generates two separate FAISS vector databases from the exact same text chunks:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Vector Store Construction</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step3')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step3">python -m cross_lingual_rag.src.vector_store</pre>
+        <pre class="output-terminal">[VectorStore] Building English index (all-mpnet-base-v2, 768d)...
+[VectorStore] Saved: data/indexes/english/index.faiss (84 vectors)
+[VectorStore] Building Multilingual index (paraphrase-MiniLM-L12, 384d)...
+[VectorStore] Saved: data/indexes/multilingual/index.faiss (84 vectors)</pre>
+      </div>
+
+      <!-- Step 4 Details -->
+      <h3 class="sub-heading">Step 4: Run the Benchmark Across Systems A, B, C, &amp; D</h3>
+      <p>Executes questions against all 4 systems and saves individual atomic JSON files to <code>results/raw/</code>:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Benchmark Execution</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step4')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step4">python -m cross_lingual_rag.src.pipelines</pre>
+        <pre class="output-terminal">[Pipelines] Loaded 18 benchmark questions from data/benchmark/questions.csv
+[Pipelines] Executing System A (Direct LLM)... Done (18 runs)
+[Pipelines] Executing System B (Monolingual English)... Done (18 runs)
+[Pipelines] Executing System C (Translation-Mediated)... Done (18 runs)
+[Pipelines] Executing System D (Direct Multilingual)... Done (18 runs)
+[Pipelines] All raw runs written to: results/raw/</pre>
+      </div>
+
+      <!-- Step 5 Details -->
+      <h3 class="sub-heading">Step 5: Grade the Benchmark &amp; Generate Reports</h3>
+      <p>Calculates Recall@1/3/5, MRR, nDCG@5, and classifies E1–E4 errors:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Scientific Evaluation</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step5')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step5">python -m cross_lingual_rag.src.evaluation</pre>
+        <pre class="output-terminal">[Evaluation] Parsing raw logs from results/raw/...
+[Evaluation] System C - Mean Recall@5: 0.8889 | MRR: 0.8333 | Mean Latency: 3327.6 ms
+[Evaluation] System D - Mean Recall@5: 0.8333 | MRR: 0.7778 | Mean Latency: 193.0 ms
+[Evaluation] Saved summary CSV to: results/csv/benchmark_results.csv
+[Evaluation] Generated Markdown report: results/summaries/evaluation_report.md</pre>
+      </div>
+
+      <!-- Step 6 Details -->
+      <h3 class="sub-heading">Step 6: Launch the Interactive Visual Lab Dashboard</h3>
+      <p>Opens the interactive Streamlit research lab at <code>http://localhost:8501</code>:</p>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Streamlit Dashboard</span>
+          <button class="copy-pill" onclick="copySnippet('cmd-step6')">Copy Command</button>
+        </div>
+        <pre class="code-terminal" id="cmd-step6">streamlit run cross_lingual_rag/app.py</pre>
+        <pre class="output-terminal">  You can now view your Streamlit app in your browser.
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.100:8501</pre>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 4: MASTER END-TO-END DATAFLOW ARCHITECTURE
+         ========================================================================= -->
+    <section class="doc-section" id="dataflow">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 4. Master End-to-End Dataflow Architecture</h2>
+          <p>Comprehensive system architecture connecting all files from raw PDFs to evaluation</p>
+        </div>
+        <span class="sec-badge">Architecture</span>
+      </div>
+
+      <!-- Figure 4.1: Master Architecture SVG -->
+      <svg class="doc-svg" viewBox="0 0 960 480" width="960" height="480">
+        <!-- Raw Textbooks -->
+        <g transform="translate(30, 30)">
+          <rect width="200" height="65" rx="6" fill="#141724" stroke="#f43f5e" stroke-width="1.5" />
+          <text x="14" y="26" font-size="12" font-weight="700" fill="#f43f5e">📚 Raw Textbooks</text>
+          <text x="14" y="46" font-size="10.5" fill="#cbd5e1">data/corpus/*.pdf</text>
+          <text x="14" y="58" font-size="9.5" fill="#64748b" font-family="'JetBrains Mono', monospace">15-20 Textbooks (CLRS, OS...)</text>
+        </g>
+
+        <!-- Benchmark Questions -->
+        <g transform="translate(730, 30)">
+          <rect width="200" height="65" rx="6" fill="#141724" stroke="#8b5cf6" stroke-width="1.5" />
+          <text x="14" y="26" font-size="12" font-weight="700" fill="#a78bfa">🎯 Benchmark Exam</text>
+          <text x="14" y="46" font-size="10.5" fill="#cbd5e1">questions.csv</text>
+          <text x="14" y="58" font-size="9.5" fill="#64748b" font-family="'JetBrains Mono', monospace">18 Hindi/English Q&amp;A Pairs</text>
+        </g>
+
+        <!-- Down arrow from raw textbooks -->
+        <path d="M 130 95 L 130 130" stroke="#f43f5e" stroke-width="2" />
+
+        <!-- Ingestion & Chunking -->
+        <g transform="translate(30, 130)">
+          <rect width="200" height="75" rx="6" fill="#141724" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="14" y="24" font-size="12" font-weight="700" fill="#38bdf8">chunking.py &amp; ingestion.py</text>
+          <text x="14" y="44" font-size="10" fill="#cbd5e1">Page-Aware 700-token flashcards</text>
+          <text x="14" y="62" font-size="9.5" fill="#38bdf8" font-family="'JetBrains Mono', monospace">chunks_manifest.json (84 chunks)</text>
+        </g>
+
+        <!-- Down arrow from chunking to embeddings -->
+        <path d="M 130 205 L 130 240" stroke="#38bdf8" stroke-width="2" />
+
+        <!-- Dual Embeddings -->
+        <g transform="translate(30, 240)">
+          <rect width="200" height="75" rx="6" fill="#141724" stroke="#10b981" stroke-width="1.5" />
+          <text x="14" y="24" font-size="12" font-weight="700" fill="#10b981">embeddings.py (L2-Norm)</text>
+          <text x="14" y="44" font-size="10" fill="#cbd5e1">Eng: all-mpnet-base-v2 (768d)</text>
+          <text x="14" y="62" font-size="10" fill="#cbd5e1">Multi: MiniLM-L12-v2 (384d)</text>
+        </g>
+
+        <!-- Arrow from embeddings to vector store -->
+        <path d="M 230 277 L 275 277" stroke="#10b981" stroke-width="2" />
+
+        <!-- Vector Store -->
+        <g transform="translate(275, 240)">
+          <rect width="190" height="75" rx="6" fill="#141724" stroke="#10b981" stroke-width="1.5" />
+          <text x="14" y="24" font-size="12" font-weight="700" fill="#10b981">vector_store.py (FAISS)</text>
+          <text x="14" y="44" font-size="10" fill="#cbd5e1">IndexFlatIP + Fallback</text>
+          <text x="14" y="62" font-size="9.5" fill="#64748b" font-family="'JetBrains Mono', monospace">data/indexes/{eng,multi}/</text>
+        </g>
+
+        <!-- Arrow from vector store to pipelines -->
+        <path d="M 465 277 L 530 277" stroke="#6366f1" stroke-width="2" />
+
+        <!-- Pipelines Orchestrator -->
+        <g transform="translate(530, 230)">
+          <rect width="180" height="95" rx="8" fill="#1a1c30" stroke="#6366f1" stroke-width="2" />
+          <text x="90" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#a78bfa">pipelines.py</text>
+          <text x="90" y="46" text-anchor="middle" font-size="10" fill="#cbd5e1">Systems A, B, C, &amp; D</text>
+          <text x="90" y="64" text-anchor="middle" font-size="9" fill="#94a3b8">Calls generation.py</text>
+          <text x="90" y="80" text-anchor="middle" font-size="9" fill="#38bdf8">Zero-temp (0.0) greedy</text>
+        </g>
+
+        <!-- Arrow from benchmark questions to pipelines -->
+        <path d="M 830 95 L 830 277 L 710 277" stroke="#8b5cf6" stroke-width="2" />
+
+        <!-- Downward arrow from pipelines to flight recorder -->
+        <path d="M 620 325 L 620 380" stroke="#6366f1" stroke-width="2" />
+
+        <!-- Flight Recorder & Observability -->
+        <g transform="translate(490, 380)">
+          <rect width="260" height="70" rx="6" fill="#141724" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="14" y="24" font-size="11.5" font-weight="700" fill="#f59e0b">logging_utils.py &amp; observability.py</text>
+          <text x="14" y="44" font-size="10" fill="#cbd5e1">Atomic Flight Recorder: results/raw/*.json</text>
+          <text x="14" y="60" font-size="9.5" fill="#64748b" font-family="'JetBrains Mono', monospace">OpenTelemetry Gantt Traces (Local JSON)</text>
+        </g>
+
+        <!-- Evaluation arrow -->
+        <path d="M 620 450 L 620 470 L 230 470 L 230 420" stroke="#f59e0b" stroke-width="2" />
+
+        <g transform="translate(100, 375)">
+          <rect width="260" height="65" rx="6" fill="#141724" stroke="#10b981" stroke-width="1.5" />
+          <text x="14" y="24" font-size="12" font-weight="700" fill="#10b981">evaluation.py</text>
+          <text x="14" y="44" font-size="10" fill="#cbd5e1">Recall@1/3/5 &bull; MRR &bull; nDCG@5</text>
+          <text x="14" y="58" font-size="9.5" fill="#cbd5e1">Automated E1–E4 Error Classification</text>
+        </g>
+      </svg>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 5: MODULE-BY-MODULE DEEP DIVE (ALL 15 MODULES)
+         ========================================================================= -->
+    <section class="doc-section" id="modules">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 5. Module-by-Module Deep Dive</h2>
+          <p>Every single Python module, configuration, and test explained with architectural rationale</p>
+        </div>
+        <span class="sec-badge">15 Modules</span>
+      </div>
+
+      <!-- 5.1 config.yaml -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge blue">Control Center</span>
+            <span class="module-h3">§ 5.1 `config.yaml` — Master Blueprint</span>
+          </div>
+          <code>config.yaml</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          The single source of truth that locks down all model names, file paths, and hyperparameters so experiments are 100% reproducible and have zero "magic numbers" hardcoded in Python.
+        </p>
+
+        <div class="terminal-wrapper">
+          <div class="terminal-top">
+            <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+            <span class="terminal-title">YAML Specification Map</span>
+          </div>
+          <pre class="code-terminal">paths:
+  corpus_dir: "data/corpus"
+  indexes_dir: "data/indexes"
+  benchmark_file: "data/benchmark/questions.csv"
+  results_raw_dir: "results/raw"
+embedding:
+  english_model: "sentence-transformers/all-mpnet-base-v2"       # 768d
+  multilingual_model: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" # 384d
+  normalize_embeddings: true                                    # Crucial for Cosine = Dot Product!
+retrieval:
+  top_k: 5
+  chunk_size: 700
+  chunk_overlap: 80
+generation:
+  provider: "gemini"                                            # "gemini" | "ollama" | "mock"
+  temperature: 0.0                                              # Strictly deterministic!</pre>
+        </div>
+
+        <div class="callout-box warning">
+          <strong>💡 Why is <code>temperature: 0.0</code> non-negotiable?</strong><br>
+          If temperature is 0.7, asking the exact same question twice produces slightly different answers due to stochastic token sampling. In scientific research, <strong>sampling randomness ruins experiments</strong>. Setting <code>temperature: 0.0</code> forces greedy decoding: the LLM becomes a deterministic mathematical function.
+        </div>
+      </div>
+
+      <!-- 5.2 src/utils.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge purple">Foundation</span>
+            <span class="module-h3">§ 5.2 `src/utils.py` — Foundation &amp; Stopwatch</span>
+          </div>
+          <code>src/utils.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>Foundational helper tools used by every other file in the system:</p>
+        <ul style="margin-left: 20px; margin-bottom: 14px;">
+          <li><code>get_project_root()</code>: Dynamically finds <code>config.yaml</code> by walking upward, ensuring relative paths never crash regardless of current working directory.</li>
+          <li><code>set_seed(42)</code>: Locks random seeds for Python, NumPy, and PyTorch so vectors and calculations are identical across runs.</li>
+          <li><code>TimeTracker</code>: High-precision stopwatch context manager (<code>time.perf_counter()</code>) measuring sub-millisecond latencies across individual retrieval and inference stages.</li>
+        </ul>
+      </div>
+
+      <!-- 5.3 src/chunking.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge emerald">Page-Aware Cutter</span>
+            <span class="module-h3">§ 5.3 `src/chunking.py` — Page-Aware Flashcard Cutter</span>
+          </div>
+          <code>src/chunking.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Cuts long textbook pages into clean 700-token flashcards with 80-token overlap, strictly preventing chunks from crossing physical textbook page boundaries.
+        </p>
+
+        <!-- SVG Flowchart for Chunking -->
+        <svg class="doc-svg" viewBox="0 0 840 130" width="840" height="130">
+          <g transform="translate(10, 20)">
+            <rect width="180" height="80" rx="6" fill="#141724" stroke="#6366f1" stroke-width="1.2" />
+            <text x="12" y="24" font-size="11" font-weight="700" fill="#a78bfa">Raw Page Text</text>
+            <text x="12" y="44" font-size="10" fill="#cbd5e1">Page 45 (Cormen Algo)</text>
+            <text x="12" y="60" font-size="9" fill="#94a3b8">OCR hyphen line breaks</text>
+          </g>
+
+          <path d="M 190 60 L 230 60" stroke="#6366f1" stroke-width="1.5" />
+
+          <g transform="translate(230, 20)">
+            <rect width="180" height="80" rx="6" fill="#141724" stroke="#38bdf8" stroke-width="1.2" />
+            <text x="12" y="24" font-size="11" font-weight="700" fill="#38bdf8">Text Cleaning</text>
+            <text x="12" y="44" font-size="10" fill="#cbd5e1">"algo-\nrithm" &rarr; "algorithm"</text>
+            <text x="12" y="60" font-size="9" fill="#94a3b8">Split on "\n\n" paragraphs</text>
+          </g>
+
+          <path d="M 410 60 L 450 60" stroke="#38bdf8" stroke-width="1.5" />
+
+          <g transform="translate(450, 20)">
+            <rect width="180" height="80" rx="6" fill="#141724" stroke="#10b981" stroke-width="1.2" />
+            <text x="12" y="24" font-size="11" font-weight="700" fill="#10b981">Token Window</text>
+            <text x="12" y="44" font-size="10" fill="#cbd5e1">&le; 700 tokens per chunk</text>
+            <text x="12" y="60" font-size="9" fill="#94a3b8">80-token sliding overlap</text>
+          </g>
+
+          <path d="M 630 60 L 670 60" stroke="#10b981" stroke-width="1.5" />
+
+          <g transform="translate(670, 20)">
+            <rect width="160" height="80" rx="6" fill="#18241c" stroke="#10b981" stroke-width="1.5" />
+            <text x="12" y="24" font-size="11" font-weight="700" fill="#34d399">Stable Chunk ID</text>
+            <text x="12" y="44" font-size="10" fill="#cbd5e1">algo_clrs_p45_c1</text>
+            <text x="12" y="60" font-size="8.5" fill="#94a3b8">Book + Page + Index</text>
+          </g>
+        </svg>
+
+        <div class="callout-box tip">
+          <strong>💡 Why does page-aware identification matter?</strong><br>
+          When the AI synthesizes an answer, it doesn't vaguely state "I read this in a textbook." It provides an authoritative academic citation: <strong>"Cormen Algorithms, Page 45, Chunk 1"</strong>.
+        </div>
+      </div>
+
+      <!-- 5.4 src/ingestion.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge amber">PDF Extractor</span>
+            <span class="module-h3">§ 5.4 `src/ingestion.py` — PDF &amp; Note Extractor</span>
+          </div>
+          <code>src/ingestion.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Discovers all PDF textbooks and lecture notes in <code>data/corpus/</code> across 5 core Computer Science disciplines, reads them page-by-page using <code>pypdf</code>, passes them to <code>chunking.py</code>, and serializes the master catalog into <code>data/processed/chunks_manifest.json</code> (84 total chunks).
+        </p>
+      </div>
+
+      <!-- 5.5 src/embeddings.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge blue">Vector Mathematics</span>
+            <span class="module-h3">§ 5.5 `src/embeddings.py` — Words to Hypersphere Coordinates</span>
+          </div>
+          <code>src/embeddings.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Turns text strings into dense vector representations so semantic meaning can be compared geometrically.
+          Loads SentenceTransformers models: English 768d MPNet and Multilingual 384d MiniLM.
+        </p>
+
+        <div class="callout-box info">
+          <strong>💡 The Math Made Simple: Why L2-Unit Normalization is Genius</strong><br>
+          Cosine similarity measures the angle between two vectors:
+          $$\text{Cosine}(u, v) = \frac{u \cdot v}{\|u\|_2 \|v\|_2}$$
+          If we divide each vector by its Euclidean length upon creation so its length is always exactly $1.0$ ($\|u\|_2 = 1.0$), the denominator becomes $1$:
+          $$\text{Cosine}(u, v) = u \cdot v = \sum_{i=1}^d u_i v_i$$
+          <strong>Result:</strong> Nearest-neighbor vector search simplifies to an ultra-fast inner-product dot product (<code>IndexFlatIP</code>) executing in microseconds on CPU!
+        </div>
+      </div>
+
+      <!-- 5.6 src/vector_store.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge purple">FAISS Engine</span>
+            <span class="module-h3">§ 5.6 `src/vector_store.py` — FAISS Fast Search &amp; NumPy Fallback</span>
+          </div>
+          <code>src/vector_store.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Stores vectors and finds the top-5 closest matches in under 20 milliseconds using Meta's FAISS library.
+          Builds dual FAISS <code>IndexFlatIP</code> stores over the exact same chunks: English (768d) and Multilingual (384d), paired with <code>metadata_map.pkl</code>.
+        </p>
+
+        <div class="callout-box tip">
+          <strong>🛡️ Built-in Safety Net: Pure NumPy Fallback</strong><br>
+          If FAISS C++ binaries are not installed or fail to link on Windows, <code>FAISSVectorStore</code> automatically falls back to an in-memory NumPy matrix dot-product engine with 100% identical math. Zero crashes, zero external dependencies required!
+        </div>
+      </div>
+
+      <!-- 5.7 src/translation.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge emerald">Google MT Bridge</span>
+            <span class="module-h3">§ 5.7 `src/translation.py` — Google Translate Bridge</span>
+          </div>
+          <code>src/translation.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Used exclusively by <strong>System C</strong>. Translates Hindi queries into English via deep-translator with sub-millisecond stopwatch tracking.
+        </p>
+        <p>
+          Includes automatic exponential backoff retry loop on rate limits, with a local academic dictionary fallback that substitutes known CS keywords if internet connectivity drops.
+        </p>
+      </div>
+
+      <!-- 5.8 src/retrieval.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge amber">Search Coordinator</span>
+            <span class="module-h3">§ 5.8 `src/retrieval.py` — Search Coordinator &amp; Evidence Formatter</span>
+          </div>
+          <code>src/retrieval.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Takes a query string, embeds it, queries FAISS for top-$k$ nearest neighbors, and formats them into transparent academic evidence blocks for prompt injection:
+        </p>
+        <div class="terminal-wrapper">
+          <pre class="code-terminal">--- [Document Passage 1 | ID: algo_clrs_p45_c1 | Page: 45 | Subject: algorithms] ---
+Dijkstra's algorithm strictly fails when a graph contains negative edge weights...
+--- [Document Passage 2 | ID: algo_clrs_p46_c0 | Page: 46 | Subject: algorithms] ---
+The Bellman-Ford algorithm must be used instead when negative edges are present...</pre>
+        </div>
+      </div>
+
+      <!-- 5.9 src/generation.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge blue">LLM Client</span>
+            <span class="module-h3">§ 5.9 `src/generation.py` — Zero-Temperature LLM Engine</span>
+          </div>
+          <code>src/generation.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Feeds retrieved textbook evidence and the student's question into the LLM with a strict academic prompt enforcing ground-truth citation and refusing unverified speculation:
+        </p>
+        <div class="callout-box info">
+          <strong>Multi-Provider Dispatcher:</strong><br>
+          &bull; <code>provider: "gemini"</code> &rarr; Google Gemini 2.0 / 1.5 Flash (Free Tier via Google AI Studio)<br>
+          &bull; <code>provider: "ollama"</code> &rarr; Local Ollama (qwen2.5:7b / llama3) (100% offline, free)<br>
+          &bull; <code>provider: "openai"</code> &rarr; GPT-4o-mini / GPT-4o<br>
+          &bull; <code>provider: "mock"</code> &rarr; Deterministic instant mock for offline CI tests
+        </div>
+      </div>
+
+      <!-- 5.10 src/pipelines.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge purple">Master Conductor</span>
+            <span class="module-h3">§ 5.10 `src/pipelines.py` — Master Conductor</span>
+          </div>
+          <code>src/pipelines.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          The central orchestrator connecting translation, retrieval, prompt assembly, generation, and logging across all 4 experimental systems:
+        </p>
+        <ul style="margin-left: 20px;">
+          <li><strong>System A:</strong> Hindi Query &rarr; LLM &rarr; Hindi Answer (No retrieval)</li>
+          <li><strong>System B:</strong> English Query &rarr; Eng FAISS &rarr; LLM &rarr; English Answer (Gold standard ceiling)</li>
+          <li><strong>System C:</strong> Hindi Query &rarr; Google Translate &rarr; Eng FAISS &rarr; LLM &rarr; Hindi Answer</li>
+          <li><strong>System D:</strong> Hindi Query &rarr; Multi FAISS &rarr; LLM &rarr; Hindi Answer (Zero translation!)</li>
+        </ul>
+      </div>
+
+      <!-- 5.11 src/logging_utils.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge emerald">Flight Recorder</span>
+            <span class="module-h3">§ 5.11 `src/logging_utils.py` — Atomic Flight Recorder</span>
+          </div>
+          <code>src/logging_utils.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Every single question executed across any system is persisted as an atomic, standalone JSON file in <code>results/raw/system_{id}/{run_id}.json</code>:
+        </p>
+        <div class="terminal-wrapper">
+          <pre class="code-terminal">{
+  "run_id": "8fa134d1-5627-4a01-8b29-379e49a8b111",
+  "question_id": "OS_01",
+  "system_id": "C",
+  "original_question": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?",
+  "translated_question": "What are the four necessary Coffman conditions for deadlock?",
+  "top_k": 5,
+  "retrieved_chunks": ["operating_systems_p2_c0", "operating_systems_p1_c0"],
+  "retrieval_scores": [0.8912, 0.7431],
+  "generated_answer": "डेडलॉक के लिए चार आवश्यक कॉफमैन शर्तें हैं: 1. म्युचुअल एक्सक्लूजन...",
+  "latencies": {
+    "translation_latency_ms": 128.4,
+    "retrieval_latency_ms": 14.2,
+    "generation_latency_ms": 842.1,
+    "total_latency_ms": 984.7
+  },
+  "error_status": "SUCCESS"
+}</pre>
+        </div>
+      </div>
+
+      <!-- 5.12 src/observability.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge amber">X-Ray Tracer</span>
+            <span class="module-h3">§ 5.12 `src/observability.py` — X-Ray Waterfall Tracer</span>
+          </div>
+          <code>src/observability.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Instruments execution graphs with OpenTelemetry / LangSmith compliant spans: translation, vector search, context preparation, and LLM generation.
+        </p>
+
+        <!-- SVG Waterfall Chart -->
+        <svg class="doc-svg" viewBox="0 0 860 120" width="860" height="120">
+          <line x1="80" y1="20" x2="800" y2="20" stroke="#334155" stroke-width="1" />
+          <text x="80" y="14" font-size="10" fill="#64748b" font-family="'JetBrains Mono', monospace">0 ms</text>
+          <text x="260" y="14" font-size="10" fill="#64748b" font-family="'JetBrains Mono', monospace">200 ms</text>
+          <text x="440" y="14" font-size="10" fill="#64748b" font-family="'JetBrains Mono', monospace">400 ms</text>
+          <text x="620" y="14" font-size="10" fill="#64748b" font-family="'JetBrains Mono', monospace">600 ms</text>
+          <text x="800" y="14" font-size="10" fill="#64748b" font-family="'JetBrains Mono', monospace">1000 ms</text>
+
+          <!-- Span 1: Translation -->
+          <rect x="80" y="30" width="120" height="20" rx="3" fill="#f59e0b" />
+          <text x="85" y="44" font-size="9.5" font-weight="700" fill="#000000">translation (128 ms)</text>
+
+          <!-- Span 2: FAISS -->
+          <rect x="200" y="55" width="30" height="20" rx="3" fill="#10b981" />
+          <text x="235" y="69" font-size="9.5" fill="#10b981">faiss (14 ms)</text>
+
+          <!-- Span 3: LLM Generation -->
+          <rect x="230" y="80" width="550" height="20" rx="3" fill="#6366f1" />
+          <text x="240" y="94" font-size="9.5" font-weight="700" fill="#ffffff">llm_generation (842 ms)</text>
+        </svg>
+
+        <p style="font-size: 12.5px; color: var(--text-dim); font-family: var(--font-mono);">
+          Dual Exporter: 100% Free local JSON store (<code>results/traces/*.json</code>) + optional LangSmith cloud sync.
+        </p>
+      </div>
+
+      <!-- 5.13 src/evaluation.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge blue">Exam Grader</span>
+            <span class="module-h3">§ 5.13 `src/evaluation.py` — Exam Grader &amp; E1–E4 Taxonomy</span>
+          </div>
+          <code>src/evaluation.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>
+          Parses raw logs and matches retrieved chunks against ground truth textbook citations in <code>data/benchmark/questions.csv</code>:
+        </p>
+        <ul style="margin-left: 20px; font-size: 14px;">
+          <li><strong>Recall@k:</strong> Did the true textbook chunk appear in top-$k$ results? (1.0 or 0.0)</li>
+          <li><strong>MRR (Mean Reciprocal Rank):</strong> $\frac{1}{\text{rank}}$ of the first relevant chunk ($1^{\text{st}} = 1.0, 2^{\text{nd}} = 0.5, 3^{\text{rd}} = 0.33$).</li>
+          <li><strong>nDCG@5:</strong> Normalized Discounted Cumulative Gain penalizing lower-ranked correct evidence.</li>
+        </ul>
+      </div>
+
+      <!-- 5.14 app.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge purple">Streamlit UI</span>
+            <span class="module-h3">§ 5.14 `app.py` — Interactive Streamlit Dashboard</span>
+          </div>
+          <code>cross_lingual_rag/app.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>A 3-tab graphical research dashboard running locally at <code>http://localhost:8501</code>:</p>
+        <ul style="margin-left: 20px; font-size: 14px;">
+          <li><strong>Tab 1 (Live Experiment Lab):</strong> Run System C and System D side-by-side on any question and watch the answers stream in.</li>
+          <li><strong>Tab 2 (Observability Workbench):</strong> Inspect OpenTelemetry waterfall Gantt charts and JSON trace trees.</li>
+          <li><strong>Tab 3 (Benchmark Analytics):</strong> Bar charts of Recall@k and latencies across all 5 subjects.</li>
+        </ul>
+      </div>
+
+      <!-- 5.15 tests/test_basic_pipeline.py -->
+      <div class="module-full-card">
+        <div class="module-header">
+          <div class="module-title-wrap">
+            <span class="mod-badge emerald">7-Stage Health Checker</span>
+            <span class="module-h3">§ 5.15 `tests/test_basic_pipeline.py` — 7-Stage Health Checker</span>
+          </div>
+          <code>tests/test_basic_pipeline.py</code>
+        </div>
+        <h4 class="sub-sub-heading">🎯 What is it?</h4>
+        <p>Comprehensive automated pytest test suite guarding the entire codebase:</p>
+        <ul style="margin-left: 20px; font-size: 14px; margin-bottom: 14px;">
+          <li>1. <code>test_page_aware_chunking</code>: Validates page bounds and ID format.</li>
+          <li>2. <code>test_embeddings_normalization</code>: Validates $\|v\|_2 = 1.0$.</li>
+          <li>3. <code>test_vector_store_build_and_search</code>: Validates FAISS cosine math.</li>
+          <li>4. <code>test_translation_service</code>: Validates latency tracking and error handling.</li>
+          <li>5. <code>test_all_four_pipelines</code>: Runs Systems A, B, C, and D end-to-end.</li>
+          <li>6. <code>test_json_logging_schema</code>: Validates mandatory JSON fields.</li>
+          <li>7. <code>test_evaluation_metrics_computation</code>: Validates Recall@k, MRR, and nDCG calculations.</li>
+        </ul>
+        <div class="callout-box tip">
+          <strong>Verified Status:</strong> 7 / 7 Passing in 39.32s on local CPU with zero regressions.
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 6: THE E1–E4 ERROR TAXONOMY
+         ========================================================================= -->
+    <section class="doc-section" id="taxonomy">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 6. The E1–E4 Scientific Error Taxonomy</h2>
+          <p>Automated root-cause diagnostic tree classifying cross-lingual failure modes</p>
+        </div>
+        <span class="sec-badge">Diagnostics</span>
+      </div>
+
+      <!-- SVG Decision Tree -->
+      <svg class="doc-svg" viewBox="0 0 920 300" width="920" height="300">
+        <!-- Root -->
+        <g transform="translate(360, 10)">
+          <rect width="200" height="38" rx="6" fill="#141724" stroke="#6366f1" stroke-width="1.5" />
+          <text x="100" y="24" text-anchor="middle" font-size="11.5" font-weight="700" fill="#a78bfa">Student Hindi Query</text>
+        </g>
+
+        <!-- Branch 1: Translation Drift -->
+        <path d="M 460 48 L 460 75 L 180 75 L 180 100" stroke="#f43f5e" stroke-width="1.5" />
+        <path d="M 460 75 L 460 100" stroke="#10b981" stroke-width="1.5" />
+
+        <g transform="translate(80, 100)">
+          <rect width="200" height="50" rx="6" fill="#24131a" stroke="#f43f5e" stroke-width="1.5" />
+          <text x="100" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#f43f5e">[E1] Translation Drift</text>
+          <text x="100" y="38" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Terms distorted in MT</text>
+        </g>
+
+        <!-- Branch 2: FAISS Recall -->
+        <g transform="translate(360, 100)">
+          <rect width="200" height="38" rx="6" fill="#141724" stroke="#38bdf8" stroke-width="1.2" />
+          <text x="100" y="24" text-anchor="middle" font-size="11" fill="#38bdf8">Gold Chunk in Top-5?</text>
+        </g>
+
+        <path d="M 460 138 L 460 165 L 340 165 L 340 190" stroke="#f43f5e" stroke-width="1.5" />
+        <path d="M 460 165 L 580 165 L 580 190" stroke="#10b981" stroke-width="1.5" />
+
+        <g transform="translate(240, 190)">
+          <rect width="200" height="50" rx="6" fill="#141c28" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="100" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#38bdf8">[E2] Retrieval Failure</text>
+          <text x="100" y="38" text-anchor="middle" font-size="9.5" fill="#cbd5e1">Recall Miss (Rank &gt; 5)</text>
+        </g>
+
+        <!-- Branch 3: Hallucination -->
+        <g transform="translate(480, 190)">
+          <rect width="200" height="38" rx="6" fill="#141724" stroke="#8b5cf6" stroke-width="1.2" />
+          <text x="100" y="24" text-anchor="middle" font-size="11" fill="#a78bfa">LLM Grounded in Context?</text>
+        </g>
+
+        <path d="M 580 228 L 580 250 L 510 250 L 510 265" stroke="#f43f5e" stroke-width="1.5" />
+        <path d="M 580 250 L 740 250 L 740 265" stroke="#10b981" stroke-width="1.5" />
+
+        <g transform="translate(410, 265)">
+          <rect width="190" height="30" rx="4" fill="#20152b" stroke="#8b5cf6" stroke-width="1.2" />
+          <text x="95" y="19" text-anchor="middle" font-size="10" font-weight="700" fill="#a78bfa">[E3] Hallucination</text>
+        </g>
+
+        <!-- Branch 4: Grammar / Success -->
+        <g transform="translate(640, 265)">
+          <rect width="190" height="30" rx="4" fill="#12241d" stroke="#10b981" stroke-width="1.5" />
+          <text x="95" y="19" text-anchor="middle" font-size="10" font-weight="700" fill="#34d399">SUCCESS! (Rank 1 Grounded)</text>
+        </g>
+      </svg>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Error Code</th>
+              <th>Category</th>
+              <th>Trigger Condition</th>
+              <th>Concrete Real-World Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: var(--accent-rose);">[E1]</strong></td>
+              <td><strong>Translation Drift</strong></td>
+              <td>System C only: Machine translator misinterprets technical terms</td>
+              <td>"ऋणात्मक किनारा" translated to "negative border" instead of "negative edge", causing FAISS to search boundary conditions.</td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--accent-cyan);">[E2]</strong></td>
+              <td><strong>Retrieval Failure</strong></td>
+              <td>Gold chunk missing from top-5 retrieved passages (Recall@5 = 0.0)</td>
+              <td>Query vector positioned too distant in embedding space; correct textbook chunk ranked at #8 (outside top-5).</td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--accent-purple);">[E3]</strong></td>
+              <td><strong>Generation Failure</strong></td>
+              <td>Gold chunk present in context, but LLM hallucinates or refuses</td>
+              <td>Gold chunk was at rank #1, but the LLM hallucinated external non-textbook facts.</td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--accent-amber);">[E4]</strong></td>
+              <td><strong>Language Failure</strong></td>
+              <td>Retrieved facts correct, but generated Hindi phrasing contains defects</td>
+              <td>Grammar fractured or corrupt due to tokenization artifacts in low-resource vocabularies.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 7: HANDS-ON MANUAL TESTING RECIPES
+         ========================================================================= -->
+    <section class="doc-section" id="recipes">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 7. Hands-On Manual Testing Recipes</h2>
+          <p>Copy-pasteable PowerShell one-liners to test individual components interactively</p>
+        </div>
+        <span class="sec-badge">Snippets</span>
+      </div>
+
+      <!-- Recipe 1 -->
+      <h3 class="sub-heading">Recipe 1: Test the Page-Aware Chunker Directly</h3>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Test Chunking</span>
+          <button class="copy-pill" onclick="copySnippet('recipe1')">Copy</button>
+        </div>
+        <pre class="code-terminal" id="recipe1">python -c "from cross_lingual_rag.src.chunking import PageAwareChunker; c = PageAwareChunker(700, 80); res = c.split_page_text('Dijkstra algorithm finds shortest paths.', 'clrs', 'algo', 45); print('Chunk ID:', res[0].chunk_id, '| Text:', res[0].text)"</pre>
+        <pre class="output-terminal">Chunk ID: clrs_p45_c0 | Text: Dijkstra algorithm finds shortest paths.</pre>
+      </div>
+
+      <!-- Recipe 2 -->
+      <h3 class="sub-heading">Recipe 2: Test Cosine Vector Similarity</h3>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Test Cosine Math</span>
+          <button class="copy-pill" onclick="copySnippet('recipe2')">Copy</button>
+        </div>
+        <pre class="code-terminal" id="recipe2">python -c "from cross_lingual_rag.src.embeddings import SentenceTransformerEmbedder; import numpy as np; em = SentenceTransformerEmbedder('sentence-transformers/all-mpnet-base-v2'); v = em.embed_texts(['Dijkstra shortest path algorithm', 'Graph shortest path algorithms']); print('Cosine Similarity:', np.dot(v[0], v[1]))"</pre>
+        <pre class="output-terminal">Cosine Similarity: 0.9412</pre>
+      </div>
+
+      <!-- Recipe 3 -->
+      <h3 class="sub-heading">Recipe 3: Test Hindi-to-English Translation</h3>
+      <div class="terminal-wrapper">
+        <div class="terminal-top">
+          <div class="terminal-dots"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span></div>
+          <span class="terminal-title">PowerShell &bull; Test Translation</span>
+          <button class="copy-pill" onclick="copySnippet('recipe3')">Copy</button>
+        </div>
+        <pre class="code-terminal" id="recipe3">python -c "from cross_lingual_rag.src.translation import TranslationService; from cross_lingual_rag.src.utils import load_config; ts = TranslationService(load_config()); t, lat, err = ts.translate_hi_to_en('डाइक्स्ट्रा का एल्गोरिदम क्या है?'); print('Translated:', t, '| Latency:', lat, 'ms')"</pre>
+        <pre class="output-terminal">Translated: What is Dijkstra's algorithm? | Latency: 142.3 ms</pre>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 8: TROUBLESHOOTING & COMMON GOTCHAS
+         ========================================================================= -->
+    <section class="doc-section" id="troubleshooting">
+      <div class="section-title-bar">
+        <div class="title-left">
+          <h2>§ 8. Troubleshooting &amp; Common Gotchas</h2>
+          <p>Built-in safety nets and how to resolve common environment hurdles</p>
+        </div>
+        <span class="sec-badge">Troubleshooting</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Observed Symptom</th>
+              <th>Root Cause</th>
+              <th>Built-in Safety Net / Solution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><code>ImportError: DLL load failed while importing _swigfaiss</code></strong></td>
+              <td>Missing C++ build tools on Windows machine.</td>
+              <td><strong>Zero action needed!</strong> <code>vector_store.py</code> automatically detects this and activates the pure NumPy fallback.</td>
+            </tr>
+            <tr>
+              <td><strong><code>HTTP 429 Too Many Requests</code></strong></td>
+              <td>Web Google Translate endpoint rate-limiting.</td>
+              <td><code>translation.py</code> automatically catches this, backs off exponentially, and activates the local glossary fallback.</td>
+            </tr>
+            <tr>
+              <td><strong>LLM answers vary slightly between runs</strong></td>
+              <td>Temperature setting is non-zero.</td>
+              <td>Set <code>temperature: 0.0</code> in <code>config.yaml</code> for deterministic greedy decoding.</td>
+            </tr>
+            <tr>
+              <td><strong>Out of Memory (OOM) on GPU</strong></td>
+              <td>Embedding batch size too large.</td>
+              <td><code>config.yaml</code> defaults to <code>device: "cpu"</code> and <code>batch_size: 32</code>, running easily within 2 GB RAM.</td>
+            </tr>
+            <tr>
+              <td><strong>Want 100% Free LLM without OpenAI key</strong></td>
+              <td>OpenAI charges per token.</td>
+              <td>Set <code>provider: "gemini"</code> in <code>config.yaml</code> (free key from Google AI Studio) or install Ollama for 100% offline generation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub-heading" style="margin-top: 24px;">Summary Verification Checklist</h3>
+      <ul class="checklist-list">
+        <li><span class="checklist-check">&#10003;</span> Run <code>python -m pytest cross_lingual_rag/tests/test_basic_pipeline.py -v</code> (7/7 Passing)</li>
+        <li><span class="checklist-check">&#10003;</span> Ingest PDFs: <code>python -m cross_lingual_rag.src.ingestion</code></li>
+        <li><span class="checklist-check">&#10003;</span> Build FAISS stores: <code>python -m cross_lingual_rag.src.vector_store</code></li>
+        <li><span class="checklist-check">&#10003;</span> Benchmark all systems: <code>python -m cross_lingual_rag.src.pipelines</code></li>
+        <li><span class="checklist-check">&#10003;</span> Score evaluation metrics: <code>python -m cross_lingual_rag.src.evaluation</code></li>
+        <li><span class="checklist-check">&#10003;</span> Launch Streamlit dashboard: <code>streamlit run cross_lingual_rag/app.py</code></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT: CLIPBOARD CONTROLLER -->
+  <script>
+    function copySnippet(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const codeText = el.innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert("Command copied to clipboard:\n\n" + codeText);
+      }).catch(() => {
+        prompt("Copy this command:", codeText);
+      });
+    }
+  </script>
+</body>
+</html>

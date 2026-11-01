@@ -1,0 +1,78 @@
+{
+  "trace_id": "de4a9b1c-f261-4cc5-91a4-167a48e4febc",
+  "run_id": "de4a9b1c-f261-4cc5-91a4-167a48e4febc",
+  "question_id": "AUTO_01",
+  "system_id": "D",
+  "query": "एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?",
+  "start_time": "2026-11-01T18:13:00.825537+00:00",
+  "end_time": "2026-11-01T18:13:00.845088+00:00",
+  "total_latency_ms": 19.06,
+  "spans": [
+    {
+      "span_id": "587a7fcb-360c-4332-8e2e-ac49f577e428",
+      "trace_id": "de4a9b1c-f261-4cc5-91a4-167a48e4febc",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-01T18:13:00.825537+00:00",
+      "end_time": "2026-11-01T18:13:00.844087+00:00",
+      "latency_ms": 18.75,
+      "inputs": {
+        "query": "एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "automata_automata_theory_p1_c0",
+          "automata_automata_theory_p2_c0",
+          "automata_automata_theory_p3_c0",
+          "computer_networks_computer_networks_p3_c0",
+          "operating_systems_operating_systems_p2_c0"
+        ],
+        "scores": [
+          0.7017968893051147,
+          0.4423283338546753,
+          0.3360379636287689,
+          0.32557734847068787,
+          0.3245655298233032
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "b96607de-1dcb-48a2-955c-cf085a2c4390",
+      "trace_id": "de4a9b1c-f261-4cc5-91a4-167a48e4febc",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-01T18:13:00.845088+00:00",
+      "end_time": "2026-11-01T18:13:00.845088+00:00",
+      "latency_ms": 0.31,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: automata_automata_theory_p1_c0 | Page: 1 | Subject: automata] ---\nTheory of Computation: Finite Automata and Regular Languages A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. A Non-Deterministic Finite Automaton (NFA) differs in its transition function, which maps Q x (Sigma union {epsilon}) to the power set 2^Q, allowing state transitions on empty strings (epsilon transitions) or multiple possible subsequent states for a single symbol. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.\n\n--- [Document Passage 2 | ID: automata_automata_theory_p2_c0 | Page: 2 | Subject: automata] ---\nContext-Free Grammars and Pushdown Automata Context-Free Grammars (CFGs) generate the class of context-free languages, which strictly subsume regular languages. A CFG is a 4-tuple (V, Sigma, R, S), where V is a finite set of non-terminal variables, Sigma is the terminal alphabet, R is a finite set of production rules of the form A -> alpha with A in V and alpha in (V union Sigma)*, and S is the start symbol. A Pushdown Automaton (PDA) is the mechanical equivalent of a CFG. It extends a finite state machine with an unbounded Last-In-First-Out (LIFO) stack storage. Deterministic Pushdown Automata (DPDAs) recognize deterministic context-free languages, which form a strict subset of context-free languages recognized by non-deterministic PDAs (e.g., the language of palindromes {w w^R}).\n\n--- [Document Passage 3 | ID: automata_automata_theory_p3_c0 | Page: 3 | Subject: automata] ---\nTuring Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).\n\n--- [Document Passage 4 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n--- [Document Passage 5 | ID: operating_systems_operating_systems_p2_c0 | Page: 2 | Subject: operating_systems] ---\nCoffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।",
+        "tokens": {
+          "prompt_tokens": 918,
+          "completion_tokens": 49,
+          "total_tokens": 967
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Automata",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त संदर्भ automata_automata_theory_p1_c0 (पृष्ठ 1) के अनुसार, नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में 5 घटक होते हैं: (Q, Sigma, delta, q_0, F)। NFA के पास DFA से अधिक कम्प्यूटेशनल शक्ति नहीं होती, क्योंकि सबसेट निर्माण (subset construction) एल्गोरिदम द्वारा इसे समकक्ष DFA में बदला जा सकता है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

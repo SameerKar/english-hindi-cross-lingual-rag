@@ -1,0 +1,76 @@
+{
+  "run_id": "6a6d7372-b265-4185-b13d-3e347cdb0b7b",
+  "timestamp": "2026-11-01T18:14:19.573084+00:00",
+  "question_id": "NET_01",
+  "system_id": "D",
+  "subject": "Computer Networks",
+  "category": "Procedure/algorithmic",
+  "original_question": "टीसीपी 3-वे हैंडशेक (TCP 3-Way Handshake) के तीन चरण क्या हैं?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "computer_networks_computer_networks_p1_c0",
+    "computer_networks_computer_networks_p2_c0",
+    "computer_networks_computer_networks_p3_c0",
+    "operating_systems_operating_systems_p2_c0",
+    "dbms_database_systems_p2_c0"
+  ],
+  "retrieval_scores": [
+    0.7465515732765198,
+    0.33969971537590027,
+    0.332755982875824,
+    0.30199339985847473,
+    0.26382681727409363
+  ],
+  "source_documents": [
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 1,
+      "chunk_id": "computer_networks_computer_networks_p1_c0",
+      "subject": "computer_networks",
+      "rank": 1
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 2,
+      "chunk_id": "computer_networks_computer_networks_p2_c0",
+      "subject": "computer_networks",
+      "rank": 2
+    },
+    {
+      "doc_id": "computer_networks_computer_networks",
+      "page": 3,
+      "chunk_id": "computer_networks_computer_networks_p3_c0",
+      "subject": "computer_networks",
+      "rank": 3
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 2,
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "subject": "operating_systems",
+      "rank": 4
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 2,
+      "chunk_id": "dbms_database_systems_p2_c0",
+      "subject": "dbms",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त संदर्भ computer_networks_computer_networks_p1_c0 (पृष्ठ 1) के अनुसार, TCP 3-वे हैंडशेक के तीन चरण हैं: 1. SYN (क्लाइंट से सर्वर), 2. SYN-ACK (सर्वर से क्लाइंट), और 3. ACK (क्लाइंट से सर्वर)।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 22.52,
+    "generation_latency_ms": 0.17,
+    "total_latency_ms": 22.85
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}
