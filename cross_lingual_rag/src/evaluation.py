@@ -22,10 +22,11 @@ class EvaluationHarness:
     """
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.benchmark_path = Path(config["paths"]["benchmark_file"])
-        self.raw_dir = Path(config["paths"]["results_raw_dir"])
-        self.csv_dir = Path(config["paths"]["results_csv_dir"])
-        self.summary_dir = Path(config["paths"]["results_summary_dir"])
+        self.root = get_project_root()
+        self.benchmark_path = self.root / Path(config["paths"].get("benchmark_file", "data/benchmark/questions.csv"))
+        self.raw_dir = self.root / Path(config["paths"].get("results_raw_dir", "results/benchmark/raw"))
+        self.csv_dir = self.root / Path(config["paths"].get("results_csv_dir", "results/benchmark/csv"))
+        self.summary_dir = self.root / Path(config["paths"].get("results_summary_dir", "results/benchmark/summaries"))
 
         ensure_directory(str(self.csv_dir))
         ensure_directory(str(self.summary_dir))
@@ -40,17 +41,26 @@ class EvaluationHarness:
 
     def load_all_logs(self, exclude_smoke: bool = True, deduplicate_latest: bool = True) -> List[Dict[str, Any]]:
         all_logs = []
-        log_files = sorted(self.raw_dir.rglob("*.json"), key=os.path.getmtime)
-        for log_f in log_files:
-            try:
-                with open(log_f, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    qid = str(data.get("question_id", ""))
-                    if exclude_smoke and qid.startswith("SMOKE_"):
-                        continue
-                    all_logs.append(data)
-            except Exception as e:
-                print(f"[Error] Corrupted log file {log_f}: {e}")
+        candidate_dirs = [self.raw_dir, self.root / "results" / "benchmark" / "raw", self.root / "results" / "raw"]
+        seen_files = set()
+
+        for c_dir in candidate_dirs:
+            if not c_dir.exists():
+                continue
+            for log_f in sorted(c_dir.rglob("*.json"), key=os.path.getmtime):
+                if log_f.name in seen_files:
+                    continue
+                seen_files.add(log_f.name)
+                try:
+                    with open(log_f, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        qid = str(data.get("question_id", ""))
+                        rtype = str(data.get("run_type", "benchmark"))
+                        if exclude_smoke and (qid.startswith("SMOKE_") or rtype in ["smoke", "custom"]):
+                            continue
+                        all_logs.append(data)
+                except Exception as e:
+                    print(f"[Error] Corrupted log file {log_f}: {e}")
 
         if deduplicate_latest and all_logs:
             dedup_map: Dict[Tuple[str, str], Dict[str, Any]] = {}

@@ -549,6 +549,102 @@
       color: #c084fc;
       border: 1px solid rgba(167, 139, 250, 0.28);
     }
+    .badge-docx {
+      background: rgba(96, 165, 250, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.28);
+    }
+    .badge-html {
+      background: rgba(251, 146, 60, 0.12);
+      color: #fb923c;
+      border: 1px solid rgba(251, 146, 60, 0.28);
+    }
+
+    /* Corpus Tab Switchers */
+    .tab-pills-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: #0f0f0f;
+      padding: 4px;
+      border-radius: var(--radius-cards);
+      border: var(--border-hairline);
+    }
+    .tab-pill-btn {
+      flex: 1;
+      text-align: center;
+      padding: 7px 12px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--color-ash-mute);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-tags);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-pill-btn:hover {
+      color: var(--color-paper-white);
+    }
+    .tab-pill-btn.active {
+      background: #1c1c1c;
+      color: var(--color-paper-white);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    /* Intermediate Answer and Latency Cards */
+    .intermediate-answer-box {
+      margin: 8px 0;
+      padding: 8px 12px;
+      background: rgba(59, 130, 246, 0.06);
+      border-left: 2px solid #3b82f6;
+      border-radius: var(--radius-tags);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .intermediate-answer-title {
+      font-weight: 600;
+      color: #93c5fd;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 3px;
+    }
+    .latency-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--color-ash-mute);
+      font-family: var(--font-mono);
+    }
+    .latency-subpill {
+      background: #111;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid #222;
+    }
+    .lang-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+    }
+    .lang-badge-ok {
+      background: rgba(52, 211, 153, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+    }
+    .lang-badge-warn {
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
 
     .folder-block {
       background: #121212;
@@ -848,51 +944,88 @@
       <!-- SCREEN 2: DOCUMENTS & KNOWLEDGE BASE -->
       <section class="screen-panel" id="screen-step-2">
         <div class="screen-header">
-          <div class="screen-badge">Stage 2 · Knowledge Base</div>
-          <h2 class="screen-title">Knowledge Base & Documents</h2>
-          <p class="screen-subtitle">Explore indexed folders, view document text/pages (.pdf, .txt, .md), filter search scope, or upload new files.</p>
+          <div class="screen-badge">Stage 2 · Corpus & Workspaces</div>
+          <h2 class="screen-title">Knowledge Base & Isolated Workspaces</h2>
+          <p class="screen-subtitle">Explore the official academic Reference Benchmark or manage custom user workspaces (.pdf, .txt, .md, .docx, .html).</p>
         </div>
 
         <div class="screen-body">
-          <!-- 2 Compact Radio Cards for Scope Selection -->
-          <div class="option-card-group">
-            <div class="option-card selected" id="opt-scope-all" onclick="selectSearchScopeOption('all')">
-              <input type="radio" name="scope_option" class="option-radio" checked>
+          <!-- Two Corpus Mode Switch Tabs (Phase 2 Requirement) -->
+          <div class="tab-pills-row">
+            <button class="tab-pill-btn active" id="btn-tab-ref" onclick="switchCorpusTab('reference')">
+              📚 Official Reference Benchmark (5 Books)
+            </button>
+            <button class="tab-pill-btn" id="btn-tab-custom" onclick="switchCorpusTab('custom')">
+              📁 Custom Workspaces (My Documents)
+            </button>
+          </div>
+
+          <!-- PANE A: REFERENCE BENCHMARK CORPUS -->
+          <div id="pane-corpus-ref" class="onyx-card" style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
-                <div class="option-title">🔍 All Documents (Recommended)</div>
-                <div class="option-desc">Queries all 5 academic CS textbooks plus any uploaded documents.</div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--color-paper-white);">Official Academic Benchmark Corpus</div>
+                <div style="font-size: 11px; color: var(--color-ash-mute); margin-top: 2px;">
+                  Standardized 5-discipline textbook dataset (Algorithms, Automata, DBMS, Operating Systems, Computer Networks).
+                </div>
               </div>
+              <span class="chip" style="font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--color-signal-blue); border-color: rgba(59, 130, 246, 0.3);">
+                🔒 Protected Benchmark
+              </span>
             </div>
 
-            <div class="option-card" id="opt-scope-uploaded" onclick="selectSearchScopeOption('uploaded_only')">
-              <input type="radio" name="scope_option" class="option-radio">
-              <div>
-                <div class="option-title">📂 Uploaded Documents Only</div>
-                <div class="option-desc">Strictly queries custom uploaded files without textbook bias.</div>
-              </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; font-size: 11px; color: var(--color-ash-mute);">
+              <span>• <strong>Disciplines:</strong> 5 Core Subjects</span>
+              <span>• <strong>Chunks:</strong> 15 Standard Chunks</span>
+              <span>• <strong>Index:</strong> indexes/reference/ (768d + 384d)</span>
+              <span>• <strong>License:</strong> CC BY 4.0 Open Access</span>
+            </div>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" id="btn-ref-rebuild" onclick="rebuildReferenceIndexes()">
+                ↺ Rebuild Reference Dual Indexes
+              </button>
+              <button class="btn btn-ghost btn-sm" id="btn-kb-reset-all" style="font-size: 11px; color: #fca5a5;" onclick="restoreDefaultCorpus()">
+                ↺ Reset Default Benchmark
+              </button>
             </div>
           </div>
 
-          <!-- Document Upload Box (Accepts .pdf, .txt, .md) -->
-          <div class="onyx-card">
-            <div class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-              <span>Upload Documents (.pdf, .txt, .md)</span>
-              <span style="font-size: 10px; color: var(--color-ash-mute);">Auto-builds FAISS dual vectors</span>
+          <!-- PANE B: CUSTOM WORKSPACES (Strictly Isolated) -->
+          <div id="pane-corpus-custom" class="onyx-card" style="display: none; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <label class="form-label" style="margin-bottom: 0;">Active Workspace:</label>
+                <select id="custom-workspace-select" class="form-input" style="padding: 4px 8px; font-size: 11.5px; width: 160px;" onchange="onWorkspaceSelectionChange(this.value)">
+                  <option value="default">Default Workspace</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" style="color: #f87171; padding: 2px 6px; font-size: 11px;" onclick="deleteActiveWorkspace()" title="Delete active custom collection">🗑️ Delete</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="text" id="new-workspace-id-input" class="form-input" placeholder="New workspace id..." style="padding: 4px 8px; font-size: 11px; width: 140px;">
+                <button class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="createNewWorkspace()">+ Create</button>
+              </div>
             </div>
+
+            <!-- Upload drop zone for Custom Workspaces (PDF, TXT, MD, DOCX, HTML) -->
             <div class="drop-zone" id="wizard-drop-zone" onclick="document.getElementById('wizard-file-input').click()">
-              <input type="file" id="wizard-file-input" multiple accept=".pdf,.txt,.md" style="display: none;" onchange="handleWizardFiles(event)">
+              <input type="file" id="wizard-file-input" multiple accept=".pdf,.txt,.md,.docx,.html,.htm" style="display: none;" onchange="handleWizardFiles(event)">
               <div style="font-size: 18px; margin-bottom: 2px;">📁 📄</div>
-              <div style="font-size: 12.5px; font-weight: 500;">Drop PDF, TXT, or MD files here or click to browse</div>
-              <div style="font-size: 10.5px; color: var(--color-ash-mute);">Extracts page-by-page text, creates semantic chunks, and updates vector store</div>
+              <div style="font-size: 12.5px; font-weight: 500;">Drop files here or click to browse</div>
+              <div style="font-size: 10.5px; color: var(--color-ash-mute);">Accepts .pdf, .txt, .md, .docx, and .html. Builds isolated vector store in indexes/custom/</div>
             </div>
 
             <div class="chips-row" id="wizard-staged-chips" style="margin-top: 8px;"></div>
 
             <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-top: 10px;">
-              <input type="text" id="wizard-subject-input" class="form-input" value="uploaded_docs" placeholder="Collection/Folder tag (e.g. uploaded_docs, notes)">
+              <input type="text" id="wizard-subject-input" class="form-input" value="custom_docs" placeholder="Collection/Subject tag (e.g. custom_docs, notes)">
               <button class="btn btn-solid-white btn-sm" id="btn-wizard-ingest" onclick="wizardUploadAndIngest()" disabled>
                 ⚡ Ingest & Build Vector Store
               </button>
+            </div>
+            <div style="margin-top: 6px; font-size: 10px; color: var(--color-ash-mute);">
+              🛡️ <strong>Isolation Guarantee:</strong> Custom documents are stored strictly in <code>data/corpus/custom/</code> and NEVER alter or mutate the official reference benchmark.
             </div>
           </div>
 
@@ -906,13 +1039,7 @@
               <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="kb-search-input" class="form-input" placeholder="Filter files or folders..." style="width: 150px; padding: 4px 8px; font-size: 11px;" oninput="filterFolderTree(this.value)">
                 <button class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="fetchDocumentTree()">↻ Refresh Tree</button>
-                <button class="btn btn-secondary btn-sm" id="btn-kb-reset-all" style="font-size: 10.5px; padding: 3px 9px; border-color: rgba(248, 113, 113, 0.45); color: #fca5a5;" onclick="restoreDefaultCorpus()" title="Wipe uploads and refresh everything back to original 5 textbooks">↺ Refresh Everything (5 Books)</button>
               </div>
-            </div>
-
-            <div style="display: flex; align-items: center; justify-content: space-between; background: #0c0c0c; border: 1px dashed var(--color-slate-border); border-radius: var(--radius-tags); padding: 6px 10px; margin-bottom: 9px; font-size: 11px; color: var(--color-ash-mute);">
-              <span>💡 <strong>Quick Reset:</strong> Restore the clean formatting of just the 5 original CS textbooks (Algorithms, Automata, Networks, DBMS, OS).</span>
-              <button class="btn btn-ghost btn-sm" style="font-size: 10.5px; color: var(--color-signal-blue); padding: 0 4px;" onclick="restoreDefaultCorpus()">Reset Now →</button>
             </div>
 
             <div id="kb-folder-container" style="max-height: 290px; overflow-y: auto; padding-right: 4px;">
@@ -938,18 +1065,36 @@
         </div>
 
         <div class="screen-body">
-          <!-- Sample query pills -->
+          <!-- Target Corpus Scope Selector -->
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label" style="display: flex; justify-content: space-between;">
+              <span>Target Corpus Scope</span>
+              <span id="stage3-target-scope-hint" style="font-size: 10px; color: var(--color-signal-blue);">Official Reference Benchmark</span>
+            </label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <select id="stage3-corpus-mode-select" class="form-input" onchange="onStage3CorpusChange(this.value)">
+                <option value="reference">📚 Reference Benchmark (5 Academic Books)</option>
+                <option value="custom">📁 Custom Workspace</option>
+              </select>
+              <select id="stage3-workspace-select" class="form-input" style="display: none;" onchange="onStage3WorkspaceChange(this.value)">
+                <option value="default">Default Workspace</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Academic Sample query pills -->
           <div class="chips-row">
-            <span style="font-size: 11px; color: var(--color-ash-mute); line-height: 22px;">Samples:</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?', 'What is the architecture of the voice agent platform?', 'VOICE_01')">🎙️ Voice Agent</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail with negative edges?', 'ALGO_01')">Dijkstra Negative Weights</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four conditions for deadlock?', 'OS_01')">Deadlock Conditions</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for?', 'DBMS_01')">ACID Properties</span>
+            <span style="font-size: 11px; color: var(--color-ash-mute); line-height: 22px;">Academic Samples:</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail with negative edges?', 'ALGO_01')">⚡ Algorithms: Dijkstra</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('पुशडाउन ऑटोमेटा और ट्यूरिंग मशीन के बीच मुख्य अंतर क्या है?', 'What is the key difference between Pushdown Automata and Turing Machines?', 'AUTO_01')">⚙️ Automata: PDA vs TM</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four conditions for deadlock?', 'OS_01')">🖥️ OS: Coffman Deadlock</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for in transaction processing?', 'DBMS_01')">💾 DBMS: ACID Properties</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('टीसीपी 3-वे हैंडशेक प्रक्रिया कैसे काम करती है?', 'How does the TCP 3-way handshake process work?', 'NET_01')">🌐 Networks: TCP Handshake</span>
           </div>
 
           <div class="form-group">
             <label class="form-label">Hindi Input Query</label>
-            <textarea id="wizard-query-hi" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें (जैसे: वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?)..."></textarea>
+            <textarea id="wizard-query-hi" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें (जैसे: डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों पर क्यों विफल हो जाता है?)..."></textarea>
           </div>
 
           <div class="form-group" style="display: none;" id="en-query-container">
@@ -963,7 +1108,7 @@
               <input type="checkbox" id="w-chk-c" checked>
               <div>
                 <div class="sys-label">System C · Translation RAG</div>
-                <div class="sys-sub">Hindi $\to$ MT $\to$ all-mpnet (768d)</div>
+                <div class="sys-sub">Hindi $\to$ MT $\to$ all-mpnet (768d) $\to$ Intermediate EN $\to$ Hindi</div>
               </div>
             </label>
 
@@ -971,7 +1116,7 @@
               <input type="checkbox" id="w-chk-d" checked>
               <div>
                 <div class="sys-label">System D · Direct Multilingual</div>
-                <div class="sys-sub">Zero MT · paraphrase-multilingual (384d)</div>
+                <div class="sys-sub">Zero MT $\to$ paraphrase-multilingual (384d) $\to$ Direct Hindi</div>
               </div>
             </label>
 
@@ -979,7 +1124,7 @@
               <input type="checkbox" id="w-chk-b" checked>
               <div>
                 <div class="sys-label">System B · Monolingual English</div>
-                <div class="sys-sub">Monolingual Upper-Bound Baseline</div>
+                <div class="sys-sub">Monolingual Upper-Bound Baseline (English Chunks & Answer)</div>
               </div>
             </label>
 
@@ -987,7 +1132,7 @@
               <input type="checkbox" id="w-chk-a" checked>
               <div>
                 <div class="sys-label">System A · Parametric LLM</div>
-                <div class="sys-sub">Zero-Retrieval Control Baseline</div>
+                <div class="sys-sub">Zero-Retrieval Control Baseline (Parametric Knowledge)</div>
               </div>
             </label>
           </div>
@@ -1034,17 +1179,19 @@
       <!-- SCREEN 5: BENCHMARK & REPORTS -->
       <section class="screen-panel" id="screen-step-5">
         <div class="screen-header">
-          <div class="screen-badge">Stage 5 · Benchmark</div>
-          <h2 class="screen-title">Benchmark Suite & Reports</h2>
-          <p class="screen-subtitle">Consolidated metrics across 73 deduplicated runs (MRR, Recall@k, latency).</p>
+          <div class="screen-badge">Stage 5 · Benchmark & Reproducibility</div>
+          <h2 class="screen-title">Scientific Benchmark Suite & Reports</h2>
+          <p class="screen-subtitle">120 paired English–Hindi academic questions across 5 subjects with MRR, Recall@1/3/5, and stage latencies.</p>
         </div>
 
         <div class="screen-body">
           <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-            <a href="/api/report/download/markdown" class="btn btn-primary btn-sm" download>📥 Download Report (.md)</a>
-            <a href="/api/report/download/csv" class="btn btn-secondary btn-sm" download>📊 Download Dataset (.csv)</a>
+            <button class="btn btn-primary btn-sm" onclick="triggerBenchmarkCommand('smoke')">⚡ Run Smoke Test (5 Questions)</button>
+            <button class="btn btn-secondary btn-sm" onclick="triggerBenchmarkCommand('full')">🚀 Run Full 120-Item Benchmark</button>
             <button class="btn btn-secondary btn-sm" onclick="triggerPytestCommand()">🧪 Run 7-Point Pytest</button>
-            <button class="btn btn-secondary btn-sm" onclick="triggerBenchmarkCommand()">📊 Run Benchmark</button>
+            <a href="/api/report/download/markdown" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📥 Report (.md)</a>
+            <a href="/api/report/download/csv" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📊 Data (.csv)</a>
+            <button class="btn btn-ghost btn-sm" onclick="fetchLatestReportContent()" title="Reload latest generated report">↻ Refresh</button>
           </div>
 
           <div class="onyx-card" style="padding: 12px;">
@@ -1197,6 +1344,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initWebSocketTerminal();
       fetchEnvAndTelemetry();
+      fetchWorkspaces();
       fetchDocumentTree();
       fetchLatestReportContent();
       setupWizardDropZone();
@@ -1345,13 +1493,159 @@
       el.type = el.type === 'password' ? 'text' : 'password';
     }
 
-    // Stage 2: Scope & Drop Zone
-    function selectSearchScopeOption(scopeVal) {
-      activeScope = scopeVal;
-      document.getElementById('opt-scope-uploaded').className = scopeVal === 'uploaded_only' ? 'option-card selected' : 'option-card';
-      document.getElementById('opt-scope-all').className = scopeVal === 'all' ? 'option-card selected' : 'option-card';
+    // --------------------------------------------------------------------------
+    // Stage 2: Two Isolated Modes (Reference Benchmark vs Custom Workspaces)
+    // --------------------------------------------------------------------------
+    let currentCorpusTab = 'reference';
+    let activeWorkspaceId = 'default';
+    let availableWorkspaces = [];
+
+    async function fetchWorkspaces() {
+      try {
+        const resp = await fetch('/api/workspaces');
+        const data = await resp.json();
+        if (resp.ok && data.workspaces) {
+          availableWorkspaces = data.workspaces;
+          populateWorkspaceDropdowns();
+        }
+      } catch (e) {
+        console.error('Failed to load workspaces:', e);
+      }
     }
 
+    function populateWorkspaceDropdowns() {
+      const s2Select = document.getElementById('custom-workspace-select');
+      const s3Select = document.getElementById('stage3-workspace-select');
+      if (!s2Select) return;
+
+      const wsList = availableWorkspaces.length > 0 ? availableWorkspaces : [{ workspace_id: 'default', name: 'Default Workspace', documents_count: 0 }];
+      
+      let opts = '';
+      wsList.forEach(ws => {
+        opts += `<option value="${ws.workspace_id}">${ws.name} (${ws.documents_count} docs)</option>`;
+      });
+
+      s2Select.innerHTML = opts;
+      if (s3Select) s3Select.innerHTML = opts;
+
+      if (availableWorkspaces.some(w => w.workspace_id === activeWorkspaceId)) {
+        s2Select.value = activeWorkspaceId;
+        if (s3Select) s3Select.value = activeWorkspaceId;
+      } else if (wsList.length > 0) {
+        activeWorkspaceId = wsList[0].workspace_id;
+        s2Select.value = activeWorkspaceId;
+        if (s3Select) s3Select.value = activeWorkspaceId;
+      }
+    }
+
+    function switchCorpusTab(mode) {
+      currentCorpusTab = mode;
+      const refPane = document.getElementById('pane-corpus-ref');
+      const custPane = document.getElementById('pane-corpus-custom');
+      const btnRef = document.getElementById('btn-tab-ref');
+      const btnCust = document.getElementById('btn-tab-custom');
+
+      if (mode === 'reference') {
+        if (refPane) refPane.style.display = 'block';
+        if (custPane) custPane.style.display = 'none';
+        if (btnRef) btnRef.className = 'tab-pill-btn active';
+        if (btnCust) btnCust.className = 'tab-pill-btn';
+      } else {
+        if (refPane) refPane.style.display = 'none';
+        if (custPane) custPane.style.display = 'block';
+        if (btnRef) btnRef.className = 'tab-pill-btn';
+        if (btnCust) btnCust.className = 'tab-pill-btn active';
+      }
+      fetchDocumentTree();
+    }
+
+    function onWorkspaceSelectionChange(val) {
+      activeWorkspaceId = val;
+      const s3Select = document.getElementById('stage3-workspace-select');
+      if (s3Select) s3Select.value = val;
+      fetchDocumentTree();
+    }
+
+    async function createNewWorkspace() {
+      const input = document.getElementById('new-workspace-id-input');
+      const val = input.value.trim();
+      if (!val) {
+        alert('Please enter a workspace identifier.');
+        return;
+      }
+      try {
+        const resp = await fetch('/api/workspaces/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workspace_id: val })
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          input.value = '';
+          activeWorkspaceId = data.workspace_id;
+          await fetchWorkspaces();
+          fetchDocumentTree();
+          appendLiveTerminal(`[WORKSPACE] Created custom workspace '${activeWorkspaceId}'`);
+        } else {
+          alert('Failed to create workspace: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Network error creating workspace: ' + e.message);
+      }
+    }
+
+    async function deleteActiveWorkspace() {
+      if (!activeWorkspaceId || activeWorkspaceId === 'reference') {
+        alert('Cannot delete this workspace.');
+        return;
+      }
+      if (!confirm(`Delete custom workspace '${activeWorkspaceId}' and all its isolated files and indexes?`)) {
+        return;
+      }
+      try {
+        const fd = new FormData();
+        fd.append('workspace_id', activeWorkspaceId);
+        const resp = await fetch('/api/workspaces/delete', {
+          method: 'POST',
+          body: fd
+        });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          activeWorkspaceId = 'default';
+          await fetchWorkspaces();
+          fetchDocumentTree();
+          appendLiveTerminal(`[WORKSPACE] Deleted custom collection '${data.deleted_id}'`);
+        } else {
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Network error deleting workspace: ' + e.message);
+      }
+    }
+
+    async function rebuildReferenceIndexes() {
+      const btn = document.getElementById('btn-ref-rebuild');
+      if (btn) { btn.disabled = true; btn.innerText = '↺ Ingesting & Rebuilding...'; }
+      appendLiveTerminal('[REFERENCE] User requested rebuild of Reference Benchmark dual FAISS indexes...');
+      try {
+        const resp = await fetch('/api/reference/rebuild', { method: 'POST' });
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          appendLiveTerminal(`[REFERENCE] Rebuild complete: ${data.total_chunks} chunks indexed.`);
+          await fetchDocumentTree();
+          await fetchEnvAndTelemetry();
+          alert(`✅ Reference Benchmark Dual Indexes Rebuilt Successfully!\n\nIngested 5 CS academic textbooks.\nTotal Reference Chunks: ${data.total_chunks}\nIndexes: indexes/reference/english and indexes/reference/multilingual`);
+        } else {
+          alert('Rebuild failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        alert('Network error during rebuild: ' + e.message);
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerText = '↺ Rebuild Reference Dual Indexes'; }
+      }
+    }
+
+    // Dropzone logic (accepts .pdf, .txt, .md, .docx, .html)
     function setupWizardDropZone() {
       const dz = document.getElementById('wizard-drop-zone');
       if (!dz) return;
@@ -1363,7 +1657,7 @@
       });
       dz.addEventListener('drop', (e) => {
         const dt = e.dataTransfer;
-        const allowed = ['.pdf', '.txt', '.md'];
+        const allowed = ['.pdf', '.txt', '.md', '.docx', '.html', '.htm'];
         const files = Array.from(dt.files).filter(f => {
           const ext = '.' + f.name.split('.').pop().toLowerCase();
           return allowed.includes(ext);
@@ -1373,7 +1667,7 @@
     }
 
     function handleWizardFiles(e) {
-      const allowed = ['.pdf', '.txt', '.md'];
+      const allowed = ['.pdf', '.txt', '.md', '.docx', '.html', '.htm'];
       const files = Array.from(e.target.files).filter(f => {
         const ext = '.' + f.name.split('.').pop().toLowerCase();
         return allowed.includes(ext);
@@ -1397,31 +1691,35 @@
 
     function renderWizardChips() {
       const holder = document.getElementById('wizard-staged-chips');
+      if (!holder) return;
       holder.innerHTML = '';
       stagedFiles.forEach((f, idx) => {
         const ext = '.' + f.name.split('.').pop().toLowerCase();
         let badge = 'PDF';
         if (ext === '.txt') badge = 'TXT';
         else if (ext === '.md') badge = 'MD';
+        else if (ext === '.docx') badge = 'DOCX';
+        else if (ext.startsWith('.htm')) badge = 'HTML';
 
         const chip = document.createElement('span');
         chip.className = 'sample-chip';
         chip.innerHTML = `<span class="badge-tag badge-${badge.toLowerCase()}" style="font-size: 8.5px; padding: 1px 4px; margin-right: 4px;">${badge}</span>${f.name} <span onclick="removeStagedFile(${idx})" style="color: #f87171; cursor: pointer; margin-left: 6px;">&times;</span>`;
         holder.appendChild(chip);
       });
-      document.getElementById('btn-wizard-ingest').disabled = stagedFiles.length === 0;
+      const btn = document.getElementById('btn-wizard-ingest');
+      if (btn) btn.disabled = stagedFiles.length === 0;
     }
 
     async function wizardUploadAndIngest() {
       if (stagedFiles.length === 0) return;
       const btn = document.getElementById('btn-wizard-ingest');
       btn.disabled = true;
-      btn.innerText = '⚡ Building FAISS...';
+      btn.innerText = '⚡ Building Workspace Index...';
 
       const formData = new FormData();
       stagedFiles.forEach(f => formData.append('files', f));
-      formData.append('subject', document.getElementById('wizard-subject-input').value.trim() || 'uploaded_docs');
-      formData.append('replace_corpus', 'false');
+      formData.append('workspace_id', activeWorkspaceId);
+      formData.append('subject', document.getElementById('wizard-subject-input').value.trim() || 'custom_docs');
 
       try {
         const resp = await fetch('/api/upload-docs', { method: 'POST', body: formData });
@@ -1430,10 +1728,10 @@
           stagedFiles = [];
           renderWizardChips();
           document.getElementById('wizard-file-input').value = '';
-          selectSearchScopeOption('uploaded_only');
-          fetchEnvAndTelemetry();
-          fetchDocumentTree();
-          alert('Documents successfully ingested and vector stores rebuilt!');
+          await fetchWorkspaces();
+          await fetchDocumentTree();
+          await fetchEnvAndTelemetry();
+          alert(`✅ Documents Uploaded & Indexed!\n\nWorkspace: ${data.workspace_id}\nFiles: ${data.files_uploaded}\nChunks: ${data.total_chunks}\nReference corpus remained completely untouched.`);
         } else {
           alert('Upload error: ' + (data.error || 'Failed'));
         }
@@ -1453,14 +1751,18 @@
       const pill = document.getElementById('kb-summary-pill');
       if (!container) return;
 
+      const url = currentCorpusTab === 'custom'
+        ? `/api/documents/tree?mode=custom&workspace_id=${encodeURIComponent(activeWorkspaceId)}`
+        : '/api/documents/tree?mode=reference';
+
       try {
-        const resp = await fetch('/api/documents/tree');
+        const resp = await fetch(url);
         const data = await resp.json();
         if (resp.ok && data.success) {
           kbTreeData = data;
           const s = data.summary || {};
           if (pill) {
-            pill.innerText = `${data.total_documents} Docs · ${s.pdf_count || 0} PDF · ${s.txt_count || 0} TXT · ${s.md_count || 0} MD`;
+            pill.innerText = `${data.total_documents} Docs · ${s.pdf || 0} PDF · ${s.txt || 0} TXT · ${s.md || 0} MD · ${s.docx || 0} DOCX · ${s.html || 0} HTML`;
           }
           renderFolderTree('');
         } else {
@@ -1524,8 +1826,12 @@
           let badgeClass = 'badge-pdf';
           if (doc.extension === '.txt') badgeClass = 'badge-txt';
           else if (doc.extension === '.md') badgeClass = 'badge-md';
+          else if (doc.extension === '.docx') badgeClass = 'badge-docx';
+          else if (doc.extension === '.html' || doc.extension === '.htm') badgeClass = 'badge-html';
 
-          const encodedPath = encodeURIComponent(doc.relative_path);
+          const viewUrl = doc.view_url || doc.relative_path;
+          const rawUrl = doc.raw_url || `/api/document/raw?path=${encodeURIComponent(doc.relative_path)}`;
+
           html += `
             <div class="doc-row-item">
               <div class="doc-info">
@@ -1540,8 +1846,8 @@
                 </div>
               </div>
               <div class="doc-actions">
-                <button class="btn btn-secondary btn-sm" style="font-size: 10.5px; padding: 2px 7px;" onclick="openDocViewer('${doc.relative_path}')">👁️ View</button>
-                <a href="/api/document/raw?path=${encodedPath}" target="_blank" class="btn btn-ghost btn-sm" style="font-size: 10.5px; padding: 2px 6px;" title="Open raw file in new tab">↗️</a>
+                <button class="btn btn-secondary btn-sm" style="font-size: 10.5px; padding: 2px 7px;" onclick="openDocViewer('${viewUrl}', '${rawUrl}')">👁️ View</button>
+                <a href="${rawUrl}" target="_blank" class="btn btn-ghost btn-sm" style="font-size: 10.5px; padding: 2px 6px;" title="Open raw file in new tab">↗️</a>
               </div>
             </div>
           `;
@@ -1576,7 +1882,7 @@
     // --------------------------------------------------------------------------
     // In-App Document Viewer Modal Logic
     // --------------------------------------------------------------------------
-    async function openDocViewer(relativePath) {
+    async function openDocViewer(viewUrlOrPath, rawUrl = '') {
       const modal = document.getElementById('doc-viewer-modal');
       const textView = document.getElementById('doc-modal-text-view');
       const embedView = document.getElementById('doc-modal-embed-view');
@@ -1591,7 +1897,8 @@
       modal.classList.add('open');
 
       try {
-        const resp = await fetch(`/api/document/view?path=${encodeURIComponent(relativePath)}`);
+        const fetchUrl = viewUrlOrPath.startsWith('/api/') ? viewUrlOrPath : `/api/document/view?path=${encodeURIComponent(viewUrlOrPath)}`;
+        const resp = await fetch(fetchUrl);
         const data = await resp.json();
         if (!resp.ok || !data.success) {
           textView.innerHTML = `<div style="color: #f87171; padding: 20px;">Error: ${data.error || 'Failed to open document.'}</div>`;
@@ -1611,16 +1918,21 @@
         // Badge
         const typeBadge = document.getElementById('doc-modal-type-badge');
         typeBadge.innerText = data.type;
-        typeBadge.className = 'badge-tag ' + (data.extension === '.pdf' ? 'badge-pdf' : (data.extension === '.txt' ? 'badge-txt' : 'badge-md'));
+        let badgeCls = 'badge-pdf';
+        if (data.extension === '.txt') badgeCls = 'badge-txt';
+        else if (data.extension === '.md') badgeCls = 'badge-md';
+        else if (data.extension === '.docx') badgeCls = 'badge-docx';
+        else if (data.extension === '.html' || data.extension === '.htm') badgeCls = 'badge-html';
+        typeBadge.className = 'badge-tag ' + badgeCls;
 
         // Raw Link
         const rawBtn = document.getElementById('doc-modal-raw-btn');
-        rawBtn.href = `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
+        rawBtn.href = data.raw_url || rawUrl || `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
 
         // PDF toggle bar
         if (data.can_embed_pdf) {
           toggles.style.display = 'inline-flex';
-          iframe.src = `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
+          iframe.src = data.raw_url || `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
         } else {
           toggles.style.display = 'none';
           iframe.src = 'about:blank';
@@ -1756,14 +2068,34 @@
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
+    // --------------------------------------------------------------------------
     // Stage 3: Query Formulation
+    // --------------------------------------------------------------------------
+    function onStage3CorpusChange(val) {
+      const wsSelect = document.getElementById('stage3-workspace-select');
+      const hint = document.getElementById('stage3-target-scope-hint');
+      if (val === 'custom') {
+        if (wsSelect) wsSelect.style.display = 'block';
+        if (hint) hint.innerText = 'Custom User Workspace';
+      } else {
+        if (wsSelect) wsSelect.style.display = 'none';
+        if (hint) hint.innerText = 'Official Reference Benchmark (5 CS Textbooks)';
+      }
+    }
+
+    function onStage3WorkspaceChange(val) {
+      activeWorkspaceId = val;
+    }
+
     function loadSamplePrompt(qHi, qEn, qid) {
       document.getElementById('wizard-query-hi').value = qHi;
       document.getElementById('wizard-query-en').value = qEn;
-      if (qid === 'VOICE_01') {
-        selectSearchScopeOption('uploaded_only');
+      const s3Mode = document.getElementById('stage3-corpus-mode-select');
+      if (s3Mode) {
+        s3Mode.value = 'reference';
+        onStage3CorpusChange('reference');
       }
-      appendLiveTerminal(`[QUERY] Loaded prompt: ${qid}`);
+      appendLiveTerminal(`[QUERY] Loaded academic prompt: ${qid}`);
     }
 
     async function executeWizardQuery() {
@@ -1780,6 +2112,9 @@
       if (document.getElementById('w-chk-b').checked) systems.push('B');
       if (document.getElementById('w-chk-a').checked) systems.push('A');
 
+      const corpusMode = document.getElementById('stage3-corpus-mode-select').value;
+      const targetWorkspaceId = corpusMode === 'custom' ? (document.getElementById('stage3-workspace-select').value || 'default') : 'reference';
+
       navigateToStep(4);
 
       const loaderBox = document.getElementById('execution-loader-box');
@@ -1793,7 +2128,8 @@
             question_hi: qHi,
             question_en: qEn,
             systems: systems,
-            subject_filter: activeScope
+            workspace_id: targetWorkspaceId,
+            subject_filter: 'all'
           })
         });
 
@@ -1809,7 +2145,7 @@
           lastQueryRecord = {
             question_hi: qHi,
             question_en: qEn,
-            scope: activeScope,
+            workspace_id: targetWorkspaceId,
             results: data.results
           };
           document.getElementById('btn-download-live-report').style.display = 'inline-flex';
@@ -1827,7 +2163,9 @@
       }
     }
 
-    // Stage 4: Results
+    // --------------------------------------------------------------------------
+    // Stage 4: Results & Citations
+    // --------------------------------------------------------------------------
     function renderStage4Results(results) {
       const container = document.getElementById('results-stack-container');
       container.innerHTML = '';
@@ -1845,6 +2183,48 @@
       const lat = (data.latencies && data.latencies.total_latency_ms) ? data.latencies.total_latency_ms.toFixed(1) : '0.0';
       const transQ = data.translated_question ? `<div style="font-size: 11px; color: var(--color-ash-mute); margin-bottom: 4px;">Translated: <span style="color: var(--color-signal-blue); font-family: var(--font-mono);">${data.translated_question}</span></div>` : '';
 
+      // Intermediate English Answer for System C
+      let intermediateHtml = '';
+      if (data.intermediate_answer_en) {
+        intermediateHtml = `
+          <div class="intermediate-answer-box">
+            <div class="intermediate-answer-title">Step 2/3 · Intermediate English Answer (Grounded Synthesis Before Final Hindi):</div>
+            <div style="color: #cbd5e1; font-style: italic;">"${escapeHtml(data.intermediate_answer_en)}"</div>
+          </div>
+        `;
+      }
+
+      // Latency Breakdown
+      let latencyBreakdownHtml = '';
+      if (data.latencies) {
+        const tLat = data.latencies.translation_latency_ms;
+        const rLat = data.latencies.retrieval_latency_ms;
+        const gLat = data.latencies.generation_latency_ms;
+        latencyBreakdownHtml = `
+          <div class="latency-pills-row">
+            ${tLat !== undefined && tLat > 0 ? `<span class="latency-subpill">Translation: ${tLat.toFixed(1)}ms</span>` : (sysId === 'D' ? `<span class="latency-subpill" style="color:#34d399;">Zero MT Latency (0ms)</span>` : '')}
+            ${rLat !== undefined ? `<span class="latency-subpill">Retrieval: ${rLat.toFixed(1)}ms</span>` : ''}
+            ${gLat !== undefined ? `<span class="latency-subpill">Generation: ${gLat.toFixed(1)}ms</span>` : ''}
+            <span class="latency-subpill" style="color: var(--color-paper-white);">Total: ${lat}ms</span>
+          </div>
+        `;
+      }
+
+      // Model & Language Validation Badges
+      const modelLabel = data.model_name || data.actual_provider || '';
+      const fallbackNotice = data.fallback_used ? `<span class="badge-tag" style="background:#ef444422; color:#f87171; border:1px solid #ef444444;">Fallback: ${data.fallback_reason || 'Local'}</span>` : '';
+      let langBadge = '';
+      if (sysId !== 'B') {
+        const err = data.error_message || '';
+        const isWarn = err.includes('Language check warning');
+        if (isWarn) {
+          langBadge = `<span class="lang-badge lang-badge-warn" title="${escapeHtml(err)}">⚠️ Low Devanagari Script</span>`;
+        } else {
+          langBadge = `<span class="lang-badge lang-badge-ok">✓ Hindi Verified</span>`;
+        }
+      }
+
+      // Evidentiary Chunks
       let chunksHtml = '';
       const chunkList = data.retrieved_chunks_details || [];
       if (chunkList.length > 0) {
@@ -1859,12 +2239,12 @@
                 <span><strong>#${idx + 1}</strong> · 📄 Page ${c.page || 1} · <span style="color: var(--color-paper-white);">${c.doc_id || ''}</span></span>
                 <span style="font-family: var(--font-mono); color: var(--color-signal-blue); font-size: 10.5px;">Score: ${score} (${pct}%)</span>
               </div>
-              <div style="color: #999; line-height: 1.45;" id="${uid}_snippet">${(c.text || '').substring(0, 130)}...</div>
+              <div style="color: #999; line-height: 1.45;" id="${uid}_snippet">${escapeHtml((c.text || '').substring(0, 130))}...</div>
               <div style="display: flex; justify-content: space-between; margin-top: 4px;">
                 <button class="btn btn-ghost btn-sm" style="padding: 0; font-size: 10px; color: var(--color-signal-blue);" onclick="toggleChunk('${uid}', this)">[+ View Full Passage]</button>
                 <button class="btn btn-secondary btn-sm" style="padding: 1px 5px; font-size: 10px;" onclick="copyText('${uid}_full')">📋 Copy</button>
               </div>
-              <div class="chunk-full" id="${uid}_full">${c.text || ''}</div>
+              <div class="chunk-full" id="${uid}_full">${escapeHtml(c.text || '')}</div>
             </div>
           `;
         });
@@ -1880,12 +2260,21 @@
       }
 
       card.innerHTML = `
-        <div class="result-head">
-          <span class="sys-tag ${badgeClass}">${title}</span>
+        <div class="result-head" style="align-items: flex-start;">
+          <div>
+            <span class="sys-tag ${badgeClass}">${title}</span>
+            ${modelLabel ? `<span class="badge-tag" style="margin-left: 6px; background: #1a1a1a; color: #aaa; border: 1px solid #333;">${modelLabel}</span>` : ''}
+            ${fallbackNotice}
+            ${langBadge}
+          </div>
           <span class="latency-pill">${lat} ms</span>
         </div>
+        ${latencyBreakdownHtml}
         ${transQ}
-        <div class="answer-quote">${data.generated_answer || 'No answer generated.'}</div>
+        ${intermediateHtml}
+        <div class="answer-quote" style="margin-top: 8px;">
+          ${escapeHtml(data.generated_answer || 'No answer generated.')}
+        </div>
         ${chunksHtml}
       `;
       return card;
@@ -1933,31 +2322,43 @@
       }
     }
 
-    // Stage 5: Reports
+    // --------------------------------------------------------------------------
+    // Stage 5: Scientific Benchmark & Reports
+    // --------------------------------------------------------------------------
     async function fetchLatestReportContent() {
+      const view = document.getElementById('full-scientific-report-view');
       try {
         const resp = await fetch('/api/report/latest');
         const data = await resp.json();
         if (data.success && data.markdown) {
-          document.getElementById('full-scientific-report-view').innerText = data.markdown;
+          view.innerText = data.markdown;
+        } else {
+          view.innerText = 'No benchmark report generated yet. Run a smoke test or full benchmark above.';
         }
       } catch (e) {
-        document.getElementById('full-scientific-report-view').innerText = 'Failed to load report.';
+        view.innerText = 'Failed to load report: ' + e.message;
       }
     }
 
     async function triggerPytestCommand() {
       try {
+        appendLiveTerminal('[PYTEST] Running 7-Point Architectural Verification Suite...');
         await fetch('/api/run-pytest', { method: 'POST' });
       } catch (e) {
         alert('Pytest trigger failed: ' + e.message);
       }
     }
 
-    async function triggerBenchmarkCommand() {
+    async function triggerBenchmarkCommand(mode = 'smoke') {
       try {
-        await fetch('/api/run-benchmark', { method: 'POST' });
-        fetchLatestReportContent();
+        const limit = mode === 'smoke' ? 5 : 120;
+        appendLiveTerminal(`[BENCHMARK] Launching ${mode.toUpperCase()} Suite (${limit} items)...`);
+        await fetch('/api/run-benchmark', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: mode, limit: limit, strict: false })
+        });
+        await fetchLatestReportContent();
       } catch (e) {
         alert('Benchmark trigger failed: ' + e.message);
       }
@@ -1967,19 +2368,13 @@
       const confirmed = confirm(
         "⚠️ REFRESH EVERYTHING TO ORIGINAL 5 CORPORA?\n\n" +
         "This will:\n" +
-        "1. Wipe all custom and uploaded documents (.pdf, .txt, .md)\n" +
-        "2. Restore the original 5 Computer Science textbooks (Algorithms, Automata, Networks, DBMS, OS)\n" +
-        "3. Purge all old chunks, manifests, and metadata\n" +
-        "4. Rebuild dual FAISS vector indexes (.faiss, .pkl, .dat) with exactly 15 clean chunks\n" +
-        "5. Reload the orchestrator live\n\n" +
+        "1. Restore the original 5 Computer Science textbooks (Algorithms, Automata, Networks, DBMS, OS)\n" +
+        "2. Purge old chunks and manifests\n" +
+        "3. Rebuild dual FAISS vector indexes with exactly 15 clean chunks\n" +
+        "4. Reload the orchestrator live\n\n" +
         "Do you want to proceed?"
       );
       if (!confirmed) return;
-
-      const btnTop = document.getElementById('btn-top-reset-corpus');
-      const btnKb = document.getElementById('btn-kb-reset-all');
-      if (btnTop) { btnTop.disabled = true; btnTop.innerText = '↺ Refreshing...'; }
-      if (btnKb) { btnKb.disabled = true; btnKb.innerText = '↺ Rebuilding Chunks & Vector Stores...'; }
 
       appendLiveTerminal("[SYSTEM] Complete system refresh requested by user...");
 
@@ -1987,19 +2382,16 @@
         const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
         const data = await resp.json();
         if (resp.ok && data.success) {
-          selectSearchScopeOption('all');
+          switchCorpusTab('reference');
           await fetchEnvAndTelemetry();
           await fetchDocumentTree();
           await fetchLatestReportContent();
-          alert(`✅ System Refreshed Successfully!\n\nRestored original 5 Computer Science textbooks.\nTotal Chunks: ${data.total_chunks}\nDual FAISS vector stores & manifests cleanly rebuilt.`);
+          alert(`✅ System Refreshed Successfully!\n\nRestored original 5 Computer Science textbooks.\nTotal Chunks: ${data.total_chunks}\nDual FAISS vector stores cleanly rebuilt.`);
         } else {
           alert('Restore error: ' + (data.error || 'Failed to restore default corpus'));
         }
       } catch (e) {
         alert('Restore network error: ' + e.message);
-      } finally {
-        if (btnTop) { btnTop.disabled = false; btnTop.innerText = '↺ Refresh Everything (5 Books)'; }
-        if (btnKb) { btnKb.disabled = false; btnKb.innerText = '↺ Refresh Everything (5 Books)'; }
       }
     }
   </script>

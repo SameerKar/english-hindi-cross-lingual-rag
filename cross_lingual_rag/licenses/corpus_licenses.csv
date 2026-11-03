@@ -1,0 +1,17 @@
+resource_id,title,authors,subject,year,source_url,license_name,license_url,commercial_use_permitted,notes
+ALG-01,Algorithms,Jeff Erickson,Algorithms,2019,https://jeffe.cs.illinois.edu/teaching/algorithms/index.html,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,Full textbook; attribution required
+ALG-02,Open Data Structures,Pat Morin,Algorithms,2013,https://opendatastructures.org/,CC BY 2.5 CA,https://creativecommons.org/licenses/by/2.5/ca/,true,Attribution required; Java/pseudocode editions
+ALG-03,An Open Guide to Data Structures and Algorithms,Paul W. Bible; Lucas Moser; Mia M. Scarlato,Algorithms,2023,https://open.umn.edu/opentextbooks/textbooks/1017,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,Open Textbook Library entry
+AUT-01,Theory of Computing: An Open Introduction,Taylor J. Smith,Automata,2020,https://people.stfx.ca/tjsmith/pub/tocopen/,CC BY-SA 4.0,https://creativecommons.org/licenses/by-sa/4.0/,true,Share-alike and attribution apply
+AUT-02,Theory of Computation,Jim Hefferon,Automata,2021,https://hefferon.net/computation/,CC BY-SA 3.0 US,https://creativecommons.org/licenses/by-sa/3.0/us/,true,Dual-licensed GFDL / CC BY-SA 3.0
+AUT-03,Theory of Computation MIT 18.404J,Michael Sipser,Automata,2020,https://ocw.mit.edu/courses/18-404j-theory-of-computation-fall-2020/,CC BY-NC-SA 4.0,https://creativecommons.org/licenses/by-nc-sa/4.0/,false,Non-commercial research only
+DB-01,Database Design - 2nd Edition,Adrienne Watt; Nelson Eng,DBMS,2014,https://opentextbc.ca/dbdesign01/,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,BCcampus Open Textbook
+DB-02,A Practical Introduction to Databases,Runestone Academy,DBMS,2022,https://runestone.academy/ns/books/published/practical_db/front-matter/preface.html,CC BY-SA 4.0,https://creativecommons.org/licenses/by-sa/4.0/,true,Interactive textbook open export
+DB-03,Database Management Systems Open Course,Shuguang Hong; Amrita George; Veda C. Storey,DBMS,2018,https://oer.galileo.usg.edu/compsci-textbooks/19/,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,Georgia State OER
+OS-01,Operating Systems and Middleware: Supporting Controlled Interaction,Max Hailperin,Operating Systems,2019,https://gustavus.edu/+max/os-book/,CC BY-SA 3.0,https://creativecommons.org/licenses/by-sa/3.0/,true,Revised edition textbook
+OS-02,Operating System,INFLIBNET Centre,Operating Systems,2021,https://ebooks.inflibnet.ac.in/csp3/,CC BY-NC 4.0,https://creativecommons.org/licenses/by-nc/4.0/,false,e-PG Pathshala non-commercial resource
+OS-03,Operating System Engineering MIT 6.828,Frans Kaashoek; Robert Morris,Operating Systems,2012,https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/,CC BY-NC-SA 4.0,https://creativecommons.org/licenses/by-nc-sa/4.0/,false,MIT OCW course lecture notes
+NET-01,Computer Networking: Principles Protocols and Practice - 3rd Edition,Olivier Bonaventure,Computer Networks,2019,https://github.com/cnp3/ebook,CC BY-SA 3.0,https://creativecommons.org/licenses/by-sa/3.0/,true,CNP3 repository open edition
+NET-02,Computer Networks: A Systems Approach,Larry Peterson; Bruce Davie,Computer Networks,2021,https://github.com/SystemsApproach/7E,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,7th edition open access
+NET-03,Introduction to Networks,Umar Khokhar; Binh Tran,Computer Networks,2024,https://oer.galileo.usg.edu/compsci-textbooks/17/,CC BY 4.0,https://creativecommons.org/licenses/by/4.0/,true,Georgia Gwinnett College open textbook
+

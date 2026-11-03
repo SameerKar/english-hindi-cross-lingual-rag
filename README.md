@@ -678,66 +678,107 @@ The platform is designed with zero lock-in. You can run completely offline witho
 
 ---
 
-## 8. Step-by-Step Verification, Testing & Execution Runbook
+## 8. Step-by-Step Verification, Testing & Operational Runbook
 
-### Phase 1: Environment Setup
+### Quickstart: One-Click Launchers
+The platform includes self-contained, automated startup scripts for Windows, macOS, and Linux that verify Python 3.10+, create and activate a virtual environment, install missing requirements, initialize `.env` safely, launch the FastAPI server, and open the interactive web studio in your default browser.
+
+#### Windows (Command Prompt or File Explorer)
+Double-click `start_windows.bat` or run:
+```cmd
+start_windows.bat
+```
+
+#### macOS / Linux (Terminal)
+```bash
+chmod +x start_macos_linux.sh
+./start_macos_linux.sh
+```
+
+---
+
+### Manual Installation & Startup
+
 ```powershell
-# Navigate into the project root
+# 1. Navigate to the project root
 cd "d:\ai projects\rag research"
 
-# Create virtual environment
-python -m venv venv
+# 2. Create and activate virtual environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1   # On Linux/macOS: source .venv/bin/activate
 
-# Activate virtual environment (Windows PowerShell)
-.\venv\Scripts\Activate.ps1
-
-# Install pinned dependencies
+# 3. Install pinned dependencies
 pip install -r cross_lingual_rag/requirements.txt
-```
 
-### Phase 2: Ingestion & Vector Index Construction
+# 4. Configure environment (.env)
+# Create a .env file from .env.example (or configure API keys directly inside the UI at Stage 1)
+cp cross_lingual_rag/.env.example cross_lingual_rag/.env
+
+# 5. Start the FastAPI Web & Evaluation Studio
+python cross_lingual_rag/server.py
+```
+Open **`http://127.0.0.1:8000`** in your browser to access the single-page experimentation studio.
+
+---
+
+### Corpus Structure & Strict Workspace Isolation
+
+The platform enforces strict physical and logical isolation between official academic benchmark documents and custom user uploads:
+
+1. **Official Reference Benchmark Corpus:**
+   - Location: `cross_lingual_rag/data/corpus/reference/{algorithms,automata,computer_networks,dbms,operating_systems}/`
+   - Metadata: `cross_lingual_rag/data/corpus/reference/corpus_manifest.csv` and `cross_lingual_rag/licenses/corpus_licenses.csv`
+   - Dual Vector Indexes: `cross_lingual_rag/indexes/reference/english/` (768d) and `cross_lingual_rag/indexes/reference/multilingual/` (384d)
+   - Benchmark Dataset: 120 paired questions in `cross_lingual_rag/data/benchmark/questions.csv` and `gold_labels.jsonl`
+   - **Guaranteed Isolation:** User uploads never mutate, overwrite, or contaminate reference benchmark indexes.
+
+2. **Custom User Workspaces:**
+   - Location: `cross_lingual_rag/data/corpus/custom/<workspace_id>/originals/`
+   - Supported Formats: `.pdf`, `.docx`, `.html`, `.txt`, `.md`
+   - Custom Dual Vector Indexes: `cross_lingual_rag/indexes/custom/<workspace_id>/`
+   - Ingestion: Extracts page-by-page text, eliminates zero-text documents, deduplicates files by SHA-256 hash, and creates semantic chunks without altering the reference corpus.
+
+---
+
+### Running Automated Test & Benchmark Suites
+
+#### 1. Architectural & Verification Unit Tests (7/7 Points)
 ```powershell
-# Place 15-20 academic PDFs in data/corpus/{subject}/
-# Then execute ingestion and dual index building:
-python -m cross_lingual_rag.src.ingestion --corpus_dir cross_lingual_rag/data/corpus --output_dir cross_lingual_rag/data/processed
-python -m cross_lingual_rag.src.vector_store --action build_all --config cross_lingual_rag/config.yaml
+python -m pytest cross_lingual_rag/tests/test_basic_pipeline.py -v
 ```
+Verifies page-aware chunking, vector normalization, dual FAISS indexing, translation providers, all 4 pipeline topologies, JSON log schemas, and evaluation metric computation.
 
-**Verification Check:**
-- Verify that `cross_lingual_rag/data/indexes/english/index.faiss` and `metadata_map.pkl` exist and are $> 0$ bytes.
-- Verify that `cross_lingual_rag/data/indexes/multilingual/index.faiss` and `metadata_map.pkl` exist and are $> 0$ bytes.
-
-### Phase 3: 10-Question Smoke Test
-Before running the 120-question benchmark, execute the automated smoke test to verify all pipelines:
+#### 2. Mandatory Implementation Specification Tests (8/8 Points)
 ```powershell
-pytest cross_lingual_rag/tests/test_basic_pipeline.py -v
+python -m pytest cross_lingual_rag/tests/test_mandatory_spec.py -v
 ```
-This runs 2 questions per system (A, B, C, D) and checks:
-- No unhandled exceptions or silent failures.
-- JSON logs are written with valid non-empty fields.
-- Retrieval scores are normalized floats between 0 and 1.
-- All latencies are greater than 0 ms.
+Verifies:
+- System A zero-retrieval enforcement.
+- System B English-only upper bound.
+- System C Hindi query translation, intermediate English answer capture, and final Hindi answer.
+- System D zero-translation direct multilingual retrieval.
+- Devanagari script threshold validation.
+- Zero-text file detection and error handling.
+- SHA-256 file duplicate detection.
+- Complete reference vs custom upload workspace isolation.
 
-### Phase 4: Full Benchmark Execution (A, B, C, D)
+#### 3. End-to-End Smoke Benchmark (5 Questions)
 ```powershell
-# Execute all four pipelines over the 120-question benchmark:
-python -m cross_lingual_rag.src.pipelines --run_all --config cross_lingual_rag/config.yaml
+python cross_lingual_rag/run_complete_experiment.py --smoke
+```
+Runs 5 paired academic questions across Systems A, B, C, D (20 pipeline runs total), records raw JSON logs, computes Recall@1/3/5, MRR, nDCG@5, and component latencies, and writes consolidated results to `results/benchmark/csv/benchmark_results.csv` and `results/benchmark/summaries/evaluation_report.md`.
+
+#### 4. Full 120-Item Academic Benchmark Run
+```powershell
+python cross_lingual_rag/run_complete_experiment.py --limit=120
 ```
 
-### Phase 5: Evaluation & Metrics Generation
-```powershell
-# Calculate Recall@1, Recall@3, Recall@5, MRR, error taxonomy breakdown:
-python -m cross_lingual_rag.src.evaluation --benchmark cross_lingual_rag/data/benchmark/questions.csv --logs_dir cross_lingual_rag/results/raw
-```
-This generates:
-- `cross_lingual_rag/results/csv/benchmark_results.csv`
-- `cross_lingual_rag/results/summaries/evaluation_report.md`
+---
 
-### Phase 6: Interactive Visual Inspection via Streamlit
-```powershell
-streamlit run cross_lingual_rag/app.py
-```
-Open your browser at `http://localhost:8501`:
-1. Enter any custom academic question in Hindi (or pick from the 120 benchmark dropdown).
-2. Compare System C (Translation RAG) and System D (Multilingual RAG) side-by-side.
-3. Inspect retrieved English chunks, similarity scores, translation steps, and latency breakdowns.
+### Interactive Web Studio Guide (5-Stage Linear Workflow)
+
+1. **Stage 1 · API & Env Setup:** Enter your Google Gemini API key (or use local fallback mode). The platform uses `gemini-3.1-flash-lite` with temperature 0.0 for deterministic academic reproducibility.
+2. **Stage 2 · Corpus & Workspaces:** Switch seamlessly between the **[📚 Official Reference Benchmark]** (with 1-click rebuild and default reset) and **[📁 Custom Workspaces]** to upload files (.pdf, .docx, .html, .txt, .md). The built-in document explorer lets you view page-by-page text and citations directly in the app.
+3. **Stage 3 · Query Formulation:** Pick from academic Hindi samples (Algorithms, Automata, OS, DBMS, Networks) or type any Hindi query, select the target corpus, and select which pipelines (A, B, C, D) to execute side-by-side.
+4. **Stage 4 · Results & Evidence:** Inspect side-by-side answers, intermediate English synthesis for System C, stage latencies breakdown (translation ms, retrieval ms, generation ms), Devanagari language check tags, and evidentiary chunks with physical page citations.
+5. **Stage 5 · Benchmark Suite & Reports:** Run smoke or full benchmark suites with live WebSocket terminal streaming, preview the latest evaluation report, and download consolidated `.csv` and `.md` reports.

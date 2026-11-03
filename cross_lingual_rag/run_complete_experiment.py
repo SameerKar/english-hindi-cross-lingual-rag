@@ -1,23 +1,26 @@
 """
 Master End-to-End Test & Observation Recording Script (`run_complete_experiment.py`).
-Executes the complete cross-lingual benchmark workflow:
-1. Runs pytest cross_lingual_rag/tests/test_basic_pipeline.py -v and asserts all 7/7 tests pass.
-2. Cleans all old/stale SMOKE_01 JSON logs from results/raw/ and results/traces/.
-3. Verifies data/processed/chunks_manifest.json (15 chunks across 5 subjects) and both FAISS indexes (data/indexes/english/index.faiss and data/indexes/multilingual/index.faiss).
-4. Runs all 17 benchmark questions x 4 systems = 68 pipeline executions (A, B, C, D).
-5. Runs EvaluationHarness.run_evaluation(exclude_smoke=True) to generate:
-   - cross_lingual_rag/results/csv/benchmark_results.csv (all 68 rows)
-   - cross_lingual_rag/results/summaries/evaluation_report.md
-   - cross_lingual_rag/results/summaries/complete_project_observations.json
+Executes the cross-lingual benchmark workflow:
+1. Runs pytest cross_lingual_rag/tests/test_basic_pipeline.py -v and asserts tests pass.
+2. Archives / cleans old stale logs.
+3. Verifies reference corpus manifest and dual FAISS vector stores (indexes/reference/).
+4. Runs benchmark questions (120 full or --limit N) across all 4 systems (A, B, C, D).
+5. Runs EvaluationHarness.run_evaluation() to generate:
+   - results/benchmark/csv/benchmark_results.csv
+   - results/benchmark/summaries/evaluation_report.md
+   - results/benchmark/summaries/complete_project_observations.json
 
 Usage:
-    python cross_lingual_rag/run_complete_experiment.py
+    python run_complete_experiment.py                # Full 120 questions (480 runs)
+    python run_complete_experiment.py --smoke        # Quick 5-question smoke test (20 runs)
+    python run_complete_experiment.py --limit 10     # 10 questions (40 runs)
 """
 
 import os
 import sys
 import time
 import json
+import argparse
 import subprocess
 from pathlib import Path
 from datetime import datetime, timezone
@@ -35,7 +38,6 @@ if sys.stderr and hasattr(sys.stderr, "reconfigure"):
     except Exception:
         pass
 
-# Add cross_lingual_rag and project root to sys.path
 script_dir = Path(__file__).resolve().parent
 root_dir = script_dir.parent
 if str(root_dir) not in sys.path:
@@ -51,9 +53,9 @@ from src.evaluation import EvaluationHarness
 
 
 def run_pytest_suite() -> dict:
-    """Runs the 7-point automated pytest suite and asserts all 7 tests pass."""
+    """Runs the automated pytest suite and asserts tests pass."""
     print("\n" + "=" * 80)
-    print("[Step 1] Running 7-Point Pytest Verification Suite...")
+    print("[Step 1] Running Automated Verification Suite...")
     print("=" * 80)
     test_file = script_dir / "tests" / "test_basic_pipeline.py"
     start_t = time.perf_counter()
@@ -82,9 +84,9 @@ def run_pytest_suite() -> dict:
 
 
 def clean_stale_logs_and_traces(raw_dir: Path, traces_dir: Path):
-    """Cleans all previous JSON logs and traces so only the clean 68 benchmark runs remain."""
+    """Archives / cleans stale logs so current benchmark runs are isolated."""
     print("\n" + "=" * 80)
-    print("[Step 2] Cleaning Old / Stale JSON Logs & Traces...")
+    print("[Step 2] Cleaning Stale JSON Logs & Traces...")
     print("=" * 80)
 
     raw_count = 0
@@ -109,80 +111,76 @@ def clean_stale_logs_and_traces(raw_dir: Path, traces_dir: Path):
 
 
 def verify_corpus_and_indexes(config: dict):
-    """Verifies that chunks_manifest.json has 15 chunks across 5 subjects and both FAISS indexes exist."""
+    """Verifies that reference chunks and indexes exist, rebuilding if necessary."""
     print("\n" + "=" * 80)
-    print("[Step 3] Verifying Corpus Manifest & Dual FAISS Vector Stores...")
+    print("[Step 3] Verifying Reference Corpus Manifest & FAISS Vector Stores...")
     print("=" * 80)
 
-    processed_dir = Path(config["paths"]["processed_dir"])
+    root = get_project_root()
+    processed_dir = root / Path(config["paths"].get("processed_dir", "data/processed"))
     manifest_file = processed_dir / "chunks_manifest.json"
-    eng_dir = Path(config["paths"]["english_index_dir"])
-    multi_dir = Path(config["paths"]["multilingual_index_dir"])
+    eng_dir = root / Path(config["paths"].get("english_index_dir", "indexes/reference/english"))
+    multi_dir = root / Path(config["paths"].get("multilingual_index_dir", "indexes/reference/multilingual"))
 
-    eng_idx = eng_dir / "index.faiss"
-    eng_map = eng_dir / "metadata_map.pkl"
-    multi_idx = multi_dir / "index.faiss"
-    multi_map = multi_dir / "metadata_map.pkl"
-
-    rebuild_corpus = False
+    rebuild = False
     if not manifest_file.exists():
-        rebuild_corpus = True
+        rebuild = True
+    elif not (eng_dir / "metadata_map.pkl").exists() or not (multi_dir / "metadata_map.pkl").exists():
+        rebuild = True
+
+    if rebuild:
+        print("  -> Ingesting reference academic corpus...")
+        ingestor = CorpusIngestor(config, mode="reference")
+        chunks = ingestor.ingest_corpus()
+        print(f"  -> Ingested {len(chunks)} chunks.")
+        print("  -> Building Dual FAISS vector stores...")
+        build_dual_indexes(config, chunks=chunks, mode="reference")
     else:
-        try:
-            with open(manifest_file, "r", encoding="utf-8") as f:
-                manifest_data = json.load(f)
-            subjects = set(c.get("subject") for c in manifest_data)
-            if len(manifest_data) < 15 or len(subjects) < 5:
-                print(f"  -> Manifest incomplete ({len(manifest_data)} chunks, {len(subjects)} subjects). Rebuilding...")
-                rebuild_corpus = True
-            else:
-                print(f"  -> Verified chunks_manifest.json: {len(manifest_data)} chunks across {len(subjects)} subjects.")
-        except Exception:
-            rebuild_corpus = True
-
-    if rebuild_corpus:
-        print("  -> Ingesting academic corpus from data/corpus/...")
-        ingestor = CorpusIngestor(config)
-        ingestor.ingest_corpus()
-
-    rebuild_indexes = False
-    if not (eng_idx.exists() and eng_map.exists() and multi_idx.exists() and multi_map.exists()):
-        rebuild_indexes = True
-
-    if rebuild_indexes:
-        print("  -> Building Dual FAISS vector stores (English 768d + Multilingual 384d)...")
-        build_dual_indexes(config)
-    else:
-        print("  -> Verified existing English & Multilingual FAISS vector stores.")
+        print("  -> Verified existing reference manifest and vector stores.")
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Cross-Lingual RAG Experiment Runner")
+    parser.add_argument("--smoke", action="store_true", help="Run quick 5-question smoke test")
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of questions to evaluate")
+    parser.add_argument("--strict", action="store_true", help="Enforce strict benchmark mode (no local LLM fallback)")
+    parser.add_argument("--skip-pytest", action="store_true", help="Skip running pytest suite")
+    args = parser.parse_args()
+
+    max_q = 5 if args.smoke else args.limit
+    run_type = "smoke" if args.smoke else "benchmark"
+
     print("=" * 80)
-    print("[RESEARCH BENCHMARK] ENGLISH-HINDI CROSS-LINGUAL ACADEMIC RAG: COMPLETE 68-RUN SUITE")
+    print(f"[RESEARCH BENCHMARK] ENGLISH-HINDI CROSS-LINGUAL ACADEMIC RAG: {run_type.upper()} SUITE")
     print("=" * 80)
 
     config = load_config()
     set_seed(config.get("random_seed", 42))
+    root = get_project_root()
 
-    # 1. Run 7-Point Pytest Suite
-    pytest_status = run_pytest_suite()
+    # 1. Run Pytest Suite
+    pytest_status = {}
+    if not args.skip_pytest:
+        pytest_status = run_pytest_suite()
 
     # 2. Clean stale logs and traces
-    raw_dir = Path(config["paths"]["results_raw_dir"])
-    traces_dir = Path(get_project_root()) / "results" / "traces"
+    raw_dir = root / Path(config["paths"].get("results_raw_dir", "results/benchmark/raw"))
+    traces_dir = root / "results" / "traces"
     clean_stale_logs_and_traces(raw_dir, traces_dir)
 
-    # 3. Verify Corpus Manifest & FAISS Vector Stores
+    # 3. Verify Reference Corpus & FAISS Stores
     verify_corpus_and_indexes(config)
 
-    # 4. Initialize Orchestrator and Execute All 17 Questions x 4 Systems = 68 Runs
+    # 4. Initialize Orchestrator and Execute Benchmark Questions
     print("\n" + "=" * 80)
-    print("[Step 4] Initializing Pipeline Orchestrator & Executing 68 Benchmark Runs...")
+    print(f"[Step 4] Initializing Pipeline Orchestrator & Executing Runs (Limit: {max_q or 'ALL'})...")
     print("=" * 80)
     orchestrator = PipelineOrchestrator(config)
 
-    bench_csv = Path(config["paths"]["benchmark_file"])
+    bench_csv = root / Path(config["paths"].get("benchmark_file", "data/benchmark/questions.csv"))
     df_bench = pd.read_csv(bench_csv)
+    if max_q:
+        df_bench = df_bench.head(max_q)
     total_q = len(df_bench)
     print(f"Loaded {total_q} paired benchmark questions from {bench_csv}")
 
@@ -191,41 +189,41 @@ def main():
 
     for idx, row in df_bench.iterrows():
         q_id = str(row["question_id"])
-        subj = str(row["subject"])
-        cat = str(row["category"])
+        subj = str(row.get("subject", "CS"))
+        cat = str(row.get("category", "General"))
         q_en = str(row["question_en"])
         q_hi = str(row["question_hi"])
 
         print(f"  -> [{idx+1:02d}/{total_q:02d}] {q_id} | Subject: {subj:<18} | Category: {cat}")
 
         # System A: Direct LLM Baseline
-        res_a = orchestrator.execute_system_A(q_hi, q_id, subj, cat)
+        res_a = orchestrator.execute_system_A(q_hi, q_id, subj, cat, run_type=run_type, strict_benchmark=args.strict)
         all_runs.append(res_a)
 
         # System B: Monolingual English RAG
-        res_b = orchestrator.execute_system_B(q_en, q_id, subj, cat)
+        res_b = orchestrator.execute_system_B(q_en, q_id, subj, cat, run_type=run_type, strict_benchmark=args.strict)
         all_runs.append(res_b)
 
         # System C: Translation-Mediated RAG
-        res_c = orchestrator.execute_system_C(q_hi, q_id, subj, cat)
+        res_c = orchestrator.execute_system_C(q_hi, q_id, subj, cat, run_type=run_type, strict_benchmark=args.strict)
         all_runs.append(res_c)
 
         # System D: Direct Multilingual RAG
-        res_d = orchestrator.execute_system_D(q_hi, q_id, subj, cat)
+        res_d = orchestrator.execute_system_D(q_hi, q_id, subj, cat, run_type=run_type, strict_benchmark=args.strict)
         all_runs.append(res_d)
 
     total_bench_duration = round(time.perf_counter() - run_start_t, 2)
-    print(f"\n[OK] All 68 benchmark pipeline executions completed in {total_bench_duration}s.")
+    print(f"\n[OK] All {len(all_runs)} benchmark pipeline executions completed in {total_bench_duration}s.")
 
     # 5. Run Evaluation Harness & Generate Reports
     print("\n" + "=" * 80)
     print("[Step 5] Running Scientific Evaluation Harness & Generating Reports...")
     print("=" * 80)
     evaluator = EvaluationHarness(config)
-    df_eval, report_md = evaluator.run_evaluation(exclude_smoke=True)
+    df_eval, report_md = evaluator.run_evaluation(exclude_smoke=False if args.smoke else True)
 
     # 6. Save Complete Structured Observations JSON
-    summary_dir = Path(config["paths"]["results_summary_dir"])
+    summary_dir = root / Path(config["paths"].get("results_summary_dir", "results/benchmark/summaries"))
     obs_path = summary_dir / "complete_project_observations.json"
 
     sys_summary = {}
@@ -252,31 +250,22 @@ def main():
                 }
             }
 
-    subj_mrr = {}
-    for subj in sorted(df_eval["subject"].dropna().unique()):
-        subj_df = df_eval[df_eval["subject"] == subj]
-        subj_mrr[subj] = {
-            "B": round(float(subj_df[subj_df["system_id"] == "B"]["mrr"].mean()), 4),
-            "C": round(float(subj_df[subj_df["system_id"] == "C"]["mrr"].mean()), 4),
-            "D": round(float(subj_df[subj_df["system_id"] == "D"]["mrr"].mean()), 4),
-        }
-
     observations_payload = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "pytest_verification": pytest_status,
         "total_benchmark_questions": total_q,
         "total_pipeline_runs": int(len(df_eval)),
-        "system_metrics_summary": sys_summary,
-        "subject_wise_mrr": subj_mrr
+        "system_metrics_summary": sys_summary
     }
+    ensure_directory(str(obs_path.parent))
     with open(obs_path, "w", encoding="utf-8") as f:
         json.dump(observations_payload, f, indent=2, ensure_ascii=False)
 
     print("\n" + "=" * 80)
     print("[OK] EXPERIMENT & OBSERVATION RECORDING FULLY COMPLETE!")
     print("=" * 80)
-    print(f"1. Consolidated CSV Table : {config['paths']['results_csv_dir']}/benchmark_results.csv")
-    print(f"2. Markdown Evaluation    : {config['paths']['results_summary_dir']}/evaluation_report.md")
+    print(f"1. Consolidated CSV Table : {evaluator.csv_dir}/benchmark_results.csv")
+    print(f"2. Markdown Evaluation    : {evaluator.summary_dir}/evaluation_report.md")
     print(f"3. JSON Observations Log  : {obs_path}")
     print("\nFinal Summary Preview:\n")
     print(report_md)

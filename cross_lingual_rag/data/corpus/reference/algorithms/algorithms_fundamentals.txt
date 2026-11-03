@@ -1,0 +1,20 @@
+=== PAGE 1 ===
+Algorithms and Data Structures: Graph Traversal and Shortest Paths
+
+Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. 
+
+The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).
+
+=== PAGE 2 ===
+Limitations with Negative Edge Weights and Bellman-Ford
+
+Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant.
+
+To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.
+
+=== PAGE 3 ===
+Dynamic Programming and the 0/1 Knapsack Problem
+
+Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. 
+
+In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.

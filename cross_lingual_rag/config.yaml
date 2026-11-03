@@ -2,18 +2,22 @@
 # All experiment settings, model identifiers, and hyperparameters are strictly frozen here.
 
 project_name: "English-Hindi Cross-Lingual Academic RAG Experimentation Platform"
-version: "2.0"
+version: "2.5"
 random_seed: 42
 
 paths:
-  corpus_dir: "data/corpus"
+  corpus_dir: "data/corpus/reference"
+  reference_corpus_dir: "data/corpus/reference"
+  custom_corpus_dir: "data/corpus/custom"
   processed_dir: "data/processed"
-  english_index_dir: "data/indexes/english"
-  multilingual_index_dir: "data/indexes/multilingual"
+  english_index_dir: "indexes/reference/english"
+  multilingual_index_dir: "indexes/reference/multilingual"
+  custom_indexes_dir: "indexes/custom"
   benchmark_file: "data/benchmark/questions.csv"
-  results_raw_dir: "results/raw"
-  results_csv_dir: "results/csv"
-  results_summary_dir: "results/summaries"
+  results_raw_dir: "results/benchmark/raw"
+  results_csv_dir: "results/benchmark/csv"
+  results_summary_dir: "results/benchmark/summaries"
+  custom_results_dir: "results/custom"
   prompts_dir: "prompts"
 
 embedding:
@@ -33,7 +37,7 @@ retrieval:
   metric: "cosine"
 
 generation:
-  # Provider options: "openai", "gemini", "ollama", "mock"
+  # Provider options: "gemini", "openai", "ollama", "mock"
   provider: "gemini"
   model: "gemini-3.1-flash-lite"
   # Strict constraint: Temperature must be 0 for research reproducibility
@@ -45,7 +49,7 @@ generation:
   ollama_base_url: "http://localhost:11434"
 
 translation:
-  # Provider options: "deep-translator" (free Google web API), "google_cloud", "mock"
+  # Provider options: "deep-translator", "gemini", "openai", "mock"
   provider: "deep-translator"
   source_lang: "hi"
   target_lang: "en"

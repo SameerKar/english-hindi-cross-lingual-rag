@@ -8,8 +8,10 @@ transformers>=4.30.0
 # Vector Database
 faiss-cpu>=1.7.4
 
-# PDF Processing and Document Extraction
+# Document Extraction & Parsers (PDF, DOCX, HTML, TXT, MD)
 pypdf>=3.17.0
+python-docx>=1.1.0
+beautifulsoup4>=4.12.0
 
 # Translation Layer
 deep-translator>=1.11.4
@@ -18,7 +20,14 @@ deep-translator>=1.11.4
 openai>=1.0.0
 google-genai>=0.1.0
 
-# UI and Dashboard
+# Backend Web Server & API
+fastapi>=0.100.0
+uvicorn>=0.22.0
+python-multipart>=0.0.6
+python-dotenv>=1.0.0
+websockets>=11.0.0
+
+# UI and Dashboard (Optional / Streamlit)
 streamlit>=1.30.0
 
 # Scientific, Data Manipulation & Utility Libraries

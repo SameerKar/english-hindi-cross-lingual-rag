@@ -2,46 +2,56 @@
   {
     "document_id": "algorithms_algorithms_fundamentals",
     "file_name": "algorithms_fundamentals.txt",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\algorithms\\algorithms_fundamentals.txt",
+    "file_path": "data/corpus/reference/algorithms/algorithms_fundamentals.txt",
+    "sha256": "3f51fa552aa7cdffd4caee900d6dfc183cfaafa792d29601def2588c028bc41e",
     "subject": "algorithms",
     "total_pages": 3,
     "total_chunks": 3,
-    "language": "en"
+    "language": "en",
+    "extraction_status": "SUCCESS"
   },
   {
     "document_id": "automata_automata_theory",
     "file_name": "automata_theory.txt",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\automata\\automata_theory.txt",
+    "file_path": "data/corpus/reference/automata/automata_theory.txt",
+    "sha256": "e69c2320a71960db2a29956773aa68c7c7d512c4aa8f245750ef1a06e8921883",
     "subject": "automata",
     "total_pages": 3,
     "total_chunks": 3,
-    "language": "en"
+    "language": "en",
+    "extraction_status": "SUCCESS"
   },
   {
     "document_id": "computer_networks_computer_networks",
     "file_name": "computer_networks.txt",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\computer_networks\\computer_networks.txt",
+    "file_path": "data/corpus/reference/computer_networks/computer_networks.txt",
+    "sha256": "971396fb2f912a56c7849f90fcc06f8a785d463716824230e7cf4c2a23a9157b",
     "subject": "computer_networks",
     "total_pages": 3,
     "total_chunks": 3,
-    "language": "en"
+    "language": "en",
+    "extraction_status": "SUCCESS"
   },
   {
     "document_id": "dbms_database_systems",
     "file_name": "database_systems.txt",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\dbms\\database_systems.txt",
+    "file_path": "data/corpus/reference/dbms/database_systems.txt",
+    "sha256": "c9394f4b0b6200ae8a88749b11b692ecc5940b396d76ce25d063d87cd8b68f05",
     "subject": "dbms",
     "total_pages": 3,
     "total_chunks": 3,
-    "language": "en"
+    "language": "en",
+    "extraction_status": "SUCCESS"
   },
   {
     "document_id": "operating_systems_operating_systems",
     "file_name": "operating_systems.txt",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\operating_systems\\operating_systems.txt",
+    "file_path": "data/corpus/reference/operating_systems/operating_systems.txt",
+    "sha256": "a7a952dbb951c523fef5fe691e0c41a8b5eb1646945b2321084a4f16d929a4f3",
     "subject": "operating_systems",
     "total_pages": 3,
     "total_chunks": 3,
-    "language": "en"
+    "language": "en",
+    "extraction_status": "SUCCESS"
   }
 ]

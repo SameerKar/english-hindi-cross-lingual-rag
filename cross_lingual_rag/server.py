@@ -94,21 +94,21 @@ class TerminalManager:
 from datetime import datetime
 terminal = TerminalManager()
 
-# Global orchestrator cache
-_orchestrator: Optional[PipelineOrchestrator] = None
+# Global orchestrator cache per workspace
+_orchestrators: Dict[str, PipelineOrchestrator] = {}
 
-def get_orchestrator_instance() -> PipelineOrchestrator:
-    global _orchestrator
-    if _orchestrator is None:
+def get_orchestrator_instance(workspace_id: str = "reference") -> PipelineOrchestrator:
+    clean_ws = workspace_id or "reference"
+    if clean_ws not in _orchestrators:
         cfg = load_config()
-        _orchestrator = PipelineOrchestrator(cfg)
-    return _orchestrator
+        _orchestrators[clean_ws] = PipelineOrchestrator(cfg, workspace_id=clean_ws)
+    return _orchestrators[clean_ws]
 
-def reload_orchestrator_instance():
-    global _orchestrator
+def reload_orchestrator_instance(workspace_id: str = "reference") -> PipelineOrchestrator:
+    clean_ws = workspace_id or "reference"
     cfg = load_config()
-    _orchestrator = PipelineOrchestrator(cfg)
-    return _orchestrator
+    _orchestrators[clean_ws] = PipelineOrchestrator(cfg, workspace_id=clean_ws)
+    return _orchestrators[clean_ws]
 
 
 @app.on_event("startup")
@@ -213,48 +213,98 @@ def format_file_size(size_bytes: int) -> str:
         return f"{size_bytes / (1024 * 1024):.2f} MB"
 
 
+@app.get("/api/workspaces")
+async def list_workspaces():
+    """Lists all user custom workspaces in data/corpus/custom/."""
+    cfg = load_config()
+    root = get_project_root()
+    custom_dir = root / "data" / "corpus" / "custom"
+    ensure_directory(str(custom_dir))
+
+    workspaces = []
+    for item in sorted(custom_dir.iterdir()):
+        if item.is_dir():
+            ws_id = item.name
+            orig_dir = item / "originals"
+            docs = list(orig_dir.glob("*.*")) if orig_dir.exists() else []
+            manifest_file = item / "processed" / "chunks_manifest.json"
+            chunks_count = 0
+            if manifest_file.exists():
+                try:
+                    with open(manifest_file, "r", encoding="utf-8") as f:
+                        chunks_count = len(json.load(f))
+                except Exception:
+                    pass
+            workspaces.append({
+                "workspace_id": ws_id,
+                "name": ws_id.replace("_", " ").title(),
+                "documents_count": len(docs),
+                "chunks_count": chunks_count,
+                "is_indexed": chunks_count > 0
+            })
+    return {"workspaces": workspaces}
+
+
+class CreateWorkspaceRequest(BaseModel):
+    workspace_id: str
+
+
+@app.post("/api/workspaces/create")
+async def create_workspace(req: CreateWorkspaceRequest):
+    root = get_project_root()
+    clean_id = "".join(c for c in req.workspace_id if c.isalnum() or c in "-_").lower().strip() or "workspace_1"
+    ws_dir = root / "data" / "corpus" / "custom" / clean_id
+    ensure_directory(str(ws_dir / "originals"))
+    ensure_directory(str(ws_dir / "processed"))
+    await terminal.broadcast(f"[WORKSPACE] Created custom collection '{clean_id}'")
+    return {"success": True, "workspace_id": clean_id}
+
+
+@app.post("/api/workspaces/delete")
+async def delete_workspace(workspace_id: str = Form(...)):
+    root = get_project_root()
+    clean_id = "".join(c for c in workspace_id if c.isalnum() or c in "-_").lower().strip()
+    if clean_id in ["reference", "default_backup", "corpus"]:
+        return JSONResponse(status_code=400, content={"error": "Cannot delete protected reference corpus."})
+    ws_dir = root / "data" / "corpus" / "custom" / clean_id
+    idx_dir = root / "indexes" / "custom" / clean_id
+    if ws_dir.exists():
+        shutil.rmtree(ws_dir, ignore_errors=True)
+    if idx_dir.exists():
+        shutil.rmtree(idx_dir, ignore_errors=True)
+    await terminal.broadcast(f"[WORKSPACE] Deleted custom collection '{clean_id}'")
+    return {"success": True, "deleted_id": clean_id}
+
+
 @app.post("/api/upload-pdfs")
 @app.post("/api/upload-docs")
 async def upload_documents(
     files: List[UploadFile] = File(...),
-    subject: str = Form("uploaded_docs"),
-    replace_corpus: bool = Form(False)
+    workspace_id: str = Form("default"),
+    subject: str = Form("custom_docs")
 ):
     """
-    Accepts academic documents (.pdf, .txt, .md), saves them into data/corpus/<subject>/,
-    extracts physical/virtual pages, creates page-aware chunks, and rebuilds FAISS indexes.
-    Streams progress live to the WebSocket terminal.
+    Accepts academic documents (.pdf, .txt, .md, .docx, .html), saves them into
+    isolated workspace: data/corpus/custom/<workspace_id>/originals/,
+    extracts physical/virtual pages, builds isolated custom FAISS indexes.
+    STRICTLY NEVER MODIFIES OR MUTATES THE REFERENCE BENCHMARK CORPUS!
     """
     cfg = load_config()
-    corpus_dir = Path(cfg["paths"]["corpus_dir"])
-    clean_subj = subject.strip().lower().replace(" ", "_").replace("-", "_") or "uploaded_docs"
-    target_dir = corpus_dir / clean_subj
+    root = get_project_root()
+    clean_ws = "".join(c for c in workspace_id if c.isalnum() or c in "-_").lower().strip() or "default"
+    clean_subj = "".join(c for c in subject if c.isalnum() or c in "-_").lower().strip() or "custom_docs"
+
+    target_dir = root / "data" / "corpus" / "custom" / clean_ws / "originals"
     ensure_directory(str(target_dir))
 
-    await terminal.broadcast(f"[UPLOAD] Received {len(files)} document(s) (.pdf, .txt, .md) for collection: '{clean_subj}'")
+    await terminal.broadcast(f"[UPLOAD] Received {len(files)} document(s) for Custom Workspace '{clean_ws}'...")
 
-    if replace_corpus:
-        await terminal.broadcast("[CLEAN] 'Replace Corpus' selected: archiving existing corpus files...")
-        # Backup existing to backup directory
-        backup_dir = corpus_dir.parent / "corpus_backup"
-        if not backup_dir.exists() and corpus_dir.exists():
-            shutil.copytree(corpus_dir, backup_dir, dirs_exist_ok=True)
-        # Clear out current corpus
-        for item in corpus_dir.iterdir():
-            if item.is_dir():
-                shutil.rmtree(item, ignore_errors=True)
-            elif item.is_file():
-                item.unlink(missing_ok=True)
-        ensure_directory(str(target_dir))
-        await terminal.broadcast("[CLEAN] Corpus directory refreshed.")
-
-    # Save uploaded files (.pdf, .txt, .md)
-    allowed_exts = {".pdf", ".txt", ".md"}
+    allowed_exts = {".pdf", ".txt", ".md", ".docx", ".html", ".htm"}
     saved_files = []
     for f in files:
         ext = Path(f.filename).suffix.lower()
         if ext not in allowed_exts:
-            await terminal.broadcast(f"[WARN] Skipped unsupported file format: '{f.filename}' (only .pdf, .txt, .md accepted)")
+            await terminal.broadcast(f"[WARN] Skipped unsupported file: '{f.filename}' (Allowed: PDF, TXT, MD, DOCX, HTML)")
             continue
         dest_path = target_dir / f.filename
         with open(dest_path, "wb") as buffer:
@@ -263,40 +313,45 @@ async def upload_documents(
         await terminal.broadcast(f"[SAVE] Saved '{f.filename}' ({format_file_size(dest_path.stat().st_size)})")
 
     if not saved_files:
-        return JSONResponse(status_code=400, content={"error": "No valid PDF, TXT, or MD files were uploaded."})
+        return JSONResponse(status_code=400, content={"error": "No supported files uploaded. Only PDF, TXT, MD, DOCX, HTML accepted."})
 
-    # Step 1: Run Ingestion
-    await terminal.broadcast(f"[INGEST] Starting page-aware extraction across {len(saved_files)} new file(s)...")
-    ingestor = CorpusIngestor(cfg)
-    all_chunks = ingestor.ingest_corpus()
-    await terminal.broadcast(f"[CHUNK] Created {len(all_chunks)} page-aware chunks across knowledge base.")
+    # Step 1: Ingest into isolated custom workspace
+    await terminal.broadcast(f"[INGEST] Ingesting documents for workspace '{clean_ws}'...")
+    ingestor = CorpusIngestor(cfg, mode="custom", workspace_id=clean_ws)
+    chunks = ingestor.ingest_corpus()
+    await terminal.broadcast(f"[CHUNK] Created {len(chunks)} chunks in custom workspace '{clean_ws}'.")
 
-    # Step 2: Build Vector Indexes
-    await terminal.broadcast("[EMBED] Encoding chunks with English 768d (all-mpnet-base-v2) & Multilingual 384d models...")
-    build_dual_indexes(cfg)
-    await terminal.broadcast("[FAISS] Successfully updated English and Multilingual FAISS vector stores.")
-
-    # Step 3: Reload Orchestrator
-    reload_orchestrator_instance()
-    await terminal.broadcast(f"[READY] Knowledge base live! Total indexed chunks: {len(all_chunks)}. Ready to query.")
+    # Step 2: Build isolated custom FAISS vector stores
+    await terminal.broadcast(f"[EMBED] Building custom FAISS vector stores in indexes/custom/{clean_ws}/...")
+    build_dual_indexes(cfg, chunks=chunks, mode="custom", workspace_id=clean_ws)
+    reload_orchestrator_instance(clean_ws)
+    await terminal.broadcast(f"[READY] Custom Workspace '{clean_ws}' indexed ({len(chunks)} chunks). Reference corpus untouched.")
 
     return {
         "success": True,
+        "workspace_id": clean_ws,
         "files_uploaded": len(saved_files),
-        "total_chunks": len(all_chunks),
-        "subject": clean_subj
+        "total_chunks": len(chunks)
     }
 
 
 @app.get("/api/documents/tree")
-async def get_documents_tree():
+async def get_documents_tree(mode: str = "reference", workspace_id: Optional[str] = None):
     """
-    Scans data/corpus/ and returns a structured tree grouped by folder/subject,
-    with file metadata (format, size, pages, chunks, last modified).
+    Scans corpus folder (Reference or Custom Workspace) and returns a structured tree
+    grouped by folder/subject, with file metadata (format, size, pages, chunks).
     """
     cfg = load_config()
-    corpus_dir = Path(cfg["paths"]["corpus_dir"])
-    metadata_path = Path(cfg["paths"].get("processed_dir", "data/processed")) / "corpus_metadata.json"
+    root = get_project_root()
+
+    if mode == "custom" and workspace_id:
+        corpus_dir = root / "data" / "corpus" / "custom" / workspace_id / "originals"
+        metadata_path = root / "data" / "corpus" / "custom" / workspace_id / "processed" / "collection_manifest.json"
+    else:
+        corpus_dir = root / "data" / "corpus" / "reference"
+        if not corpus_dir.exists():
+            corpus_dir = root / Path(cfg["paths"].get("corpus_dir", "data/corpus/reference"))
+        metadata_path = root / "data" / "processed" / "corpus_metadata.json"
 
     meta_lookup = {}
     if metadata_path.exists():
@@ -304,20 +359,17 @@ async def get_documents_tree():
             with open(metadata_path, "r", encoding="utf-8") as f:
                 meta_list = json.load(f)
                 for item in meta_list:
-                    # Key by relative path or file_name + subject
                     rel = item.get("file_name", "")
                     subj = item.get("subject", "")
                     meta_lookup[f"{subj}/{rel}"] = item
                     meta_lookup[rel] = item
         except Exception as e:
-            print(f"[Warning] Failed to load corpus_metadata.json: {e}")
+            print(f"[Warning] Failed to load metadata: {e}")
 
-    supported_exts = {".pdf", ".txt", ".md"}
+    supported_exts = {".pdf", ".txt", ".md", ".docx", ".html", ".htm"}
     folders: Dict[str, List[Dict[str, Any]]] = {}
     total_docs = 0
-    pdf_count = 0
-    txt_count = 0
-    md_count = 0
+    type_counts = {"pdf": 0, "txt": 0, "md": 0, "docx": 0, "html": 0}
 
     if corpus_dir.exists():
         for file_path in sorted(corpus_dir.rglob("*")):
@@ -331,24 +383,37 @@ async def get_documents_tree():
             rel_path = str(file_path.relative_to(corpus_dir)).replace("\\", "/")
 
             if ext == ".pdf":
-                pdf_count += 1
+                type_counts["pdf"] += 1
                 type_label = "PDF"
             elif ext == ".md":
-                md_count += 1
+                type_counts["md"] += 1
                 type_label = "Markdown"
+            elif ext == ".docx":
+                type_counts["docx"] += 1
+                type_label = "DOCX"
+            elif ext in [".html", ".htm"]:
+                type_counts["html"] += 1
+                type_label = "HTML"
             else:
-                txt_count += 1
+                type_counts["txt"] += 1
                 type_label = "Text"
 
             st = file_path.stat()
             size_bytes = st.st_size
             mod_time = datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M")
 
-            # Look up ingestion metadata
             meta = meta_lookup.get(f"{folder_name}/{file_path.name}") or meta_lookup.get(file_path.name) or {}
             total_pages = meta.get("total_pages", 1)
             total_chunks = meta.get("total_chunks", 0)
             doc_id = meta.get("document_id", f"{folder_name}_{file_path.stem}".lower())
+
+            raw_url = f"/api/document/raw?path={rel_path}&mode={mode}"
+            if workspace_id:
+                raw_url += f"&workspace_id={workspace_id}"
+
+            view_url = f"/api/document/view?path={rel_path}&mode={mode}"
+            if workspace_id:
+                view_url += f"&workspace_id={workspace_id}"
 
             doc_info = {
                 "name": file_path.name,
@@ -361,7 +426,9 @@ async def get_documents_tree():
                 "modified_at": mod_time,
                 "total_pages": total_pages,
                 "total_chunks": total_chunks,
-                "document_id": doc_id
+                "document_id": doc_id,
+                "view_url": view_url,
+                "raw_url": raw_url
             }
 
             if folder_name not in folders:
@@ -371,27 +438,31 @@ async def get_documents_tree():
 
     return {
         "success": True,
+        "mode": mode,
+        "workspace_id": workspace_id,
         "total_documents": total_docs,
         "total_folders": len(folders),
-        "summary": {
-            "pdf_count": pdf_count,
-            "txt_count": txt_count,
-            "md_count": md_count
-        },
+        "summary": type_counts,
         "folders": folders
     }
 
 
 @app.get("/api/document/view")
-async def view_document_content(path: str):
+async def view_document_content(path: str, mode: str = "reference", workspace_id: Optional[str] = None):
     """
-    Securely reads and returns the extracted content and page-by-page breakdown of any document.
-    Supports .pdf (via pypdf), .txt, and .md files strictly within data/corpus/.
+    Securely reads and returns the extracted content and page breakdown of any document.
+    Supports .pdf, .docx, .html, .txt, and .md files strictly within allowed paths.
     """
     cfg = load_config()
-    corpus_dir = Path(cfg["paths"]["corpus_dir"]).resolve()
-    
-    # Path traversal protection
+    root = get_project_root()
+
+    if mode == "custom" and workspace_id:
+        corpus_dir = (root / "data" / "corpus" / "custom" / workspace_id / "originals").resolve()
+    else:
+        corpus_dir = (root / "data" / "corpus" / "reference").resolve()
+        if not corpus_dir.exists():
+            corpus_dir = (root / Path(cfg["paths"].get("corpus_dir", "data/corpus/reference"))).resolve()
+
     clean_path = path.strip().replace("\\", "/").lstrip("/")
     target_file = (corpus_dir / clean_path).resolve()
 
@@ -411,11 +482,11 @@ async def view_document_content(path: str):
                 txt = (page.extract_text() or "").strip()
                 pages.append({
                     "page_number": idx + 1,
-                    "text": txt if txt else "[No extractable text found on this page - likely a scanned or diagram page]"
+                    "text": txt if txt else "[Scanned image or non-extractable page]"
                 })
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": f"Failed to extract PDF: {str(e)}"})
-        
+
         full_text = "\n\n" + ("=" * 40) + "\n\n".join(f"--- PAGE {p['page_number']} ---\n{p['text']}" for p in pages)
         return {
             "success": True,
@@ -429,15 +500,90 @@ async def view_document_content(path: str):
             "pages": pages,
             "full_text": full_text,
             "can_embed_pdf": True,
-            "raw_url": f"/api/document/raw?path={rel_path}"
+            "raw_url": f"/api/document/raw?path={rel_path}&mode={mode}" + (f"&workspace_id={workspace_id}" if workspace_id else "")
         }
+
+    elif ext == ".docx":
+        try:
+            import docx
+            doc = docx.Document(str(target_file))
+            full_paras = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
+            cur_p = 1
+            cur_lines = []
+            cur_len = 0
+            for para in full_paras:
+                cur_lines.append(para)
+                cur_len += len(para)
+                if cur_len >= 3000:
+                    pages.append({"page_number": cur_p, "text": "\n\n".join(cur_lines)})
+                    cur_p += 1
+                    cur_lines = []
+                    cur_len = 0
+            if cur_lines:
+                pages.append({"page_number": cur_p, "text": "\n\n".join(cur_lines)})
+            if not pages:
+                pages.append({"page_number": 1, "text": "\n\n".join(full_paras)})
+            return {
+                "success": True,
+                "file_name": target_file.name,
+                "folder": target_file.parent.name,
+                "relative_path": rel_path,
+                "extension": ext,
+                "type": "DOCX",
+                "size_formatted": format_file_size(file_size),
+                "total_pages": len(pages),
+                "pages": pages,
+                "full_text": "\n\n".join(full_paras),
+                "can_embed_pdf": False,
+                "raw_url": f"/api/document/raw?path={rel_path}&mode={mode}"
+            }
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Failed to read DOCX: {str(e)}"})
+
+    elif ext in [".html", ".htm"]:
+        try:
+            from bs4 import BeautifulSoup
+            with open(target_file, "r", encoding="utf-8", errors="replace") as f:
+                soup = BeautifulSoup(f.read(), "html.parser")
+            for elem in soup(["script", "style", "nav", "footer", "header"]):
+                elem.extract()
+            text = soup.get_text(separator="\n\n")
+            lines = [line.strip() for line in text.splitlines() if line.strip()]
+            cur_p = 1
+            cur_lines = []
+            cur_len = 0
+            for l in lines:
+                cur_lines.append(l)
+                cur_len += len(l)
+                if cur_len >= 3000:
+                    pages.append({"page_number": cur_p, "text": "\n\n".join(cur_lines)})
+                    cur_p += 1
+                    cur_lines = []
+                    cur_len = 0
+            if cur_lines:
+                pages.append({"page_number": cur_p, "text": "\n\n".join(cur_lines)})
+            return {
+                "success": True,
+                "file_name": target_file.name,
+                "folder": target_file.parent.name,
+                "relative_path": rel_path,
+                "extension": ext,
+                "type": "HTML",
+                "size_formatted": format_file_size(file_size),
+                "total_pages": len(pages),
+                "pages": pages,
+                "full_text": text,
+                "can_embed_pdf": False,
+                "raw_url": f"/api/document/raw?path={rel_path}&mode={mode}"
+            }
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Failed to read HTML: {str(e)}"})
 
     elif ext in {".txt", ".md"}:
         try:
             with open(target_file, "r", encoding="utf-8", errors="replace") as f:
                 content = f.read()
 
-            # Check if page delimiters exist
             if "--- PAGE" in content or "=== PAGE" in content:
                 import re
                 parts = re.split(r'(?:---|===)\s*PAGE\s*(\d+)\s*(?:---|===)', content)
@@ -448,7 +594,6 @@ async def view_document_content(path: str):
                     page_txt = parts[i+1].strip()
                     pages.append({"page_number": page_num, "text": page_txt})
             else:
-                # Break down into virtual pages
                 paragraphs = content.split("\n\n")
                 current_p = 1
                 current_chunks = []
@@ -478,7 +623,7 @@ async def view_document_content(path: str):
                 "pages": pages,
                 "full_text": content,
                 "can_embed_pdf": False,
-                "raw_url": f"/api/document/raw?path={rel_path}"
+                "raw_url": f"/api/document/raw?path={rel_path}&mode={mode}"
             }
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": f"Failed to read document: {str(e)}"})
@@ -487,13 +632,19 @@ async def view_document_content(path: str):
 
 
 @app.get("/api/document/raw")
-async def get_raw_document(path: str):
+async def get_raw_document(path: str, mode: str = "reference", workspace_id: Optional[str] = None):
     """
-    Serves the raw document file directly for in-browser PDF viewing or raw text download.
-    Strictly constrained to data/corpus/.
+    Serves the raw document file directly for in-browser PDF viewing or download.
     """
     cfg = load_config()
-    corpus_dir = Path(cfg["paths"]["corpus_dir"]).resolve()
+    root = get_project_root()
+    if mode == "custom" and workspace_id:
+        corpus_dir = (root / "data" / "corpus" / "custom" / workspace_id / "originals").resolve()
+    else:
+        corpus_dir = (root / "data" / "corpus" / "reference").resolve()
+        if not corpus_dir.exists():
+            corpus_dir = (root / Path(cfg["paths"].get("corpus_dir", "data/corpus/reference"))).resolve()
+
     clean_path = path.strip().replace("\\", "/").lstrip("/")
     target_file = (corpus_dir / clean_path).resolve()
 
@@ -504,7 +655,10 @@ async def get_raw_document(path: str):
     media_map = {
         ".pdf": "application/pdf",
         ".txt": "text/plain; charset=utf-8",
-        ".md": "text/markdown; charset=utf-8"
+        ".md": "text/markdown; charset=utf-8",
+        ".html": "text/html; charset=utf-8",
+        ".htm": "text/html; charset=utf-8",
+        ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     }
     media_type = media_map.get(ext, "application/octet-stream")
 
@@ -516,103 +670,28 @@ async def get_raw_document(path: str):
     )
 
 
+@app.post("/api/reference/rebuild")
 @app.post("/api/restore-default-corpus")
 @app.post("/api/refresh-everything")
-async def restore_default_corpus():
+async def rebuild_reference_corpus():
     """
-    Completely refreshes the system back to the original 5 Computer Science textbook corpus:
-    - Clears all custom/uploaded documents from data/corpus/
-    - Restores the original 5 subject folders (algorithms, automata, computer_networks, dbms, operating_systems)
-    - Purges all old indexes (.faiss, .pkl, .dat, .npy) and chunk manifests
-    - Ingests the 5 textbooks to produce exactly 15 page-aware chunks
-    - Rebuilds both English 768d and Multilingual 384d FAISS vector stores
-    - Reloads orchestrator live
-    - Streams progress step-by-step to the live terminal
+    Rebuilds the official 5-discipline academic Reference Corpus (Algorithms, Automata, DBMS, OS, Networks)
+    from data/corpus/reference/, regenerates chunks_manifest.json (15 chunks), and builds FAISS indexes.
     """
-    await terminal.broadcast("[REFRESH] Initiating complete system refresh to original 5 Computer Science textbooks...")
+    await terminal.broadcast("[REFERENCE] Rebuilding official academic reference corpus and indexes...")
     cfg = load_config()
-    data_dir = Path(cfg["paths"]["corpus_dir"]).parent
-    corpus_dir = Path(cfg["paths"]["corpus_dir"])
-    backup_dir = data_dir / "corpus_default_backup"
-
-    # 1. Clean out all current files in data/corpus/
-    await terminal.broadcast("[CLEAN] Wiping all custom and uploaded documents from data/corpus/...")
-    if corpus_dir.exists():
-        for item in corpus_dir.iterdir():
-            if item.is_dir():
-                shutil.rmtree(item, ignore_errors=True)
-            elif item.is_file():
-                item.unlink(missing_ok=True)
-    ensure_directory(str(corpus_dir))
-
-    # 2. Restore 5 original subject folders
-    original_subjects = ["algorithms", "automata", "computer_networks", "dbms", "operating_systems"]
-    if backup_dir.exists():
-        for subj in original_subjects:
-            src = backup_dir / subj
-            dst = corpus_dir / subj
-            if src.exists():
-                shutil.copytree(src, dst, dirs_exist_ok=True)
-    else:
-        # Fallback: extract directly from git commit 8742fe9 if backup dir is missing
-        import subprocess
-        for subj in original_subjects:
-            dst = corpus_dir / subj
-            ensure_directory(str(dst))
-            fname = f"{subj}_fundamentals.txt" if subj == "algorithms" else (f"{subj}_theory.txt" if subj == "automata" else (f"database_systems.txt" if subj == "dbms" else f"{subj}.txt"))
-            git_path = f"cross_lingual_rag/data/corpus/{subj}/{fname}"
-            try:
-                content = subprocess.check_output(["git", "show", f"8742fe9:{git_path}"]).decode("utf-8")
-                with open(dst / fname, "w", encoding="utf-8") as f:
-                    f.write(content)
-            except Exception as e:
-                print(f"[Warning] Git fallback restore for {git_path}: {e}")
-
-    await terminal.broadcast("[RESTORE] Restored 5 default subjects: algorithms, automata, computer_networks, dbms, operating_systems.")
-
-    # 3. Purge existing indexes (.faiss, .pkl, .dat, .npy) in english and multilingual index dirs
-    await terminal.broadcast("[PURGE] Purging legacy FAISS vector index files (.faiss, .pkl, .dat)...")
-    for idx_key in ["english_index_dir", "multilingual_index_dir"]:
-        p = Path(cfg["paths"].get(idx_key, ""))
-        if p.exists() and p.is_dir():
-            for f in p.iterdir():
-                if f.is_file():
-                    try:
-                        f.unlink(missing_ok=True)
-                    except Exception:
-                        pass
-
-    # 4. Purge processed artifacts
-    processed_dir = Path(cfg["paths"].get("processed_dir", "data/processed"))
-    for art in ["chunks_manifest.json", "corpus_metadata.json"]:
-        p = processed_dir / art
-        if p.exists():
-            try:
-                p.unlink(missing_ok=True)
-            except Exception:
-                pass
-
-    # 5. Ingestion of 5 default books
-    await terminal.broadcast("[INGEST] Re-extracting text & generating page-aware chunks for 5 original textbooks...")
-    ingestor = CorpusIngestor(cfg)
+    ingestor = CorpusIngestor(cfg, mode="reference")
     chunks = ingestor.ingest_corpus()
-    await terminal.broadcast(f"[CHUNK] Created exactly {len(chunks)} page-aware chunks across 5 original subjects.")
-
-    # 6. Rebuild Dual FAISS Indexes
-    await terminal.broadcast("[EMBED] Rebuilding dual vector stores: English 768d (all-mpnet-base-v2) & Multilingual 384d...")
-    build_dual_indexes(cfg)
-    await terminal.broadcast("[FAISS] Vector stores successfully regenerated and persisted.")
-
-    # 7. Reload Orchestrator live
+    await terminal.broadcast(f"[REFERENCE] Ingested {len(chunks)} reference chunks across 5 academic disciplines.")
+    build_dual_indexes(cfg, chunks=chunks, mode="reference")
+    await terminal.broadcast("[REFERENCE] Dual English & Multilingual FAISS indexes successfully rebuilt.")
     reload_orchestrator_instance()
-    await terminal.broadcast(f"[READY] Complete system refresh successful! Active: 5 Computer Science textbooks ({len(chunks)} chunks).")
-
+    await terminal.broadcast("[READY] Reference benchmark indexes live and verified.")
     return {
         "success": True,
+        "mode": "reference",
         "total_chunks": len(chunks),
-        "total_documents": 5,
-        "subjects": original_subjects,
-        "message": f"Successfully restored pristine 5-subject baseline ({len(chunks)} chunks)."
+        "message": f"Successfully rebuilt Reference Benchmark indexes ({len(chunks)} chunks)."
     }
 
 
@@ -723,6 +802,7 @@ class QueryRequest(BaseModel):
     question_id: Optional[str] = "LIVE_Q"
     systems: List[str] = ["A", "B", "C", "D"]
     subject_filter: Optional[str] = "all"
+    workspace_id: Optional[str] = "reference"
 
 
 @app.post("/api/query")
@@ -731,7 +811,8 @@ async def execute_query(req: QueryRequest):
     Executes a cross-lingual query across Systems A, B, C, and D.
     Streams step-by-step progress to the live terminal and returns structured results.
     """
-    orch = get_orchestrator_instance()
+    ws_id = req.workspace_id or "reference"
+    orch = get_orchestrator_instance(ws_id)
     q_hi = req.question_hi.strip()
     q_en = (req.question_en or q_hi).strip()
     qid = req.question_id or "LIVE_01"
@@ -739,7 +820,7 @@ async def execute_query(req: QueryRequest):
     cat = req.category or "general"
     s_filter = req.subject_filter or "all"
 
-    await terminal.broadcast(f"[QUERY] Received query: '{q_hi[:60]}...' (Scope Filter: {s_filter})")
+    await terminal.broadcast(f"[QUERY] [{ws_id.upper()}] Query: '{q_hi[:60]}...' (Scope Filter: {s_filter})")
 
     results: Dict[str, Any] = {}
 
@@ -831,14 +912,30 @@ async def run_pytest_command():
     return {"passed": passed, "exit_code": proc.returncode}
 
 
+class BenchmarkRunRequest(BaseModel):
+    mode: Optional[str] = "smoke"
+    limit: Optional[int] = 5
+    strict: Optional[bool] = False
+
+
 @app.post("/api/run-benchmark")
-async def run_benchmark_command():
-    """Runs the complete 68-run benchmark and streams stdout live to the terminal."""
-    await terminal.broadcast("[BENCHMARK] Launching 68-Run Scientific Benchmark Suite...")
+async def run_benchmark_command(req: Optional[BenchmarkRunRequest] = None):
+    """Runs the benchmark suite (smoke or full 120 items) and streams stdout live to the terminal."""
+    mode = (req.mode if req else "smoke") or "smoke"
+    limit = req.limit if (req and req.limit) else (5 if mode == "smoke" else 120)
+    strict = req.strict if req else False
+
+    await terminal.broadcast(f"[BENCHMARK] Launching {mode.upper()} Suite ({limit} questions, Strict: {strict})...")
     
     bench_file = script_dir / "run_complete_experiment.py"
+    cmd = [sys.executable, str(bench_file), f"--limit={limit}"]
+    if strict:
+        cmd.append("--strict")
+    if mode == "smoke":
+        cmd.append("--smoke")
+
     proc = subprocess.Popen(
-        [sys.executable, str(bench_file)],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -852,8 +949,8 @@ async def run_benchmark_command():
     proc.wait()
 
     reload_orchestrator_instance()
-    await terminal.broadcast("[BENCHMARK] Complete 68-Run Execution Finished and Reports Updated.")
-    return {"success": proc.returncode == 0, "exit_code": proc.returncode}
+    await terminal.broadcast(f"[BENCHMARK] Execution completed with status code {proc.returncode}.")
+    return {"success": proc.returncode == 0, "exit_code": proc.returncode, "mode": mode, "limit": limit}
 
 
 # ---------------------------------------------------------------------------
