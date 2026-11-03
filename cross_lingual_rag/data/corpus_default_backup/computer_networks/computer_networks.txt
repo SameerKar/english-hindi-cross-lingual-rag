@@ -1,0 +1,30 @@
+=== PAGE 1 ===
+Computer Networks: Transport Layer Protocols and TCP 3-Way Handshake
+
+The Transmission Control Protocol (TCP) is a connection-oriented, reliable, byte-stream transport layer protocol defined in RFC 793. Unlike UDP, which is connectionless and best-effort, TCP provides guaranteed in-order delivery, flow control, and congestion control.
+
+Before data transfer begins, TCP establishes a virtual connection between client and server using a Three-Way Handshake:
+1. SYN: The active client generates a randomly chosen Initial Sequence Number (ISN_client = x) and sends a TCP segment with the SYN control flag set to 1.
+2. SYN-ACK: The passive server receives the SYN segment, allocates connection buffers and state variables, generates its own Initial Sequence Number (ISN_server = y), and transmits a segment with SYN=1 and ACK=1, where the acknowledgment number is set to x + 1.
+3. ACK: The client receives the SYN-ACK, transitions to the ESTABLISHED state, and transmits an ACK segment with ACK=1 and acknowledgment number set to y + 1. Data payloads can accompany this third packet.
+
+=== PAGE 2 ===
+TCP Flow Control vs Congestion Control
+
+It is vital to distinguish between flow control and congestion control in computer networks:
+- Flow Control is a speed-matching service that prevents a fast sender from overwhelming a slow receiver's buffer space. TCP implements flow control using a receive window (`rwnd`) field in the TCP header. The receiver explicitly informs the sender of how many spare bytes of buffer space are currently available (`rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]`). The sender ensures that the unacknowledged data never exceeds `rwnd`.
+- Congestion Control prevents senders from injecting too much traffic into the network subnet, avoiding packet loss and queue collapse in intermediate routers. TCP maintains a congestion window (`cwnd`). The effective transmission window is $\min(\text{cwnd}, \text{rwnd})$. TCP congestion control algorithms (such as TCP Reno and Tahoe) employ four phases: Slow Start (exponential window growth), Congestion Avoidance (additive increase / multiplicative decrease, AIMD), Fast Retransmit, and Fast Recovery.
+
+=== PAGE 3 ===
+OSI Reference Model vs TCP/IP Protocol Stack
+
+The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers:
+1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media.
+2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC).
+3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6).
+4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP).
+5. Session Layer: Dialog control, token management, and synchronization checkpoints.
+6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL.
+7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP).
+
+In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.

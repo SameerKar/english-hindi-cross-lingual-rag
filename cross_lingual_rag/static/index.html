@@ -803,7 +803,7 @@
       <div class="chip" style="cursor: pointer;" onclick="navigateToStep(1)">
         🤖 <span id="nav-mode-label" style="color: var(--color-signal-blue);">Gemini 3.1 Flash Lite</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="restoreDefaultCorpus()">↺ Reset CS Books</button>
+      <button class="btn btn-secondary btn-sm" id="btn-top-reset-corpus" onclick="restoreDefaultCorpus()" title="Wipe custom uploads and refresh everything back to original 5 textbooks">↺ Refresh Everything (5 Books)</button>
     </div>
   </header>
 
@@ -903,10 +903,16 @@
                 <span style="font-size: 12.5px; font-weight: 500; color: var(--color-paper-white);">📁 Knowledge Base Explorer</span>
                 <span id="kb-summary-pill" class="chip" style="font-size: 10.5px; padding: 2px 7px;">Loading...</span>
               </div>
-              <div style="display: flex; gap: 6px; align-items: center;">
-                <input type="text" id="kb-search-input" class="form-input" placeholder="Filter files or folders..." style="width: 170px; padding: 4px 8px; font-size: 11px;" oninput="filterFolderTree(this.value)">
-                <button class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="fetchDocumentTree()">↻ Refresh</button>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="kb-search-input" class="form-input" placeholder="Filter files or folders..." style="width: 150px; padding: 4px 8px; font-size: 11px;" oninput="filterFolderTree(this.value)">
+                <button class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="fetchDocumentTree()">↻ Refresh Tree</button>
+                <button class="btn btn-secondary btn-sm" id="btn-kb-reset-all" style="font-size: 10.5px; padding: 3px 9px; border-color: rgba(248, 113, 113, 0.45); color: #fca5a5;" onclick="restoreDefaultCorpus()" title="Wipe uploads and refresh everything back to original 5 textbooks">↺ Refresh Everything (5 Books)</button>
               </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #0c0c0c; border: 1px dashed var(--color-slate-border); border-radius: var(--radius-tags); padding: 6px 10px; margin-bottom: 9px; font-size: 11px; color: var(--color-ash-mute);">
+              <span>💡 <strong>Quick Reset:</strong> Restore the clean formatting of just the 5 original CS textbooks (Algorithms, Automata, Networks, DBMS, OS).</span>
+              <button class="btn btn-ghost btn-sm" style="font-size: 10.5px; color: var(--color-signal-blue); padding: 0 4px;" onclick="restoreDefaultCorpus()">Reset Now →</button>
             </div>
 
             <div id="kb-folder-container" style="max-height: 290px; overflow-y: auto; padding-right: 4px;">
@@ -1947,18 +1953,41 @@
     }
 
     async function restoreDefaultCorpus() {
-      if (!confirm('Restore original 5 Computer Science textbooks?')) return;
+      const confirmed = confirm(
+        "⚠️ REFRESH EVERYTHING TO ORIGINAL 5 CORPORA?\n\n" +
+        "This will:\n" +
+        "1. Wipe all custom and uploaded documents (.pdf, .txt, .md)\n" +
+        "2. Restore the original 5 Computer Science textbooks (Algorithms, Automata, Networks, DBMS, OS)\n" +
+        "3. Purge all old chunks, manifests, and metadata\n" +
+        "4. Rebuild dual FAISS vector indexes (.faiss, .pkl, .dat) with exactly 15 clean chunks\n" +
+        "5. Reload the orchestrator live\n\n" +
+        "Do you want to proceed?"
+      );
+      if (!confirmed) return;
+
+      const btnTop = document.getElementById('btn-top-reset-corpus');
+      const btnKb = document.getElementById('btn-kb-reset-all');
+      if (btnTop) { btnTop.disabled = true; btnTop.innerText = '↺ Refreshing...'; }
+      if (btnKb) { btnKb.disabled = true; btnKb.innerText = '↺ Rebuilding Chunks & Vector Stores...'; }
+
+      appendLiveTerminal("[SYSTEM] Complete system refresh requested by user...");
+
       try {
         const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
         const data = await resp.json();
-        if (resp.ok) {
-          fetchEnvAndTelemetry();
-          fetchDocumentTree();
-          fetchLatestReportContent();
-          alert('Default 5 CS textbooks restored!');
+        if (resp.ok && data.success) {
+          await fetchEnvAndTelemetry();
+          await fetchDocumentTree();
+          await fetchLatestReportContent();
+          alert(`✅ System Refreshed Successfully!\n\nRestored original 5 Computer Science textbooks.\nTotal Chunks: ${data.total_chunks}\nDual FAISS vector stores & manifests cleanly rebuilt.`);
+        } else {
+          alert('Restore error: ' + (data.error || 'Failed to restore default corpus'));
         }
       } catch (e) {
-        alert('Restore failed: ' + e.message);
+        alert('Restore network error: ' + e.message);
+      } finally {
+        if (btnTop) { btnTop.disabled = false; btnTop.innerText = '↺ Refresh Everything (5 Books)'; }
+        if (btnKb) { btnKb.disabled = false; btnKb.innerText = '↺ Refresh Everything (5 Books)'; }
       }
     }
   </script>

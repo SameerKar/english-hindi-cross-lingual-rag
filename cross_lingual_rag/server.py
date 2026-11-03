@@ -517,23 +517,103 @@ async def get_raw_document(path: str):
 
 
 @app.post("/api/restore-default-corpus")
+@app.post("/api/refresh-everything")
 async def restore_default_corpus():
-    """Restores the original 5-subject benchmark corpus and rebuilds indexes."""
-    await terminal.broadcast("[RESTORE] Restoring original 5 Computer Science textbook corpus...")
+    """
+    Completely refreshes the system back to the original 5 Computer Science textbook corpus:
+    - Clears all custom/uploaded documents from data/corpus/
+    - Restores the original 5 subject folders (algorithms, automata, computer_networks, dbms, operating_systems)
+    - Purges all old indexes (.faiss, .pkl, .dat, .npy) and chunk manifests
+    - Ingests the 5 textbooks to produce exactly 15 page-aware chunks
+    - Rebuilds both English 768d and Multilingual 384d FAISS vector stores
+    - Reloads orchestrator live
+    - Streams progress step-by-step to the live terminal
+    """
+    await terminal.broadcast("[REFRESH] Initiating complete system refresh to original 5 Computer Science textbooks...")
     cfg = load_config()
-    backup_dir = Path(cfg["paths"]["corpus_dir"]).parent / "corpus_backup"
+    data_dir = Path(cfg["paths"]["corpus_dir"]).parent
     corpus_dir = Path(cfg["paths"]["corpus_dir"])
+    backup_dir = data_dir / "corpus_default_backup"
 
+    # 1. Clean out all current files in data/corpus/
+    await terminal.broadcast("[CLEAN] Wiping all custom and uploaded documents from data/corpus/...")
+    if corpus_dir.exists():
+        for item in corpus_dir.iterdir():
+            if item.is_dir():
+                shutil.rmtree(item, ignore_errors=True)
+            elif item.is_file():
+                item.unlink(missing_ok=True)
+    ensure_directory(str(corpus_dir))
+
+    # 2. Restore 5 original subject folders
+    original_subjects = ["algorithms", "automata", "computer_networks", "dbms", "operating_systems"]
     if backup_dir.exists():
-        shutil.copytree(backup_dir, corpus_dir, dirs_exist_ok=True)
-        await terminal.broadcast("[RESTORE] Copied backup files back into data/corpus/.")
-    
+        for subj in original_subjects:
+            src = backup_dir / subj
+            dst = corpus_dir / subj
+            if src.exists():
+                shutil.copytree(src, dst, dirs_exist_ok=True)
+    else:
+        # Fallback: extract directly from git commit 8742fe9 if backup dir is missing
+        import subprocess
+        for subj in original_subjects:
+            dst = corpus_dir / subj
+            ensure_directory(str(dst))
+            fname = f"{subj}_fundamentals.txt" if subj == "algorithms" else (f"{subj}_theory.txt" if subj == "automata" else (f"database_systems.txt" if subj == "dbms" else f"{subj}.txt"))
+            git_path = f"cross_lingual_rag/data/corpus/{subj}/{fname}"
+            try:
+                content = subprocess.check_output(["git", "show", f"8742fe9:{git_path}"]).decode("utf-8")
+                with open(dst / fname, "w", encoding="utf-8") as f:
+                    f.write(content)
+            except Exception as e:
+                print(f"[Warning] Git fallback restore for {git_path}: {e}")
+
+    await terminal.broadcast("[RESTORE] Restored 5 default subjects: algorithms, automata, computer_networks, dbms, operating_systems.")
+
+    # 3. Purge existing indexes (.faiss, .pkl, .dat, .npy) in english and multilingual index dirs
+    await terminal.broadcast("[PURGE] Purging legacy FAISS vector index files (.faiss, .pkl, .dat)...")
+    for idx_key in ["english_index_dir", "multilingual_index_dir"]:
+        p = Path(cfg["paths"].get(idx_key, ""))
+        if p.exists() and p.is_dir():
+            for f in p.iterdir():
+                if f.is_file():
+                    try:
+                        f.unlink(missing_ok=True)
+                    except Exception:
+                        pass
+
+    # 4. Purge processed artifacts
+    processed_dir = Path(cfg["paths"].get("processed_dir", "data/processed"))
+    for art in ["chunks_manifest.json", "corpus_metadata.json"]:
+        p = processed_dir / art
+        if p.exists():
+            try:
+                p.unlink(missing_ok=True)
+            except Exception:
+                pass
+
+    # 5. Ingestion of 5 default books
+    await terminal.broadcast("[INGEST] Re-extracting text & generating page-aware chunks for 5 original textbooks...")
     ingestor = CorpusIngestor(cfg)
     chunks = ingestor.ingest_corpus()
+    await terminal.broadcast(f"[CHUNK] Created exactly {len(chunks)} page-aware chunks across 5 original subjects.")
+
+    # 6. Rebuild Dual FAISS Indexes
+    await terminal.broadcast("[EMBED] Rebuilding dual vector stores: English 768d (all-mpnet-base-v2) & Multilingual 384d...")
     build_dual_indexes(cfg)
+    await terminal.broadcast("[FAISS] Vector stores successfully regenerated and persisted.")
+
+    # 7. Reload Orchestrator live
     reload_orchestrator_instance()
-    await terminal.broadcast(f"[RESTORE] Complete! Restored {len(chunks)} default chunks across 5 subjects.")
-    return {"success": True, "total_chunks": len(chunks)}
+    await terminal.broadcast(f"[READY] Complete system refresh successful! Active: 5 Computer Science textbooks ({len(chunks)} chunks).")
+
+    return {
+        "success": True,
+        "total_chunks": len(chunks),
+        "total_documents": 5,
+        "subjects": original_subjects,
+        "message": f"Successfully restored pristine 5-subject baseline ({len(chunks)} chunks)."
+    }
 
 
 class SaveEnvRequest(BaseModel):

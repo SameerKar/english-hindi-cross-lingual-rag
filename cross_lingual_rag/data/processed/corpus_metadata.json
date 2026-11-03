@@ -27,24 +27,6 @@
     "language": "en"
   },
   {
-    "document_id": "computer_science_enterprise_voice_ai_architecture",
-    "file_name": "Enterprise_Voice_AI_Architecture.pdf",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\computer_science\\Enterprise_Voice_AI_Architecture.pdf",
-    "subject": "computer_science",
-    "total_pages": 10,
-    "total_chunks": 0,
-    "language": "en"
-  },
-  {
-    "document_id": "custom_kb_indian_voice_agent_platform__architecture_&_implementation_guide",
-    "file_name": "Indian Voice Agent Platform_ Architecture & Implementation Guide.pdf",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\custom_kb\\Indian Voice Agent Platform_ Architecture & Implementation Guide.pdf",
-    "subject": "custom_kb",
-    "total_pages": 12,
-    "total_chunks": 12,
-    "language": "en"
-  },
-  {
     "document_id": "dbms_database_systems",
     "file_name": "database_systems.txt",
     "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\dbms\\database_systems.txt",
@@ -58,33 +40,6 @@
     "file_name": "operating_systems.txt",
     "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\operating_systems\\operating_systems.txt",
     "subject": "operating_systems",
-    "total_pages": 3,
-    "total_chunks": 3,
-    "language": "en"
-  },
-  {
-    "document_id": "sai_international_sai_international_omni_agent_call_logic",
-    "file_name": "Sai International Omni Agent Call Logic.pdf",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\sai_international\\Sai International Omni Agent Call Logic.pdf",
-    "subject": "sai_international",
-    "total_pages": 4,
-    "total_chunks": 4,
-    "language": "en"
-  },
-  {
-    "document_id": "uploaded_docs_learn_python_the_hard_way_a_very",
-    "file_name": "Learn_Python_the_Hard_Way_A_Very.pdf",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\uploaded_docs\\Learn_Python_the_Hard_Way_A_Very.pdf",
-    "subject": "uploaded_docs",
-    "total_pages": 311,
-    "total_chunks": 331,
-    "language": "en"
-  },
-  {
-    "document_id": "uploaded_docs_voice_ai_methodology",
-    "file_name": "voice_ai_methodology.md",
-    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\uploaded_docs\\voice_ai_methodology.md",
-    "subject": "uploaded_docs",
     "total_pages": 3,
     "total_chunks": 3,
     "language": "en"

@@ -1,0 +1,26 @@
+=== PAGE 1 ===
+Operating Systems: Process Synchronization and Deadlocks
+
+In multiprogramming environments, concurrent access to shared data can lead to data inconsistency. A race condition arises when several processes access and manipulate the same data concurrently and the outcome depends on the particular order in which access takes place. The critical-section problem requires three structural conditions to be satisfied:
+1. Mutual Exclusion: If process P_i is executing in its critical section, then no other processes can be executing in their critical sections.
+2. Progress: If no process is executing in its critical section and there exist some processes that wish to enter their critical section, then only those processes not executing in their remainder sections can participate in deciding which will enter next.
+3. Bounded Waiting: There must be a bound on the number of times other processes are allowed to enter their critical sections after a process has made a request to enter and before that request is granted.
+
+=== PAGE 2 ===
+Coffman's Four Conditions for Deadlock
+
+A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously:
+1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time).
+2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes.
+3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task.
+4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).
+
+=== PAGE 3 ===
+Virtual Memory and Page Replacement Algorithms
+
+Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. Memory is organized into fixed-size blocks called pages (in logical memory) and frames (in physical memory). When a process attempts to access a page not currently residing in physical RAM, the memory management unit (MMU) generates a page fault hardware interrupt.
+
+When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out:
+- FIFO (First-In, First-Out): Replaces the oldest page loaded in memory. Can suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults.
+- Optimal (OPT / Belady's Min): Replaces the page that will not be used for the longest period of time in the future. Provides the lowest page fault rate but is impossible to implement in practice because future references cannot be known.
+- Least Recently Used (LRU): Replaces the page that has not been used for the longest period in the past. Approximates the optimal algorithm by using past temporal locality.
