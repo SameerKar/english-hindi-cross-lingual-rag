@@ -743,47 +743,66 @@ async def execute_query(req: QueryRequest):
 
     results: Dict[str, Any] = {}
 
-    # System C: Translation-Mediated RAG
-    if "C" in req.systems:
-        await terminal.broadcast("[SYS-C] Step 1/3: Translating Hindi query to English...")
-        t0 = time.perf_counter()
-        res_c = orch.execute_system_C(q_hi, qid, subj, cat, subject_filter=s_filter)
-        dur_c = round((time.perf_counter() - t0) * 1000.0, 1)
-        trans_q = res_c.get("translated_question", "")
-        top_chunk = res_c.get("retrieved_chunks", ["NONE"])[0]
-        top_score = res_c.get("retrieval_scores", [0.0])[0] if res_c.get("retrieval_scores") else 0.0
-        await terminal.broadcast(f"[SYS-C] Translated: '{trans_q}'")
-        await terminal.broadcast(f"[SYS-C] Top-1 Chunk: `{top_chunk}` (Score: {top_score:.4f}) in {dur_c}ms")
-        results["C"] = res_c
+    try:
+        # System C: Translation-Mediated RAG
+        if "C" in req.systems:
+            await terminal.broadcast("[SYS-C] Step 1/3: Translating Hindi query to English...")
+            t0 = time.perf_counter()
+            res_c = orch.execute_system_C(q_hi, qid, subj, cat, subject_filter=s_filter)
+            dur_c = round((time.perf_counter() - t0) * 1000.0, 1)
+            trans_q = res_c.get("translated_question", "")
+            chunks_c = res_c.get("retrieved_chunks") or []
+            top_chunk = chunks_c[0] if chunks_c else "NONE"
+            scores_c = res_c.get("retrieval_scores") or []
+            top_score = scores_c[0] if scores_c else 0.0
+            await terminal.broadcast(f"[SYS-C] Translated: '{trans_q}'")
+            await terminal.broadcast(f"[SYS-C] Top-1 Chunk: `{top_chunk}` (Score: {top_score:.4f}) in {dur_c}ms")
+            results["C"] = res_c
 
-    # System D: Direct Multilingual RAG
-    if "D" in req.systems:
-        await terminal.broadcast("[SYS-D] Zero-Shot Multilingual Search (No translation)...")
-        t0 = time.perf_counter()
-        res_d = orch.execute_system_D(q_hi, qid, subj, cat, subject_filter=s_filter)
-        dur_d = round((time.perf_counter() - t0) * 1000.0, 1)
-        top_chunk_d = res_d.get("retrieved_chunks", ["NONE"])[0]
-        top_score_d = res_d.get("retrieval_scores", [0.0])[0] if res_d.get("retrieval_scores") else 0.0
-        await terminal.broadcast(f"[SYS-D] Top-1 Chunk: `{top_chunk_d}` (Score: {top_score_d:.4f}) in {dur_d}ms")
-        results["D"] = res_d
+        # System D: Direct Multilingual RAG
+        if "D" in req.systems:
+            await terminal.broadcast("[SYS-D] Zero-Shot Multilingual Search (No translation)...")
+            t0 = time.perf_counter()
+            res_d = orch.execute_system_D(q_hi, qid, subj, cat, subject_filter=s_filter)
+            dur_d = round((time.perf_counter() - t0) * 1000.0, 1)
+            chunks_d = res_d.get("retrieved_chunks") or []
+            top_chunk_d = chunks_d[0] if chunks_d else "NONE"
+            scores_d = res_d.get("retrieval_scores") or []
+            top_score_d = scores_d[0] if scores_d else 0.0
+            await terminal.broadcast(f"[SYS-D] Top-1 Chunk: `{top_chunk_d}` (Score: {top_score_d:.4f}) in {dur_d}ms")
+            results["D"] = res_d
 
-    # System B: Monolingual English RAG
-    if "B" in req.systems:
-        await terminal.broadcast("[SYS-B] Running Monolingual English Upper-Bound RAG...")
-        res_b = orch.execute_system_B(q_en, qid, subj, cat, subject_filter=s_filter)
-        results["B"] = res_b
+        # System B: Monolingual English RAG
+        if "B" in req.systems:
+            await terminal.broadcast("[SYS-B] Running Monolingual English Upper-Bound RAG...")
+            t0 = time.perf_counter()
+            res_b = orch.execute_system_B(q_en, qid, subj, cat, subject_filter=s_filter)
+            dur_b = round((time.perf_counter() - t0) * 1000.0, 1)
+            chunks_b = res_b.get("retrieved_chunks") or []
+            top_chunk_b = chunks_b[0] if chunks_b else "NONE"
+            scores_b = res_b.get("retrieval_scores") or []
+            top_score_b = scores_b[0] if scores_b else 0.0
+            await terminal.broadcast(f"[SYS-B] Top-1 Chunk: `{top_chunk_b}` (Score: {top_score_b:.4f}) in {dur_b}ms")
+            results["B"] = res_b
 
-    # System A: Direct LLM Baseline
-    if "A" in req.systems:
-        await terminal.broadcast("[SYS-A] Running Direct Parametric LLM Baseline (Zero Retrieval)...")
-        res_a = orch.execute_system_A(q_hi, qid, subj, cat)
-        lat_a = res_a.get("latencies", {}).get("total_latency_ms", 0.0)
-        ans_preview = (res_a.get("generated_answer") or "").replace("\n", " ")[:60]
-        await terminal.broadcast(f"[SYS-A] Answer generated in {lat_a:.1f}ms: '{ans_preview}...'")
-        results["A"] = res_a
+        # System A: Direct LLM Baseline
+        if "A" in req.systems:
+            await terminal.broadcast("[SYS-A] Running Direct Parametric LLM Baseline (Zero Retrieval)...")
+            res_a = orch.execute_system_A(q_hi, qid, subj, cat)
+            lat_a = res_a.get("latencies", {}).get("total_latency_ms", 0.0)
+            ans_preview = (res_a.get("generated_answer") or "").replace("\n", " ")[:60]
+            await terminal.broadcast(f"[SYS-A] Answer generated in {lat_a:.1f}ms: '{ans_preview}...'")
+            results["A"] = res_a
 
-    await terminal.broadcast("[QUERY] All requested systems completed successfully.")
-    return {"success": True, "results": results}
+        await terminal.broadcast("[QUERY] All requested systems completed successfully.")
+        return {"success": True, "results": results}
+
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        print(f"[Query Error] Exception in /api/query: {tb}")
+        await terminal.broadcast(f"[ERROR] Query failed: {str(e)}")
+        return JSONResponse(status_code=500, content={"success": False, "error": str(e), "traceback": tb})
 
 
 @app.post("/api/run-pytest")

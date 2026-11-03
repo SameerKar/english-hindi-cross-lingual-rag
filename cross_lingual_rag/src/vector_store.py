@@ -137,8 +137,16 @@ class FAISSVectorStore:
         if num_items == 0:
             return []
 
+        # Graceful fallback: if filter is "uploaded_only" but no uploaded documents exist in index, search all
+        effective_filter = subject_filter
+        if effective_filter == "uploaded_only":
+            default_subs = {"algorithms", "automata", "computer_networks", "dbms", "operating_systems"}
+            has_uploaded = any(c.subject.lower() not in default_subs for c in self.metadata_map.values())
+            if not has_uploaded:
+                effective_filter = "all"
+
         # If filtering, search over more candidates to find top-k matches within filter
-        k_search = min(num_items, max(top_k * 5, 25)) if (subject_filter and subject_filter != "all") else min(top_k, num_items)
+        k_search = min(num_items, max(top_k * 5, 25)) if (effective_filter and effective_filter != "all") else min(top_k, num_items)
 
         if FAISS_AVAILABLE and self.index is not None:
             distances, indices = self.index.search(query_vector.astype(np.float32), k_search)
@@ -159,12 +167,12 @@ class FAISSVectorStore:
                 score = float(scores[rank_idx])
 
                 # Apply scope / subject filter
-                if subject_filter and subject_filter != "all":
-                    if subject_filter == "uploaded_only":
+                if effective_filter and effective_filter != "all":
+                    if effective_filter == "uploaded_only":
                         default_subs = {"algorithms", "automata", "computer_networks", "dbms", "operating_systems"}
                         if chunk.subject.lower() in default_subs:
                             continue
-                    elif chunk.subject.lower() != subject_filter.lower():
+                    elif chunk.subject.lower() != effective_filter.lower():
                         continue
 
                 results.append((chunk, score))

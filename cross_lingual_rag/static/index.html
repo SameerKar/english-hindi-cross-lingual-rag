@@ -856,19 +856,19 @@
         <div class="screen-body">
           <!-- 2 Compact Radio Cards for Scope Selection -->
           <div class="option-card-group">
-            <div class="option-card selected" id="opt-scope-uploaded" onclick="selectSearchScopeOption('uploaded_only')">
+            <div class="option-card selected" id="opt-scope-all" onclick="selectSearchScopeOption('all')">
               <input type="radio" name="scope_option" class="option-radio" checked>
               <div>
-                <div class="option-title">📂 Uploaded Documents Only</div>
-                <div class="option-desc">Strictly queries your custom uploaded files without textbook bias.</div>
+                <div class="option-title">🔍 All Documents (Recommended)</div>
+                <div class="option-desc">Queries all 5 academic CS textbooks plus any uploaded documents.</div>
               </div>
             </div>
 
-            <div class="option-card" id="opt-scope-all" onclick="selectSearchScopeOption('all')">
+            <div class="option-card" id="opt-scope-uploaded" onclick="selectSearchScopeOption('uploaded_only')">
               <input type="radio" name="scope_option" class="option-radio">
               <div>
-                <div class="option-title">🔍 All Documents</div>
-                <div class="option-desc">Queries uploaded documents plus all textbook benchmark folders.</div>
+                <div class="option-title">📂 Uploaded Documents Only</div>
+                <div class="option-desc">Strictly queries custom uploaded files without textbook bias.</div>
               </div>
             </div>
           </div>
@@ -1160,7 +1160,7 @@
     let currentStep = 1;
     let ws = null;
     let stagedFiles = [];
-    let activeScope = 'uploaded_only';
+    let activeScope = 'all';
     let lastQueryRecord = null;
     let isGuideCollapsed = false;
 
@@ -1430,6 +1430,7 @@
           stagedFiles = [];
           renderWizardChips();
           document.getElementById('wizard-file-input').value = '';
+          selectSearchScopeOption('uploaded_only');
           fetchEnvAndTelemetry();
           fetchDocumentTree();
           alert('Documents successfully ingested and vector stores rebuilt!');
@@ -1796,8 +1797,15 @@
           })
         });
 
-        const data = await resp.json();
-        if (resp.ok && data.results) {
+        let data;
+        const rawText = await resp.text();
+        try {
+          data = JSON.parse(rawText);
+        } catch (jsonErr) {
+          throw new Error(`Server returned HTTP ${resp.status}: ${rawText.slice(0, 160)}`);
+        }
+
+        if (resp.ok && data.success && data.results) {
           lastQueryRecord = {
             question_hi: qHi,
             question_en: qEn,
@@ -1807,10 +1815,13 @@
           document.getElementById('btn-download-live-report').style.display = 'inline-flex';
           renderStage4Results(data.results);
         } else {
-          alert('Query failed.');
+          const errMsg = data.error || (data.detail ? JSON.stringify(data.detail) : 'Query execution failed.');
+          alert(`Query failed: ${errMsg}`);
+          appendLiveTerminal(`[ERROR] Query failed: ${errMsg}`);
         }
       } catch (err) {
         alert('Query network error: ' + err.message);
+        appendLiveTerminal(`[ERROR] Network error: ${err.message}`);
       } finally {
         loaderBox.style.display = 'none';
       }
@@ -1976,6 +1987,7 @@
         const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
         const data = await resp.json();
         if (resp.ok && data.success) {
+          selectSearchScopeOption('all');
           await fetchEnvAndTelemetry();
           await fetchDocumentTree();
           await fetchLatestReportContent();
