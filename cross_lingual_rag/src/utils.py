@@ -41,10 +41,10 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     try:
         import dotenv
         if (root / ".env").exists():
-            dotenv.load_dotenv(root / ".env")
+            dotenv.load_dotenv(root / ".env", override=True)
         if (root.parent / ".env").exists():
-            dotenv.load_dotenv(root.parent / ".env")
-        dotenv.load_dotenv()
+            dotenv.load_dotenv(root.parent / ".env", override=True)
+        dotenv.load_dotenv(override=True)
     except Exception:
         pass
 

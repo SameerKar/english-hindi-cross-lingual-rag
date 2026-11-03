@@ -3,18 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cross-Lingual Academic RAG — Interactive Multi-Stage Studio</title>
+  <title>Cross-Lingual Academic RAG — Studio</title>
   
-  <!-- Endlesstools Typography: Inter 400 & 500 weights, JetBrains Mono for Code/Terminal -->
+  <!-- Endlesstools Typography: Inter 400 & 500 weights, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================================================
-       ENDLESSTOOLS DESIGN SYSTEM TOKENS
-       Black-box gallery wall aesthetic. Elevation is drawn, not dropped.
-       ========================================================================== */
     :root {
       --color-obsidian-canvas: #080808;
       --color-onyx-card: #181818;
@@ -24,27 +20,15 @@
       --color-ash-mute: #959595;
       --color-paper-white: #ffffff;
       --color-signal-blue: #1d9bf0;
-      --color-prism-gradient: linear-gradient(97.25deg, rgb(184, 255, 69) 3%, rgb(255, 203, 69) 22%, rgb(255, 0, 184) 100%);
+      --color-accent-green: #34d399;
 
       --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', Consolas, monospace;
 
-      /* Scale with signature negative letter-spacing */
-      --text-caption: 12px;
-      --tracking-caption: -0.033em;
-      --text-body-sm: 13.5px;
-      --tracking-body-sm: -0.03em;
-      --text-body: 15px;
-      --tracking-body: -0.03em;
-      --text-subheading: 17px;
-      --tracking-subheading: -0.03em;
-      --text-heading-sm: 20px;
-      --tracking-heading-sm: -0.025em;
-
-      --radius-tags: 7px;
-      --radius-cards: 10px;
-      --radius-inputs: 10px;
-      --radius-buttons: 10px;
+      --radius-tags: 6px;
+      --radius-cards: 9px;
+      --radius-inputs: 8px;
+      --radius-buttons: 8px;
       --radius-full: 9999px;
 
       --border-hairline: 1px solid var(--color-slate-border);
@@ -54,7 +38,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Single-Page Viewport Lock */
+    /* Single-Page Viewport Lock: strictly no page-level scroll */
     html, body {
       height: 100vh;
       width: 100vw;
@@ -62,9 +46,9 @@
       background-color: var(--color-obsidian-canvas);
       color: var(--color-paper-white);
       font-family: var(--font-inter);
-      font-size: var(--text-body-sm);
+      font-size: 13.5px;
       line-height: 1.45;
-      letter-spacing: var(--tracking-body-sm);
+      letter-spacing: -0.025em;
       font-weight: 400;
       display: flex;
       flex-direction: column;
@@ -74,15 +58,15 @@
        Top Navigation Bar with Stage Stepper
        -------------------------------------------------------------------------- */
     header.top-nav {
-      height: 56px;
-      min-height: 56px;
+      height: 52px;
+      min-height: 52px;
       background-color: rgba(8, 8, 8, 0.98);
       border-bottom: var(--border-hairline);
-      padding: 0 20px;
+      padding: 0 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
       z-index: 50;
     }
 
@@ -92,14 +76,13 @@
       gap: 10px;
       text-decoration: none;
       color: inherit;
-      min-width: 220px;
     }
     .brand-glyph {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 2.5px;
+      gap: 2px;
     }
     .glyph-dot {
       background: var(--color-paper-white);
@@ -110,37 +93,28 @@
     .glyph-dot:nth-child(6) { background: #ff00b8; }
 
     .brand-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 500;
-      letter-spacing: -0.025em;
       color: var(--color-paper-white);
-      line-height: 1.1;
-    }
-    .brand-tag {
-      font-size: 10.5px;
-      color: var(--color-ash-mute);
-      letter-spacing: -0.033em;
     }
 
-    /* Centered Stage Stepper */
+    /* Minimalist Stepper */
     .stage-stepper {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: #111111;
       border: var(--border-hairline);
       border-radius: var(--radius-full);
-      padding: 3px 6px;
+      padding: 3px 5px;
     }
     .step-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
+      padding: 4px 11px;
       border-radius: var(--radius-full);
       font-size: 11.5px;
       font-weight: 500;
-      letter-spacing: var(--tracking-caption);
       color: var(--color-ash-mute);
       cursor: pointer;
       transition: all 0.15s ease;
@@ -157,62 +131,54 @@
       color: var(--color-signal-blue);
     }
     .step-arrow {
-      color: #404040;
+      color: #383838;
       font-size: 10px;
     }
 
-    /* Top Right Telemetry */
+    /* Top Telemetry */
     .top-telemetry {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: var(--radius-tags);
       font-size: 11px;
-      letter-spacing: var(--tracking-caption);
       border: var(--border-hairline);
       color: var(--color-ash-mute);
+      white-space: nowrap;
     }
     .pulse-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: #10b981;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-      animation: pulse 2.4s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.85); }
     }
 
-    /* --------------------------------------------------------------------------
-       Buttons (Endlesstools Style)
-       -------------------------------------------------------------------------- */
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 7px 15px;
+      padding: 6px 14px;
       border-radius: var(--radius-buttons);
       font-family: var(--font-inter);
-      font-size: var(--text-body-sm);
-      letter-spacing: var(--tracking-body-sm);
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
       outline: none;
       border: 1px solid transparent;
       background: transparent;
       color: var(--color-paper-white);
       text-decoration: none;
       user-select: none;
+      white-space: nowrap;
     }
     .btn-primary {
       border: var(--border-white);
@@ -241,23 +207,15 @@
       background: var(--color-graphite-layer);
     }
     .btn-ghost {
-      border: 1px solid transparent;
       color: var(--color-ash-mute);
-      padding: 5px 10px;
+      padding: 4px 8px;
     }
     .btn-ghost:hover {
       color: var(--color-paper-white);
     }
-    .btn-signal {
-      border: 1px solid var(--color-signal-blue);
-      color: var(--color-signal-blue);
-    }
-    .btn-signal:hover {
-      background: rgba(29, 155, 240, 0.1);
-    }
     .btn-sm {
-      padding: 4px 10px;
-      font-size: 11.5px;
+      padding: 3px 9px;
+      font-size: 11px;
       border-radius: var(--radius-tags);
     }
     .btn:disabled {
@@ -266,13 +224,13 @@
     }
 
     /* --------------------------------------------------------------------------
-       Main Viewport Split Grid (58% Left Wizard, 42% Right Learner & Terminal)
+       Split Viewport Grid (58% Left Form / 42% Right Terminal & Guide)
        -------------------------------------------------------------------------- */
     .viewport-grid {
       flex: 1;
       display: grid;
       grid-template-columns: 1.25fr 0.95fr;
-      height: calc(100vh - 56px);
+      height: calc(100vh - 52px);
       overflow: hidden;
     }
     @media (max-width: 1080px) {
@@ -280,67 +238,62 @@
       .right-column { display: none; }
     }
 
-    /* Left Column: Screen Viewport */
+    /* Left Column */
     .left-column {
       height: 100%;
       overflow-y: auto;
-      padding: 24px 28px;
+      padding: 22px 26px;
       border-right: var(--border-hairline);
       display: flex;
       flex-direction: column;
     }
 
-    /* Right Column: Split Learner & Terminal */
+    /* Right Column */
     .right-column {
       height: 100%;
       overflow: hidden;
-      display: grid;
-      grid-template-rows: 1fr 1fr;
+      display: flex;
+      flex-direction: column;
       background: var(--color-obsidian-canvas);
     }
 
-    /* --------------------------------------------------------------------------
-       Wizard Screens Container
-       -------------------------------------------------------------------------- */
+    /* Screen Panels */
     .screen-panel {
       display: none;
-      animation: fadeIn 0.18s ease;
       flex: 1;
+      flex-direction: column;
+      animation: fadeIn 0.15s ease;
     }
     .screen-panel.active {
       display: flex;
-      flex-direction: column;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(3px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .screen-header {
-      margin-bottom: 18px;
-      padding-bottom: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
       border-bottom: var(--border-hairline);
     }
     .screen-badge {
-      display: inline-block;
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10.5px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-signal-blue);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .screen-title {
-      font-size: var(--text-heading-sm);
+      font-size: 18px;
       font-weight: 500;
-      letter-spacing: var(--tracking-heading-sm);
       color: var(--color-paper-white);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .screen-subtitle {
-      font-size: var(--text-body-sm);
+      font-size: 12.5px;
       color: var(--color-ash-mute);
-      line-height: 1.45;
     }
 
     .screen-body {
@@ -351,8 +304,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 24px;
-      padding-top: 14px;
+      margin-top: 18px;
+      padding-top: 12px;
       border-top: var(--border-hairline);
     }
 
@@ -361,8 +314,8 @@
       background: var(--color-onyx-card);
       border: var(--border-hairline);
       border-radius: var(--radius-cards);
-      padding: 16px;
-      margin-bottom: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
     }
     .form-group {
       margin-bottom: 12px;
@@ -376,212 +329,163 @@
       letter-spacing: 0.04em;
       margin-bottom: 6px;
     }
-    .form-input, .form-textarea, .form-select {
+    .form-input, .form-textarea {
       width: 100%;
-      background: var(--color-graphite-layer);
+      background: #111111;
       border: var(--border-hairline);
       border-radius: var(--radius-inputs);
-      padding: 9px 12px;
       color: var(--color-paper-white);
-      font-family: inherit;
-      font-size: var(--text-body-sm);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      padding: 8px 12px;
       outline: none;
-      transition: border 0.15s ease;
+      transition: border-color 0.15s ease;
     }
-    .form-input:focus, .form-textarea:focus, .form-select:focus {
-      border-color: var(--color-paper-white);
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--color-iron-border);
     }
     .form-textarea {
       resize: vertical;
-      min-height: 72px;
+      min-height: 80px;
       line-height: 1.5;
     }
 
-    /* Radio / Selection Option Cards */
+    /* Scope Cards */
     .option-card-group {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .option-card {
       background: var(--color-onyx-card);
       border: var(--border-hairline);
       border-radius: var(--radius-cards);
-      padding: 14px 16px;
+      padding: 12px 14px;
       cursor: pointer;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      transition: border 0.15s ease, background 0.15s ease;
+      gap: 10px;
+      transition: all 0.15s ease;
     }
     .option-card:hover {
       border-color: var(--color-iron-border);
-      background: var(--color-graphite-layer);
     }
     .option-card.selected {
       border-color: var(--color-paper-white);
-      background: #1f1f1f;
-    }
-    .option-radio {
-      margin-top: 3px;
-      accent-color: var(--color-signal-blue);
+      background: #1c1c1c;
     }
     .option-title {
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 500;
       color: var(--color-paper-white);
       margin-bottom: 2px;
     }
     .option-desc {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--color-ash-mute);
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
-    /* Upload Zone */
+    /* Drop Zone */
     .drop-zone {
-      border: 1px dashed var(--color-iron-border);
-      background: var(--color-graphite-layer);
+      border: 1px dashed var(--color-slate-border);
+      background: #111111;
       border-radius: var(--radius-cards);
-      padding: 20px;
+      padding: 16px;
       text-align: center;
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .drop-zone:hover, .drop-zone.dragover {
-      border-color: var(--color-paper-white);
-      background: #242424;
+      border-color: var(--color-signal-blue);
+      background: #141414;
     }
 
-    /* Sample Query Chips */
+    /* Chips */
     .chips-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .sample-chip {
-      background: transparent;
-      border: var(--border-hairline);
-      border-radius: var(--radius-tags);
-      padding: 3px 9px;
-      font-size: 11.5px;
-      color: var(--color-ash-mute);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .sample-chip:hover {
-      border-color: var(--color-signal-blue);
-      color: var(--color-paper-white);
-    }
-    .sample-chip.custom {
-      border-color: rgba(29, 155, 240, 0.4);
-      color: var(--color-signal-blue);
-    }
-
-    /* System Toggles Grid */
-    .systems-selector-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 12px 0;
-    }
-    .sys-toggle-card {
       background: var(--color-onyx-card);
       border: var(--border-hairline);
       border-radius: var(--radius-tags);
-      padding: 10px 12px;
+      padding: 4px 9px;
+      font-size: 11px;
+      color: var(--color-ash-mute);
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .sample-chip:hover {
+      border-color: var(--color-iron-border);
+      color: var(--color-paper-white);
+    }
+
+    /* System Selector Grid */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .sys-card {
+      background: #111111;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
+      padding: 9px 11px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       cursor: pointer;
       user-select: none;
     }
-    .sys-toggle-card input[type="checkbox"] {
+    .sys-card input[type="checkbox"] {
       accent-color: var(--color-signal-blue);
     }
-    .sys-toggle-label {
+    .sys-label {
       font-size: 12px;
       font-weight: 500;
       color: var(--color-paper-white);
     }
-    .sys-toggle-sub {
+    .sys-sub {
       font-size: 10.5px;
       color: var(--color-ash-mute);
     }
 
-    /* Staggered Loaders Animation */
-    .loader-container {
-      display: none;
-      background: var(--color-onyx-card);
-      border: var(--border-hairline);
-      border-radius: var(--radius-cards);
-      padding: 20px;
-      margin-bottom: 14px;
-    }
-    .loader-stage {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-      font-size: 12px;
-      color: var(--color-ash-mute);
-    }
-    .loader-stage.active {
-      color: var(--color-signal-blue);
-      font-weight: 500;
-    }
-    .loader-spinner {
-      width: 12px;
-      height: 12px;
-      border: 2px solid #333;
-      border-top-color: var(--color-signal-blue);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Results Layout */
+    /* Result Cards */
     .results-stack {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     .result-card {
       background: var(--color-onyx-card);
       border: var(--border-hairline);
       border-radius: var(--radius-cards);
-      padding: 14px 16px;
+      padding: 12px 14px;
     }
     .result-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-      gap: 6px;
+      margin-bottom: 6px;
     }
-    .badge-c { border: 1px solid var(--color-signal-blue); color: var(--color-signal-blue); }
-    .badge-d { border: 1px solid #34d399; color: #34d399; }
-    .badge-b { border: 1px solid #c084fc; color: #c084fc; }
-    .badge-a { border: 1px solid #fbbf24; color: #fbbf24; }
     .sys-tag {
       font-size: 10.5px;
       font-weight: 500;
       padding: 2px 7px;
       border-radius: 4px;
-      letter-spacing: 0.04em;
     }
+    .badge-c { border: 1px solid var(--color-signal-blue); color: var(--color-signal-blue); }
+    .badge-d { border: 1px solid #34d399; color: #34d399; }
+    .badge-b { border: 1px solid #c084fc; color: #c084fc; }
+    .badge-a { border: 1px solid #fbbf24; color: #fbbf24; }
     .latency-pill {
       font-family: var(--font-mono);
       font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: #121212;
-      border: var(--border-hairline);
       color: var(--color-ash-mute);
     }
 
@@ -589,140 +493,87 @@
       background: #111111;
       border: var(--border-hairline);
       border-radius: var(--radius-tags);
-      padding: 10px 12px;
-      font-size: 13px;
-      line-height: 1.6;
+      padding: 9px 11px;
+      font-size: 12.5px;
+      line-height: 1.55;
       color: #e5e5e5;
-      margin: 8px 0;
       white-space: pre-wrap;
       word-break: break-word;
+      margin: 6px 0;
     }
 
-    /* Evidentiary Chunks */
     .chunk-box {
       background: #101010;
       border: var(--border-hairline);
       border-radius: var(--radius-tags);
-      padding: 9px 12px;
-      margin-bottom: 6px;
-    }
-    .chunk-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 4px;
-      font-size: 11.5px;
-    }
-    .chunk-progress-bg {
-      width: 100%;
-      height: 3px;
-      background: #242424;
-      border-radius: 2px;
-      margin: 4px 0 6px;
-      overflow: hidden;
-    }
-    .chunk-progress-bar {
-      height: 100%;
-      background: var(--color-signal-blue);
-      border-radius: 2px;
-      transition: width 0.3s ease;
-    }
-    .chunk-snippet {
-      font-size: 11.5px;
-      color: #999;
-      line-height: 1.5;
+      padding: 7px 10px;
+      margin-top: 6px;
+      font-size: 11px;
     }
     .chunk-full {
       display: none;
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: #cbd5e1;
+      font-size: 10.5px;
       background: #080808;
       border: 1px solid var(--color-slate-border);
-      padding: 8px;
+      padding: 7px;
       border-radius: 4px;
-      margin-top: 6px;
-      max-height: 160px;
+      margin-top: 5px;
+      max-height: 120px;
       overflow-y: auto;
       white-space: pre-wrap;
     }
 
-    /* --------------------------------------------------------------------------
-       Right Column: Learner System & Live Terminal (Split View)
-       -------------------------------------------------------------------------- */
-    .learner-panel {
-      border-bottom: var(--border-hairline);
-      padding: 18px 20px;
-      overflow-y: auto;
-      background: var(--color-obsidian-canvas);
-    }
-    .learner-badge {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--color-signal-blue);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-    }
-    .learner-title {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--color-paper-white);
-      margin-bottom: 8px;
-    }
-    .learner-content {
-      font-size: 12.5px;
-      line-height: 1.6;
-      color: var(--color-ash-mute);
-    }
-    .learner-content strong {
-      color: var(--color-paper-white);
-      font-weight: 500;
-    }
-    .concept-tag {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: #141414;
-      border: var(--border-hairline);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--color-paper-white);
-      margin: 2px 2px 2px 0;
-    }
-
-    /* Terminal Dock */
-    .terminal-dock {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background: #060606;
-      overflow: hidden;
-    }
-    .term-dock-head {
-      background: #0f0f0f;
+    /* Collapsible Quick Guide on Right Column */
+    .quick-guide-bar {
+      background: #0d0d0d;
       border-bottom: var(--border-hairline);
       padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
     }
-    .term-dots {
+    .quick-guide-content {
+      background: #0a0a0a;
+      border-bottom: var(--border-hairline);
+      padding: 10px 14px;
+      font-size: 11.5px;
+      color: var(--color-ash-mute);
+      line-height: 1.5;
+      display: block;
+    }
+    .quick-guide-content.collapsed {
+      display: none;
+    }
+
+    /* Terminal Dock on Right Column */
+    .terminal-dock {
+      flex: 1;
       display: flex;
-      gap: 5px;
+      flex-direction: column;
+      background: #050505;
+      overflow: hidden;
     }
-    .term-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+    .term-head {
+      background: #0c0c0c;
+      border-bottom: var(--border-hairline);
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-ash-mute);
     }
     .term-output {
       flex: 1;
-      padding: 12px 14px;
+      padding: 10px 12px;
       overflow-y: auto;
       font-family: var(--font-mono);
       font-size: 11px;
-      line-height: 1.6;
+      line-height: 1.55;
       color: #cfcfcf;
       white-space: pre-wrap;
       word-break: break-all;
@@ -732,21 +583,17 @@
     .term-tag-ingest { color: #a78bfa; }
     .term-tag-embed { color: #f472b6; }
     .term-tag-faiss { color: #34d399; }
-    .term-tag-sysc { color: var(--color-signal-blue); }
-    .term-tag-sysd { color: #10b981; }
     .term-tag-query { color: #fbbf24; }
-    .term-tag-env { color: #38bdf8; }
+    .term-tag-notice { color: #38bdf8; }
 
-    /* Scrollbars */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2f2f2f; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
   </style>
 </head>
 <body>
 
-  <!-- Top Sticky Header Navigation with Stepper -->
+  <!-- Top Navigation & Stage Stepper -->
   <header class="top-nav">
     <a href="#" class="brand-lockup">
       <div class="brand-glyph">
@@ -757,159 +604,118 @@
         <div class="glyph-dot"></div>
         <div class="glyph-dot"></div>
       </div>
-      <div>
-        <div class="brand-title">Cross-Lingual RAG Studio</div>
-        <div class="brand-tag">Endlesstools Style Architecture</div>
-      </div>
+      <div class="brand-title">Cross-Lingual RAG Studio</div>
     </a>
 
-    <!-- Stage Progress Stepper -->
+    <!-- Stepper Navigation -->
     <nav class="stage-stepper">
-      <div class="step-pill active" id="pill-step-1" onclick="navigateToStep(1)">
-        <span>1. API & Env</span>
-      </div>
+      <div class="step-pill active" id="pill-step-1" onclick="navigateToStep(1)">1. API & Env</div>
       <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-2" onclick="navigateToStep(2)">
-        <span>2. Documents</span>
-      </div>
+      <div class="step-pill" id="pill-step-2" onclick="navigateToStep(2)">2. Documents</div>
       <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-3" onclick="navigateToStep(3)">
-        <span>3. Query & Systems</span>
-      </div>
+      <div class="step-pill" id="pill-step-3" onclick="navigateToStep(3)">3. Query & Systems</div>
       <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-4" onclick="navigateToStep(4)">
-        <span>4. Results & Evidence</span>
-      </div>
+      <div class="step-pill" id="pill-step-4" onclick="navigateToStep(4)">4. Results & Evidence</div>
       <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-5" onclick="navigateToStep(5)">
-        <span>5. Scientific Benchmark</span>
-      </div>
+      <div class="step-pill" id="pill-step-5" onclick="navigateToStep(5)">5. Scientific Benchmark</div>
     </nav>
 
     <!-- Telemetry Status Pills -->
     <div class="top-telemetry">
       <div class="chip">
         <div class="pulse-dot"></div>
-        <span id="nav-socket-label">Terminal Connected</span>
+        <span id="nav-socket-label">Live</span>
       </div>
       <div class="chip">
         📚 <span id="nav-chunks-label" style="color: var(--color-paper-white); font-weight: 500;">...</span> Chunks
       </div>
       <div class="chip" style="cursor: pointer;" onclick="navigateToStep(1)">
-        🤖 <span id="nav-mode-label" style="color: var(--color-signal-blue);">Detecting LLM...</span>
+        🤖 <span id="nav-mode-label" style="color: var(--color-signal-blue);">Gemini 3.1 Flash Lite</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="restoreDefaultCorpus()">
-        ↺ Reset 5 CS Books
-      </button>
+      <button class="btn btn-ghost btn-sm" onclick="restoreDefaultCorpus()">↺ Reset CS Books</button>
     </div>
   </header>
 
-  <!-- Main Viewport Split Grid -->
+  <!-- Viewport Split Grid -->
   <main class="viewport-grid">
 
-    <!-- LEFT COLUMN: TOGGLABLE STEP SCREENS -->
+    <!-- LEFT COLUMN: STREAMLINED STEP SCREENS -->
     <div class="left-column">
 
-      <!-- ====================================================================
-           SCREEN 1: API KEY & ENVIRONMENT CONFIGURATION
-           ==================================================================== -->
+      <!-- SCREEN 1: API & ENV -->
       <section class="screen-panel active" id="screen-step-1">
         <div class="screen-header">
-          <div class="screen-badge">Stage 1 of 5 · System Initialization</div>
-          <h2 class="screen-title">Environment & Model Provider Configuration</h2>
-          <p class="screen-subtitle">
-            Enter your Google Gemini API key to persist it directly into your <code>.env</code> file. Without a key, the system automatically runs in deterministic local mode at $0 cost.
-          </p>
+          <div class="screen-badge">Stage 1 · Setup</div>
+          <h2 class="screen-title">API & Environment</h2>
+          <p class="screen-subtitle">Connect your Gemini API key (persisted to <code>.env</code>) or use local grounded mode.</p>
         </div>
 
         <div class="screen-body">
           <div class="onyx-card">
             <div class="form-group">
-              <label class="form-label">Google Gemini API Key (100% Free at Google AI Studio)</label>
+              <label class="form-label">Google Gemini API Key (Gemini 3.1 Flash Lite)</label>
               <div style="display: flex; gap: 8px;">
-                <input type="password" id="input-gemini-key" class="form-input" placeholder="AIzaSy... (Paste Gemini API key to write to .env)">
+                <input type="password" id="input-gemini-key" class="form-input" placeholder="Paste Gemini API key to save in .env...">
                 <button class="btn btn-secondary btn-sm" onclick="togglePasswordVisibility('input-gemini-key')">👁️</button>
-                <button class="btn btn-solid-white btn-sm" id="btn-save-env" onclick="saveApiKeyToEnv()">
-                  Save to .env
-                </button>
-              </div>
-              <div style="font-size: 11.5px; color: var(--color-ash-mute); margin-top: 6px;">
-                Get a free key instantly with no credit card: <a href="https://aistudio.google.com/" target="_blank" style="color: var(--color-signal-blue); text-decoration: underline;">Google AI Studio</a>
+                <button class="btn btn-solid-white btn-sm" id="btn-save-env" onclick="saveApiKeyToEnv()">Save to .env</button>
               </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: var(--border-hairline);">
-              <div style="font-size: 12px; color: var(--color-ash-mute);">
-                Live Detected Mode: <strong id="env-current-mode-label" style="color: var(--color-signal-blue);">Checking...</strong>
-              </div>
-              <button class="btn btn-ghost btn-sm" onclick="useLocalFreeMode()">
-                Use Local Synthesizer ($0 Cost)
-              </button>
-            </div>
-          </div>
-
-          <div class="onyx-card">
-            <div style="font-size: 12px; color: var(--color-ash-mute); line-height: 1.6;">
-              <strong style="color: var(--color-paper-white);">Where is this stored?</strong><br>
-              Saving your key writes directly to <code>cross_lingual_rag/.env</code> on disk and injects it into <code>os.environ</code>. The backend reloads the generator live with zero server downtime.
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: var(--border-hairline); margin-top: 8px;">
+              <span style="font-size: 11.5px; color: var(--color-ash-mute);">Active Mode: <strong id="env-current-mode-label" style="color: var(--color-signal-blue);">Gemini 3.1 Flash Lite</strong></span>
+              <button class="btn btn-ghost btn-sm" onclick="useLocalFreeMode()">Switch to Local Mode ($0 Cost)</button>
             </div>
           </div>
         </div>
 
         <div class="screen-footer">
-          <span style="font-size: 12px; color: var(--color-ash-mute);">Stage 1/5 Complete</span>
-          <button class="btn btn-solid-white" onclick="navigateToStep(2)">
-            Continue to Document Selection →
-          </button>
+          <span style="font-size: 11.5px; color: var(--color-ash-mute);">Stage 1/5</span>
+          <button class="btn btn-solid-white" onclick="navigateToStep(2)">Continue to Documents →</button>
         </div>
       </section>
 
-      <!-- ====================================================================
-           SCREEN 2: DOCUMENT INGESTION & SEARCH SCOPE
-           ==================================================================== -->
+      <!-- SCREEN 2: DOCUMENTS -->
       <section class="screen-panel" id="screen-step-2">
         <div class="screen-header">
-          <div class="screen-badge">Stage 2 of 5 · Corpus Architecture</div>
-          <h2 class="screen-title">Knowledge Base & Document Selection</h2>
-          <p class="screen-subtitle">
-            Choose what documents to search from, or drop ANY new academic PDFs to extract pages and re-index vector stores live.
-          </p>
+          <div class="screen-badge">Stage 2 · Knowledge Base</div>
+          <h2 class="screen-title">Document Scope</h2>
+          <p class="screen-subtitle">Choose document search scope or upload new PDFs to index live.</p>
         </div>
 
         <div class="screen-body">
-          <!-- Selection Options -->
+          <!-- 2 Compact Radio Cards -->
           <div class="option-card-group">
             <div class="option-card selected" id="opt-scope-uploaded" onclick="selectSearchScopeOption('uploaded_only')">
               <input type="radio" name="scope_option" class="option-radio" checked>
               <div>
-                <div class="option-title">📂 Uploaded Documents Only (Zero Textbook Bias)</div>
-                <div class="option-desc">Strictly queries your uploaded technical PDFs, specifications, and papers without interference from the default textbooks.</div>
+                <div class="option-title">📂 Uploaded PDFs Only</div>
+                <div class="option-desc">Strictly queries your custom uploaded papers without textbook bias.</div>
               </div>
             </div>
 
             <div class="option-card" id="opt-scope-all" onclick="selectSearchScopeOption('all')">
               <input type="radio" name="scope_option" class="option-radio">
               <div>
-                <div class="option-title">🔍 Search All Documents (Uploaded PDFs + Benchmark CS Books)</div>
-                <div class="option-desc">Comprehensive search across your uploaded documents plus the 5 academic Computer Science textbooks.</div>
+                <div class="option-title">🔍 All Documents</div>
+                <div class="option-desc">Queries uploaded documents plus the 5 academic Computer Science textbooks.</div>
               </div>
             </div>
           </div>
 
-          <!-- Upload Dropzone -->
+          <!-- Compact Upload Box -->
           <div class="onyx-card">
-            <div class="form-label" style="margin-bottom: 8px;">Upload New PDFs into Knowledge Base</div>
+            <div class="form-label">Upload Additional Academic PDFs</div>
             <div class="drop-zone" id="wizard-drop-zone" onclick="document.getElementById('wizard-file-input').click()">
               <input type="file" id="wizard-file-input" multiple accept=".pdf" style="display: none;" onchange="handleWizardFiles(event)">
-              <div style="font-size: 24px; margin-bottom: 4px; color: var(--color-ash-mute);">📄</div>
-              <div style="font-size: 13px; font-weight: 500; color: var(--color-paper-white);">Drop ANY academic or technical PDFs here, or click to browse</div>
-              <div style="font-size: 11px; color: var(--color-ash-mute);">Extracts physical pages and builds dual FAISS indexes live</div>
+              <div style="font-size: 18px; margin-bottom: 2px;">📄</div>
+              <div style="font-size: 12.5px; font-weight: 500;">Drop ANY PDF here or click to browse</div>
+              <div style="font-size: 10.5px; color: var(--color-ash-mute);">Auto-extracts page citations and builds FAISS vector index</div>
             </div>
 
-            <div class="chips-row" id="wizard-staged-chips" style="margin-top: 10px;"></div>
+            <div class="chips-row" id="wizard-staged-chips" style="margin-top: 8px;"></div>
 
-            <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; margin-top: 12px;">
-              <input type="text" id="wizard-subject-input" class="form-input" value="uploaded_docs" placeholder="Collection tag (e.g. voice_ai, medical)">
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-top: 10px;">
+              <input type="text" id="wizard-subject-input" class="form-input" value="uploaded_docs" placeholder="Collection tag (e.g. voice_ai, law)">
               <button class="btn btn-solid-white btn-sm" id="btn-wizard-ingest" onclick="wizardUploadAndIngest()" disabled>
                 ⚡ Ingest & Build Vector Store
               </button>
@@ -918,217 +724,162 @@
         </div>
 
         <div class="screen-footer">
-          <button class="btn btn-secondary" onclick="navigateToStep(1)">
-            ← Back to API Key
-          </button>
-          <button class="btn btn-solid-white" onclick="navigateToStep(3)">
-            Continue to Query Formulation →
-          </button>
+          <button class="btn btn-secondary" onclick="navigateToStep(1)">← Back</button>
+          <button class="btn btn-solid-white" onclick="navigateToStep(3)">Continue to Query →</button>
         </div>
       </section>
 
-      <!-- ====================================================================
-           SCREEN 3: QUERY FORMULATION & SYSTEM SELECTION
-           ==================================================================== -->
+      <!-- SCREEN 3: QUERY & SYSTEMS -->
       <section class="screen-panel" id="screen-step-3">
         <div class="screen-header">
-          <div class="screen-badge">Stage 3 of 5 · Query Formulation</div>
-          <h2 class="screen-title">Cross-Lingual Query & Systems Selection</h2>
-          <p class="screen-subtitle">
-            Enter your academic question in Hindi. Select which RAG pipelines you want to evaluate side-by-side.
-          </p>
+          <div class="screen-badge">Stage 3 · Query Formulation</div>
+          <h2 class="screen-title">Query & Systems</h2>
+          <p class="screen-subtitle">Ask in Hindi and select the RAG systems you want to evaluate side-by-side.</p>
         </div>
 
         <div class="screen-body">
-          <!-- Quick Samples -->
+          <!-- Sample query pills -->
           <div class="chips-row">
-            <span style="font-size: 11px; color: var(--color-ash-mute); display: flex; align-items: center; margin-right: 4px;">Samples:</span>
-            <span class="sample-chip custom" onclick="loadSamplePrompt('वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?', 'What is the architecture of the voice agent platform?', 'VOICE_01')">🎙️ Voice Agent Architecture</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail when a graph contains negative edge weights?', 'ALGO_01')">Dijkstra Negative Weights</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four necessary conditions for deadlock?', 'OS_01')">Deadlock 4 Conditions</span>
-            <span class="sample-chip" onclick="loadSamplePrompt('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for in transaction processing?', 'DBMS_01')">ACID Properties</span>
+            <span style="font-size: 11px; color: var(--color-ash-mute); line-height: 22px;">Samples:</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?', 'What is the architecture of the voice agent platform?', 'VOICE_01')">🎙️ Voice Agent</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail with negative edges?', 'ALGO_01')">Dijkstra Negative Weights</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four conditions for deadlock?', 'OS_01')">Deadlock Conditions</span>
+            <span class="sample-chip" onclick="loadSamplePrompt('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for?', 'DBMS_01')">ACID Properties</span>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Hindi Input Query (Input for Systems C & D)</label>
+            <label class="form-label">Hindi Input Query</label>
             <textarea id="wizard-query-hi" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें (जैसे: वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?)..."></textarea>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">English Baseline Query (Optional for System B)</label>
-            <textarea id="wizard-query-en" class="form-textarea" placeholder="English equivalent question for monolingual upper-bound baseline..."></textarea>
+          <div class="form-group" style="display: none;" id="en-query-container">
+            <label class="form-label">English Baseline Query (Optional)</label>
+            <textarea id="wizard-query-en" class="form-textarea" placeholder="English equivalent question..."></textarea>
           </div>
 
-          <label class="form-label" style="margin-top: 14px;">Select Systems to Evaluate</label>
-          <div class="systems-selector-grid">
-            <label class="sys-toggle-card">
+          <label class="form-label" style="margin-top: 10px;">Select Systems to Evaluate</label>
+          <div class="systems-grid">
+            <label class="sys-card">
               <input type="checkbox" id="w-chk-c" checked>
               <div>
-                <div class="sys-toggle-label">System C · Translation RAG</div>
-                <div class="sys-toggle-sub">Hindi $\to$ MT $\to$ all-mpnet-base-v2 (768d)</div>
+                <div class="sys-label">System C · Translation RAG</div>
+                <div class="sys-sub">Hindi $\to$ MT $\to$ all-mpnet (768d)</div>
               </div>
             </label>
 
-            <label class="sys-toggle-card">
+            <label class="sys-card">
               <input type="checkbox" id="w-chk-d" checked>
               <div>
-                <div class="sys-toggle-label">System D · Direct Multilingual</div>
-                <div class="sys-toggle-sub">Zero MT · paraphrase-multilingual (384d)</div>
+                <div class="sys-label">System D · Direct Multilingual</div>
+                <div class="sys-sub">Zero MT · paraphrase-multilingual (384d)</div>
               </div>
             </label>
 
-            <label class="sys-toggle-card">
+            <label class="sys-card">
               <input type="checkbox" id="w-chk-b" checked>
               <div>
-                <div class="sys-toggle-label">System B · Monolingual English</div>
-                <div class="sys-toggle-sub">Monolingual Upper-Bound Baseline</div>
+                <div class="sys-label">System B · Monolingual English</div>
+                <div class="sys-sub">Monolingual Upper-Bound Baseline</div>
               </div>
             </label>
 
-            <label class="sys-toggle-card">
+            <label class="sys-card">
               <input type="checkbox" id="w-chk-a">
               <div>
-                <div class="sys-toggle-label">System A · Parametric LLM</div>
-                <div class="sys-toggle-sub">Zero-Retrieval Control Baseline</div>
+                <div class="sys-label">System A · Parametric LLM</div>
+                <div class="sys-sub">Zero-Retrieval Control Baseline</div>
               </div>
             </label>
           </div>
         </div>
 
         <div class="screen-footer">
-          <button class="btn btn-secondary" onclick="navigateToStep(2)">
-            ← Back to Documents
-          </button>
-          <button class="btn btn-primary" id="btn-execute-query" onclick="executeWizardQuery()">
-            🚀 Run Query Across Systems →
-          </button>
+          <button class="btn btn-secondary" onclick="navigateToStep(2)">← Back</button>
+          <button class="btn btn-primary" id="btn-execute-query" onclick="executeWizardQuery()">🚀 Run Query Across Systems →</button>
         </div>
       </section>
 
-      <!-- ====================================================================
-           SCREEN 4: RESULTS, EVIDENCE & GROUNDED SYNTHESIS
-           ==================================================================== -->
+      <!-- SCREEN 4: RESULTS & EVIDENCE -->
       <section class="screen-panel" id="screen-step-4">
         <div class="screen-header">
-          <div class="screen-badge">Stage 4 of 5 · Empirical Comparison</div>
-          <h2 class="screen-title">Multi-System Results & Evidentiary Chunks</h2>
-          <p class="screen-subtitle">
-            Side-by-side evaluation of retrieved passages, physical page citations, cosine similarity scores, and synthesized answers.
-          </p>
+          <div class="screen-badge">Stage 4 · Evidence</div>
+          <h2 class="screen-title">Results & Citations</h2>
+          <p class="screen-subtitle">Side-by-side answers, retrieved passages, and physical page citations.</p>
         </div>
 
         <div class="screen-body">
-          <!-- Staggered Loader Tracker -->
-          <div class="loader-container" id="execution-loader-box">
-            <div class="loader-stage active" id="l-stage-1">
-              <div class="loader-spinner"></div>
-              <span>Machine Translating Hindi Query to English (System C)...</span>
-            </div>
-            <div class="loader-stage" id="l-stage-2">
-              <div class="loader-spinner"></div>
-              <span>Encoding Queries into 768d & 384d Embedding Spaces...</span>
-            </div>
-            <div class="loader-stage" id="l-stage-3">
-              <div class="loader-spinner"></div>
-              <span>Searching FAISS Vector Stores with Cosine Similarity...</span>
-            </div>
-            <div class="loader-stage" id="l-stage-4">
-              <div class="loader-spinner"></div>
-              <span>Synthesizing Context-Grounded Answers with Page Citations...</span>
-            </div>
+          <div id="execution-loader-box" style="display: none; padding: 20px; text-align: center; color: var(--color-signal-blue);">
+            <div style="font-size: 13px; font-weight: 500;">⚡ Processing query across RAG pipelines...</div>
+            <div style="font-size: 11px; color: var(--color-ash-mute); margin-top: 4px;">Translating, vector search, and synthesizing grounded answer</div>
           </div>
 
-          <!-- Results Stack -->
           <div class="results-stack" id="results-stack-container">
-            <div style="text-align: center; color: var(--color-ash-mute); padding: 40px;">
-              No query executed yet. Click "Run Query Across Systems" on Stage 3.
+            <div style="text-align: center; color: var(--color-ash-mute); padding: 40px; font-size: 13px;">
+              No query executed yet. Run a query from Stage 3 to compare systems.
             </div>
           </div>
         </div>
 
         <div class="screen-footer">
-          <button class="btn btn-secondary" onclick="navigateToStep(3)">
-            ← Modify Query
-          </button>
+          <button class="btn btn-secondary" onclick="navigateToStep(3)">← Modify Query</button>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-secondary btn-sm" id="btn-download-live-report" onclick="downloadLiveQueryReport()" style="display: none;">
               📄 Download Query Report (.md)
             </button>
-            <button class="btn btn-solid-white" onclick="navigateToStep(5)">
-              View Scientific Benchmark Report →
-            </button>
+            <button class="btn btn-solid-white" onclick="navigateToStep(5)">View Benchmark →</button>
           </div>
         </div>
       </section>
 
-      <!-- ====================================================================
-           SCREEN 5: SCIENTIFIC BENCHMARK & REPORTS
-           ==================================================================== -->
+      <!-- SCREEN 5: BENCHMARK & REPORTS -->
       <section class="screen-panel" id="screen-step-5">
         <div class="screen-header">
-          <div class="screen-badge">Stage 5 of 5 · Consolidated Evaluation</div>
-          <h2 class="screen-title">Scientific Evaluation Report & Benchmark Suite</h2>
-          <p class="screen-subtitle">
-            Comprehensive metrics across all 73 deduplicated runs: Recall@1/3/5, MRR, nDCG@5, component latencies, and E1–E4 error taxonomy.
-          </p>
+          <div class="screen-badge">Stage 5 · Benchmark</div>
+          <h2 class="screen-title">Benchmark Suite & Reports</h2>
+          <p class="screen-subtitle">Consolidated metrics across 73 deduplicated runs (MRR, Recall@k, latency).</p>
         </div>
 
         <div class="screen-body">
-          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-            <a href="/api/report/download/markdown" class="btn btn-primary btn-sm" download>
-              📥 Download Report (.md)
-            </a>
-            <a href="/api/report/download/csv" class="btn btn-secondary btn-sm" download>
-              📊 Download Dataset (.csv)
-            </a>
-            <button class="btn btn-secondary btn-sm" onclick="triggerPytestCommand()">
-              🧪 Run 7-Point Pytest
-            </button>
-            <button class="btn btn-secondary btn-sm" onclick="triggerBenchmarkCommand()">
-              📊 Run 68-Run Benchmark
-            </button>
+          <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+            <a href="/api/report/download/markdown" class="btn btn-primary btn-sm" download>📥 Download Report (.md)</a>
+            <a href="/api/report/download/csv" class="btn btn-secondary btn-sm" download>📊 Download Dataset (.csv)</a>
+            <button class="btn btn-secondary btn-sm" onclick="triggerPytestCommand()">🧪 Run 7-Point Pytest</button>
+            <button class="btn btn-secondary btn-sm" onclick="triggerBenchmarkCommand()">📊 Run Benchmark</button>
           </div>
 
-          <div class="onyx-card" style="padding: 14px;">
-            <div id="full-scientific-report-view" style="font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; color: #d4d4d4; white-space: pre-wrap; max-height: 400px; overflow-y: auto;">
-              Loading latest scientific report...
+          <div class="onyx-card" style="padding: 12px;">
+            <div id="full-scientific-report-view" style="font-family: var(--font-mono); font-size: 11px; line-height: 1.55; color: #d4d4d4; white-space: pre-wrap; max-height: 380px; overflow-y: auto;">
+              Loading benchmark report...
             </div>
           </div>
         </div>
 
         <div class="screen-footer">
-          <button class="btn btn-secondary" onclick="navigateToStep(4)">
-            ← Back to Query Results
-          </button>
-          <button class="btn btn-solid-white" onclick="navigateToStep(1)">
-            ↺ Start New Session
-          </button>
+          <button class="btn btn-secondary" onclick="navigateToStep(4)">← Back</button>
+          <button class="btn btn-solid-white" onclick="navigateToStep(1)">↺ New Session</button>
         </div>
       </section>
 
     </div>
 
-    <!-- RIGHT COLUMN: SPLIT LEARNER GUIDE (TOP) + LIVE TERMINAL (BOTTOM) -->
+    <!-- RIGHT COLUMN: MINIMAL QUICK GUIDE + LIVE TERMINAL -->
     <div class="right-column">
 
-      <!-- TOP: CONTEXT-AWARE LEARNER SYSTEM -->
-      <section class="learner-panel">
-        <div class="learner-badge" id="learner-stage-indicator">Learner System · Stage 1 Guide</div>
-        <h3 class="learner-title" id="learner-heading">API Keys, Memory & RAG Grounding</h3>
-        <div class="learner-content" id="learner-body">
-          Loading learning guide...
-        </div>
-      </section>
+      <!-- Collapsible Quick Concept Bar -->
+      <div class="quick-guide-bar" onclick="toggleQuickGuide()">
+        <span style="font-size: 11px; font-weight: 500; color: var(--color-signal-blue);">
+          💡 <span id="quick-guide-title">Stage 1 Concept: Gemini 3.1 Flash Lite & Grounding</span>
+        </span>
+        <span id="quick-guide-toggle-icon" style="font-size: 10px; color: var(--color-ash-mute);">[Collapse ▴]</span>
+      </div>
+      <div class="quick-guide-content" id="quick-guide-body">
+        <strong>Synthesis Engine:</strong> The LLM synthesizes retrieved English document passages into a fluent Hindi answer citing physical page numbers. Using <code>gemini-3.1-flash-lite</code> ensures high-speed reasoning with deterministic fallback.
+      </div>
 
-      <!-- BOTTOM: ALWAYS-VISIBLE LIVE TERMINAL -->
+      <!-- Live Terminal Dock (Main Right Stage) -->
       <section class="terminal-dock">
-        <div class="term-dock-head">
-          <div class="term-dots">
-            <div class="term-dot" style="background: #444;"></div>
-            <div class="term-dot" style="background: #555;"></div>
-            <div class="term-dot" style="background: #666;"></div>
-          </div>
-          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--color-ash-mute);">bash — cross_lingual_rag.live_terminal</div>
+        <div class="term-head">
+          <span>bash — live_terminal</span>
           <button class="btn btn-ghost btn-sm" style="font-size: 10px; padding: 1px 6px;" onclick="clearLiveTerminal()">Clear</button>
         </div>
         <div class="term-output" id="live-term-output">
@@ -1141,156 +892,84 @@
 
   </main>
 
-  <!-- JavaScript Client Controller -->
   <script>
     let currentStep = 1;
     let ws = null;
     let stagedFiles = [];
     let activeScope = 'uploaded_only';
     let lastQueryRecord = null;
+    let isGuideCollapsed = false;
 
-    // Learner System Content Database per Stage
-    const LEARNER_CONTENT = {
+    // Concise Stage Tips (Clean, non-verbose)
+    const STAGE_TIPS = {
       1: {
-        badge: "Learner System · Stage 1 Guide",
-        heading: "Model Provider & RAG Grounding Architecture",
-        body: `
-          <p><strong>Why do we configure an LLM provider?</strong></p>
-          <p>In Cross-Lingual Academic RAG, the LLM is responsible for the final <em>Synthesis</em> step. It takes passages retrieved from English documents and formulates an answer in Hindi.</p>
-          <p style="margin-top: 8px;"><strong>The 2 Execution Modes:</strong></p>
-          <ul style="padding-left: 16px; margin-top: 4px;">
-            <li><strong>Google Gemini 2.0 Flash:</strong> High-speed reasoning with free API access. Perfect for generative rephrasing and natural Hindi fluency.</li>
-            <li><strong>Deterministic Context-Grounded Synthesizer ($0 Cost):</strong> Operates with zero network calls and zero cost, extracting facts directly from the retrieved chunk and citing the physical document and page.</li>
-          </ul>
-          <div style="margin-top: 10px;">
-            <span class="concept-tag">gemini-2.0-flash</span>
-            <span class="concept-tag">zero-hallucination</span>
-            <span class="concept-tag">.env-persistence</span>
-          </div>
-        `
+        title: "Stage 1 Concept: Gemini 3.1 Flash Lite & Grounding",
+        text: "<strong>Synthesis Engine:</strong> Google <code>gemini-3.1-flash-lite</code> converts retrieved English passages into Hindi answers with page citations. Deterministic fallback guarantees $0 cost when offline."
       },
       2: {
-        badge: "Learner System · Stage 2 Guide",
-        heading: "Page-Aware Chunking & Vector Store Alignment",
-        body: `
-          <p><strong>How do we index arbitrary PDFs?</strong></p>
-          <p>When you drop a PDF, <code>pypdf</code> physically parses each page. Chunks preserve the exact page number (e.g. <code>_p1_c0</code>) so every answer can cite its real source.</p>
-          <p style="margin-top: 8px;"><strong>Dual Vector Stores:</strong></p>
-          <ul style="padding-left: 16px; margin-top: 4px;">
-            <li><strong>English FAISS (768d):</strong> Built using <code>sentence-transformers/all-mpnet-base-v2</code>. Used by Systems B & C.</li>
-            <li><strong>Multilingual FAISS (384d):</strong> Built using <code>paraphrase-multilingual-MiniLM-L12-v2</code>. Used by System D for zero-shot Hindi queries.</li>
-          </ul>
-          <div style="margin-top: 10px;">
-            <span class="concept-tag">FAISS IndexFlatIP</span>
-            <span class="concept-tag">L2-Normalized</span>
-            <span class="concept-tag">Page-Aware Chunks</span>
-          </div>
-        `
+        title: "Stage 2 Concept: Page-Aware Chunking & Vector Stores",
+        text: "<strong>Dual FAISS Indexes:</strong> Chunks preserve physical PDF page metadata (e.g. <code>_p1_c0</code>) for verifiable citations across <code>all-mpnet-base-v2</code> (768d) and <code>paraphrase-multilingual</code> (384d)."
       },
       3: {
-        badge: "Learner System · Stage 3 Guide",
-        heading: "The 4 RAG Paradigms Compared",
-        body: `
-          <p><strong>Why compare 4 systems?</strong></p>
-          <ul style="padding-left: 16px; margin-top: 4px;">
-            <li><strong>System A (Direct Parametric):</strong> Zero retrieval. Tests what the LLM hallucinates without documents.</li>
-            <li><strong>System B (Monolingual English):</strong> Monolingual upper-bound baseline. How well an English query retrieves English text.</li>
-            <li><strong>System C (Translation-Mediated):</strong> Translates Hindi $\\to$ English $\\to$ English vector search. High recall (~0.895 MRR) but high latency (~10.4s).</li>
-            <li><strong>System D (Direct Multilingual):</strong> Zero MT. Encodes Hindi query into shared cross-lingual vector space. 35× faster (~297ms) with ~0.708 MRR.</li>
-          </ul>
-          <div style="margin-top: 10px;">
-            <span class="concept-tag">Cross-Lingual Alignment</span>
-            <span class="concept-tag">Latency Trade-Off</span>
-            <span class="concept-tag">Ablation Baseline</span>
-          </div>
-        `
+        title: "Stage 3 Concept: Translation vs Multilingual RAG",
+        text: "<strong>Trade-off:</strong> System C (Translation RAG) achieves higher recall (~0.895 MRR) via MT; System D (Multilingual RAG) delivers zero-shot cross-lingual retrieval with 35× lower latency (~297ms)."
       },
       4: {
-        badge: "Learner System · Stage 4 Guide",
-        heading: "Cosine Similarity Math & Fact Attribution",
-        body: `
-          <p><strong>How are chunks scored?</strong></p>
-          <p>Vectors are $L_2$-normalized, so the Inner Product in FAISS equals the <strong>Cosine Similarity</strong>:</p>
-          <p style="font-family: var(--font-mono); background: #141414; padding: 4px 8px; border-radius: 4px; margin: 4px 0;">\\cos(\\theta) = \\frac{\\mathbf{u} \\cdot \\mathbf{v}}{\\|\\mathbf{u}\\| \\|\\mathbf{v}\\|}</p>
-          <p>Scores $> 0.60$ indicate strong semantic alignment. The system highlights the top-1 gold evidence and displays the physical page citation.</p>
-          <div style="margin-top: 10px;">
-            <span class="concept-tag">Cosine Score</span>
-            <span class="concept-tag">Ground Truth Attribution</span>
-            <span class="concept-tag">Page Evidence</span>
-          </div>
-        `
+        title: "Stage 4 Concept: Cosine Alignment & Attribution",
+        text: "<strong>Cosine Scoring:</strong> $L_2$-normalized FAISS inner products measure semantic similarity. Citations ground every claim directly in the document page."
       },
       5: {
-        badge: "Learner System · Stage 5 Guide",
-        heading: "Scientific Evaluation Metrics & Error Taxonomy",
-        body: `
-          <p><strong>Understanding the Evaluation Metrics:</strong></p>
-          <ul style="padding-left: 16px; margin-top: 4px;">
-            <li><strong>Recall@k:</strong> Did the gold chunk appear in the top-$k$ retrieved chunks?</li>
-            <li><strong>MRR (Mean Reciprocal Rank):</strong> $\\frac{1}{\\text{rank}}$ of the first relevant chunk.</li>
-            <li><strong>nDCG@5:</strong> Graded relevance accounting for ranking position.</li>
-            <li><strong>Error Taxonomy (E1–E4):</strong> E1 (Translation Drift), E2 (Retrieval Failure), E3 (Generation Failure), E4 (Language Failure).</li>
-          </ul>
-          <div style="margin-top: 10px;">
-            <span class="concept-tag">MRR = 0.895</span>
-            <span class="concept-tag">E1-E4 Taxonomy</span>
-            <span class="concept-tag">73 Deduplicated Runs</span>
-          </div>
-        `
+        title: "Stage 5 Concept: Scientific Evaluation Suite",
+        text: "<strong>Metrics:</strong> Evaluates Recall@1/3/5, MRR, nDCG@5, component latencies, and E1–E4 error classification across all experimental runs."
       }
     };
 
-    // Initialize on Page Load
     window.addEventListener('DOMContentLoaded', () => {
       initWebSocketTerminal();
       fetchEnvAndTelemetry();
       fetchLatestReportContent();
       setupWizardDropZone();
-      updateLearnerContent(1);
+      updateStageTip(1);
     });
 
-    // --------------------------------------------------------------------------
-    // Wizard Navigation Controller
-    // --------------------------------------------------------------------------
     function navigateToStep(stepNumber) {
       currentStep = stepNumber;
-
-      // Update Screen Panels
       for (let i = 1; i <= 5; i++) {
         const screen = document.getElementById(`screen-step-${i}`);
         const pill = document.getElementById(`pill-step-${i}`);
         if (screen) {
-          if (i === stepNumber) {
-            screen.classList.add('active');
-          } else {
-            screen.classList.remove('active');
-          }
+          if (i === stepNumber) screen.classList.add('active');
+          else screen.classList.remove('active');
         }
         if (pill) {
-          if (i === stepNumber) {
-            pill.className = 'step-pill active';
-          } else if (i < stepNumber) {
-            pill.className = 'step-pill completed';
-          } else {
-            pill.className = 'step-pill';
-          }
+          if (i === stepNumber) pill.className = 'step-pill active';
+          else if (i < stepNumber) pill.className = 'step-pill completed';
+          else pill.className = 'step-pill';
         }
       }
-
-      // Update Context-Aware Learner Guide
-      updateLearnerContent(stepNumber);
+      updateStageTip(stepNumber);
     }
 
-    function updateLearnerContent(step) {
-      const info = LEARNER_CONTENT[step] || LEARNER_CONTENT[1];
-      document.getElementById('learner-stage-indicator').innerText = info.badge;
-      document.getElementById('learner-heading').innerText = info.heading;
-      document.getElementById('learner-body').innerHTML = info.body;
+    function toggleQuickGuide() {
+      isGuideCollapsed = !isGuideCollapsed;
+      const body = document.getElementById('quick-guide-body');
+      const icon = document.getElementById('quick-guide-toggle-icon');
+      if (isGuideCollapsed) {
+        body.classList.add('collapsed');
+        icon.innerText = '[Expand ▾]';
+      } else {
+        body.classList.remove('collapsed');
+        icon.innerText = '[Collapse ▴]';
+      }
     }
 
-    // --------------------------------------------------------------------------
-    // WebSocket Terminal Management
-    // --------------------------------------------------------------------------
+    function updateStageTip(step) {
+      const tip = STAGE_TIPS[step] || STAGE_TIPS[1];
+      document.getElementById('quick-guide-title').innerText = tip.title;
+      document.getElementById('quick-guide-body').innerHTML = tip.text;
+    }
+
+    // WebSocket Terminal
     function initWebSocketTerminal() {
       const loc = window.location;
       const wsProto = loc.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -1298,7 +977,7 @@
       ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
-        document.getElementById('nav-socket-label').innerText = 'Terminal Connected';
+        document.getElementById('nav-socket-label').innerText = 'Live';
       };
 
       ws.onmessage = (event) => {
@@ -1322,10 +1001,9 @@
         .replace(/\[CHUNK\]/g, '<span class="term-tag-embed">[CHUNK]</span>')
         .replace(/\[EMBED\]/g, '<span class="term-tag-embed">[EMBED]</span>')
         .replace(/\[FAISS\]/g, '<span class="term-tag-faiss">[FAISS]</span>')
-        .replace(/\[SYS-C\]/g, '<span class="term-tag-sysc">[SYS-C]</span>')
-        .replace(/\[SYS-D\]/g, '<span class="term-tag-sysd">[SYS-D]</span>')
         .replace(/\[QUERY\]/g, '<span class="term-tag-query">[QUERY]</span>')
-        .replace(/\[ENV\]/g, '<span class="term-tag-env">[ENV]</span>');
+        .replace(/\[Notice\]/g, '<span class="term-tag-notice">[NOTICE]</span>')
+        .replace(/\[LLM Notice\]/g, '<span class="term-tag-notice">[LLM]</span>');
 
       div.innerHTML = formatted;
       out.appendChild(div);
@@ -1336,14 +1014,12 @@
       document.getElementById('live-term-output').innerHTML = '<div class="term-line">[SYSTEM] Console cleared.</div>';
     }
 
-    // --------------------------------------------------------------------------
-    // Stage 1: API Key & Environment Controller
-    // --------------------------------------------------------------------------
+    // Stage 1: API & Env
     async function fetchEnvAndTelemetry() {
       try {
         const resp = await fetch('/api/get-env');
         const data = await resp.json();
-        const mode = data.active_mode || 'Deterministic Context Synthesizer ($0)';
+        const mode = data.active_mode || 'Google Gemini 3.1 Flash Lite';
         document.getElementById('env-current-mode-label').innerText = mode;
         document.getElementById('nav-mode-label').innerText = mode;
         if (data.masked_gemini_key) {
@@ -1375,7 +1051,8 @@
         if (resp.ok && data.success) {
           document.getElementById('env-current-mode-label').innerText = data.active_mode;
           document.getElementById('nav-mode-label').innerText = data.active_mode;
-          alert('API Key saved to .env and environment reloaded live!');
+          appendLiveTerminal(`[ENV] Gemini API Key saved to .env. Engine: ${data.active_mode}`);
+          alert('API Key saved to .env!');
         } else {
           alert('Failed to save key: ' + (data.error || 'Unknown error'));
         }
@@ -1397,9 +1074,7 @@
       el.type = el.type === 'password' ? 'text' : 'password';
     }
 
-    // --------------------------------------------------------------------------
-    // Stage 2: Document Ingestion Controller
-    // --------------------------------------------------------------------------
+    // Stage 2: Documents
     function selectSearchScopeOption(scopeVal) {
       activeScope = scopeVal;
       document.getElementById('opt-scope-uploaded').className = scopeVal === 'uploaded_only' ? 'option-card selected' : 'option-card';
@@ -1445,8 +1120,8 @@
       holder.innerHTML = '';
       stagedFiles.forEach((f, idx) => {
         const chip = document.createElement('span');
-        chip.className = 'sample-chip custom';
-        chip.innerHTML = `📄 ${f.name} (${(f.size/1024).toFixed(0)} KB) <span onclick="removeStagedFile(${idx})" style="color: #f87171; cursor: pointer; margin-left: 4px;">&times;</span>`;
+        chip.className = 'sample-chip';
+        chip.innerHTML = `📄 ${f.name} <span onclick="removeStagedFile(${idx})" style="color: #f87171; cursor: pointer; margin-left: 4px;">&times;</span>`;
         holder.appendChild(chip);
       });
       document.getElementById('btn-wizard-ingest').disabled = stagedFiles.length === 0;
@@ -1483,16 +1158,14 @@
       }
     }
 
-    // --------------------------------------------------------------------------
-    // Stage 3: Query Formulation Controller
-    // --------------------------------------------------------------------------
+    // Stage 3: Query Formulation
     function loadSamplePrompt(qHi, qEn, qid) {
       document.getElementById('wizard-query-hi').value = qHi;
       document.getElementById('wizard-query-en').value = qEn;
       if (qid === 'VOICE_01') {
         selectSearchScopeOption('uploaded_only');
       }
-      appendLiveTerminal(`[QUERY] Loaded benchmark prompt: ${qid}`);
+      appendLiveTerminal(`[QUERY] Loaded prompt: ${qid}`);
     }
 
     async function executeWizardQuery() {
@@ -1509,13 +1182,10 @@
       if (document.getElementById('w-chk-b').checked) systems.push('B');
       if (document.getElementById('w-chk-a').checked) systems.push('A');
 
-      // Navigate to Stage 4 Results
       navigateToStep(4);
 
-      // Show Staggered Loaders
       const loaderBox = document.getElementById('execution-loader-box');
       loaderBox.style.display = 'block';
-      animateStaggeredLoaders();
 
       try {
         const resp = await fetch('/api/query', {
@@ -1549,40 +1219,15 @@
       }
     }
 
-    function animateStaggeredLoaders() {
-      const stages = ['l-stage-1', 'l-stage-2', 'l-stage-3', 'l-stage-4'];
-      stages.forEach((s, idx) => {
-        const el = document.getElementById(s);
-        el.className = idx === 0 ? 'loader-stage active' : 'loader-stage';
-        setTimeout(() => {
-          el.className = 'loader-stage active';
-        }, (idx + 1) * 700);
-      });
-    }
-
-    // --------------------------------------------------------------------------
-    // Stage 4: Results & Evidentiary Chunks Rendering
-    // --------------------------------------------------------------------------
+    // Stage 4: Results
     function renderStage4Results(results) {
       const container = document.getElementById('results-stack-container');
       container.innerHTML = '';
 
-      // Render System C
-      if (results.C) {
-        container.appendChild(createResultCard('C', 'SYSTEM C · TRANSLATION RAG', 'badge-c', results.C));
-      }
-      // Render System D
-      if (results.D) {
-        container.appendChild(createResultCard('D', 'SYSTEM D · DIRECT MULTILINGUAL RAG', 'badge-d', results.D));
-      }
-      // Render System B
-      if (results.B) {
-        container.appendChild(createResultCard('B', 'SYSTEM B · MONOLINGUAL ENGLISH RAG', 'badge-b', results.B));
-      }
-      // Render System A
-      if (results.A) {
-        container.appendChild(createResultCard('A', 'SYSTEM A · DIRECT PARAMETRIC BASELINE', 'badge-a', results.A));
-      }
+      if (results.C) container.appendChild(createResultCard('C', 'SYSTEM C · TRANSLATION RAG', 'badge-c', results.C));
+      if (results.D) container.appendChild(createResultCard('D', 'SYSTEM D · DIRECT MULTILINGUAL RAG', 'badge-d', results.D));
+      if (results.B) container.appendChild(createResultCard('B', 'SYSTEM B · MONOLINGUAL ENGLISH RAG', 'badge-b', results.B));
+      if (results.A) container.appendChild(createResultCard('A', 'SYSTEM A · DIRECT PARAMETRIC BASELINE', 'badge-a', results.A));
     }
 
     function createResultCard(sysId, title, badgeClass, data) {
@@ -1590,29 +1235,26 @@
       card.className = 'result-card';
 
       const lat = (data.latencies && data.latencies.total_latency_ms) ? data.latencies.total_latency_ms.toFixed(1) : '0.0';
-      const transQ = data.translated_question ? `<div style="font-size: 11.5px; color: var(--color-ash-mute); margin-bottom: 4px;">Translated Query: <span style="color: var(--color-signal-blue); font-family: var(--font-mono);">${data.translated_question}</span></div>` : '';
+      const transQ = data.translated_question ? `<div style="font-size: 11px; color: var(--color-ash-mute); margin-bottom: 4px;">Translated: <span style="color: var(--color-signal-blue); font-family: var(--font-mono);">${data.translated_question}</span></div>` : '';
 
       let chunksHtml = '';
       const chunkList = data.retrieved_chunks_details || [];
       if (chunkList.length > 0) {
-        chunksHtml = '<div style="margin-top: 10px; font-size: 11px; font-weight: 500; color: var(--color-ash-mute); text-transform: uppercase;">Top Evidentiary Chunks Retrieved:</div>';
+        chunksHtml = '<div style="margin-top: 8px; font-size: 10.5px; font-weight: 500; color: var(--color-ash-mute); text-transform: uppercase;">Top Evidentiary Chunks:</div>';
         chunkList.slice(0, 3).forEach((c, idx) => {
           const score = typeof c.score === 'number' ? c.score.toFixed(4) : c.score;
           const pct = typeof c.relevance_pct === 'number' ? c.relevance_pct.toFixed(1) : (score * 100).toFixed(1);
           const uid = `chunk_${sysId}_${idx}`;
           chunksHtml += `
             <div class="chunk-box">
-              <div class="chunk-head">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                 <span><strong>#${idx + 1}</strong> · 📄 Page ${c.page || 1} · <span style="color: var(--color-paper-white);">${c.doc_id || ''}</span></span>
-                <span style="font-family: var(--font-mono); color: var(--color-signal-blue);">Score: ${score} (${pct}%)</span>
+                <span style="font-family: var(--font-mono); color: var(--color-signal-blue); font-size: 10.5px;">Score: ${score} (${pct}%)</span>
               </div>
-              <div class="chunk-progress-bg">
-                <div class="chunk-progress-bar" style="width: ${Math.min(100, Math.max(0, pct))}%;"></div>
-              </div>
-              <div class="chunk-snippet" id="${uid}_snippet">${(c.text || '').substring(0, 140)}...</div>
+              <div style="color: #999; line-height: 1.45;" id="${uid}_snippet">${(c.text || '').substring(0, 130)}...</div>
               <div style="display: flex; justify-content: space-between; margin-top: 4px;">
-                <button class="btn btn-ghost btn-sm" style="padding: 0; font-size: 10.5px; color: var(--color-signal-blue);" onclick="toggleChunk('${uid}', this)">[+ View Full Passage]</button>
-                <button class="btn btn-secondary btn-sm" style="padding: 1px 6px; font-size: 10px;" onclick="copyText('${uid}_full')">📋 Copy</button>
+                <button class="btn btn-ghost btn-sm" style="padding: 0; font-size: 10px; color: var(--color-signal-blue);" onclick="toggleChunk('${uid}', this)">[+ View Full Passage]</button>
+                <button class="btn btn-secondary btn-sm" style="padding: 1px 5px; font-size: 10px;" onclick="copyText('${uid}_full')">📋 Copy</button>
               </div>
               <div class="chunk-full" id="${uid}_full">${c.text || ''}</div>
             </div>
@@ -1649,7 +1291,7 @@
     function copyText(elemId) {
       const el = document.getElementById(elemId);
       if (el) {
-        navigator.clipboard.writeText(el.innerText).then(() => alert('Passage copied to clipboard!'));
+        navigator.clipboard.writeText(el.innerText).then(() => alert('Passage copied!'));
       }
     }
 
@@ -1674,9 +1316,7 @@
       }
     }
 
-    // --------------------------------------------------------------------------
-    // Stage 5: Scientific Benchmark Report Controller
-    // --------------------------------------------------------------------------
+    // Stage 5: Reports
     async function fetchLatestReportContent() {
       try {
         const resp = await fetch('/api/report/latest');
@@ -1707,7 +1347,7 @@
     }
 
     async function restoreDefaultCorpus() {
-      if (!confirm('Are you sure you want to restore the original 5 Computer Science textbook corpus?')) return;
+      if (!confirm('Restore original 5 Computer Science textbooks?')) return;
       try {
         const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
         const data = await resp.json();

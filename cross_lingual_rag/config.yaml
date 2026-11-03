@@ -34,8 +34,8 @@ retrieval:
 
 generation:
   # Provider options: "openai", "gemini", "ollama", "mock"
-  provider: "openai"
-  model: "gpt-4o-mini"
+  provider: "gemini"
+  model: "gemini-3.1-flash-lite"
   # Strict constraint: Temperature must be 0 for research reproducibility
   temperature: 0.0
   max_new_tokens: 512

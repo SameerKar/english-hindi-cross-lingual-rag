@@ -291,6 +291,7 @@ class SaveEnvRequest(BaseModel):
 @app.get("/api/get-env")
 async def get_env_config():
     """Returns the current environment setup and masked keys."""
+    load_config()
     g_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
     o_key = os.getenv("OPENAI_API_KEY") or ""
     
@@ -298,7 +299,7 @@ async def get_env_config():
     masked_o = (o_key[:5] + "..." + o_key[-4:]) if len(o_key) > 9 else ("***" if o_key else "")
 
     orch = get_orchestrator_instance()
-    active_mode = "Gemini 2.0 Flash (Free API)" if g_key else ("OpenAI API" if o_key else "Deterministic Context-Grounded Synthesizer ($0 Cost)")
+    active_mode = f"Google {orch.generator.model_name} (Cloud API)" if g_key else ("OpenAI API" if o_key else "Deterministic Context-Grounded Synthesizer ($0 Cost)")
 
     return {
         "has_gemini_key": bool(g_key),
