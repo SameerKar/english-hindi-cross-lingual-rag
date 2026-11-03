@@ -88,15 +88,22 @@ class LLMGenerator:
                 )
                 
                 gemini_resp = None
-                try:
-                    gemini_resp = self.client.models.generate_content(
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(
+                        self.client.models.generate_content,
                         model=self.model_name,
                         contents=prompt,
                         config=cfg
                     )
-                except Exception as g_err:
-                    print(f"[LLM Notice] Gemini call failed ({str(g_err)[:80]}). Switching immediately to fast local synthesis.")
-                    gemini_resp = None
+                    try:
+                        gemini_resp = future.result(timeout=3.5)
+                    except concurrent.futures.TimeoutError:
+                        print(f"[LLM Notice] Gemini call timed out after 3.5s. Switching immediately to fast local synthesis.")
+                        gemini_resp = None
+                    except Exception as g_err:
+                        print(f"[LLM Notice] Gemini call failed ({str(g_err)[:80]}). Switching immediately to fast local synthesis.")
+                        gemini_resp = None
 
                 if gemini_resp and gemini_resp.text:
                     output_text = gemini_resp.text.strip()
