@@ -111,6 +111,17 @@ def reload_orchestrator_instance():
     return _orchestrator
 
 
+@app.on_event("startup")
+async def startup_warmup():
+    """Pre-warms the orchestrator and embedders on server boot to eliminate query cold start."""
+    try:
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, get_orchestrator_instance)
+        await terminal.broadcast("[SYSTEM] RAG Orchestrator & Embedder models pre-warmed and ready.")
+    except Exception as e:
+        print(f"[Startup Warning] Pre-warm notice: {e}")
+
+
 # ---------------------------------------------------------------------------
 # WebSocket Endpoint for Real-Time Live Terminal
 # ---------------------------------------------------------------------------
@@ -444,6 +455,9 @@ async def execute_query(req: QueryRequest):
     if "A" in req.systems:
         await terminal.broadcast("[SYS-A] Running Direct Parametric LLM Baseline (Zero Retrieval)...")
         res_a = orch.execute_system_A(q_hi, qid, subj, cat)
+        lat_a = res_a.get("latencies", {}).get("total_latency_ms", 0.0)
+        ans_preview = (res_a.get("generated_answer") or "").replace("\n", " ")[:60]
+        await terminal.broadcast(f"[SYS-A] Answer generated in {lat_a:.1f}ms: '{ans_preview}...'")
         results["A"] = res_a
 
     await terminal.broadcast("[QUERY] All requested systems completed successfully.")

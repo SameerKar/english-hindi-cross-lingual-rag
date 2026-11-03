@@ -784,7 +784,7 @@
             </label>
 
             <label class="sys-card">
-              <input type="checkbox" id="w-chk-a">
+              <input type="checkbox" id="w-chk-a" checked>
               <div>
                 <div class="sys-label">System A · Parametric LLM</div>
                 <div class="sys-sub">Zero-Retrieval Control Baseline</div>
@@ -1260,6 +1260,15 @@
             </div>
           `;
         });
+      } else if (sysId === 'A') {
+        chunksHtml = `
+          <div class="chunk-box" style="border-left: 2px solid #fbbf24; background: #131109; margin-top: 8px; padding: 8px 10px;">
+            <div style="color: #fbbf24; font-weight: 500; font-size: 11px;">⚠️ Control Baseline · Zero Retrieval</div>
+            <div style="color: #999; font-size: 10.5px; margin-top: 2px; line-height: 1.4;">
+              System A generates answers directly from parametric model memory without searching any PDF documents. Zero evidentiary chunks or page citations are retrieved, demonstrating the baseline need for RAG.
+            </div>
+          </div>
+        `;
       }
 
       card.innerHTML = `
