@@ -524,6 +524,177 @@
       white-space: pre-wrap;
     }
 
+    /* Document Format Badges & Folder Explorer */
+    .badge-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: var(--radius-tags);
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      display: inline-block;
+    }
+    .badge-pdf {
+      background: rgba(29, 155, 240, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(29, 155, 240, 0.28);
+    }
+    .badge-txt {
+      background: rgba(52, 211, 153, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.28);
+    }
+    .badge-md {
+      background: rgba(167, 139, 250, 0.12);
+      color: #c084fc;
+      border: 1px solid rgba(167, 139, 250, 0.28);
+    }
+
+    .folder-block {
+      background: #121212;
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+      margin-bottom: 6px;
+      overflow: hidden;
+    }
+    .folder-header {
+      padding: 7px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: #171717;
+      border-bottom: var(--border-hairline);
+      transition: background 0.12s ease;
+    }
+    .folder-header:hover {
+      background: #1e1e1e;
+    }
+    .folder-header.collapsed {
+      border-bottom: none;
+    }
+    .folder-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+    }
+    .folder-files-list {
+      padding: 5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .folder-files-list.collapsed {
+      display: none;
+    }
+    .doc-row-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      border-radius: var(--radius-tags);
+      background: #090909;
+      border: 1px solid #242424;
+      gap: 8px;
+      transition: border-color 0.12s ease;
+    }
+    .doc-row-item:hover {
+      border-color: var(--color-iron-border);
+    }
+    .doc-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      flex: 1;
+    }
+    .doc-filename {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .doc-meta-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--color-ash-mute);
+      white-space: nowrap;
+    }
+    .doc-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Document Viewer Modal */
+    .doc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .doc-modal-overlay.open {
+      display: flex;
+    }
+    .doc-modal-dialog {
+      width: 980px;
+      max-width: 96vw;
+      height: 88vh;
+      background: #141414;
+      border: 1px solid var(--color-slate-border);
+      border-radius: var(--radius-cards);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .doc-modal-head {
+      height: 52px;
+      min-height: 52px;
+      padding: 0 16px;
+      border-bottom: var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #181818;
+    }
+    .doc-modal-body {
+      flex: 1;
+      overflow: hidden;
+      background: #090909;
+      position: relative;
+    }
+    mark.doc-highlight {
+      background: #fbbf24;
+      color: #000;
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+    .page-marker-header {
+      color: var(--color-signal-blue);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      margin: 16px 0 6px 0;
+      padding-bottom: 3px;
+      border-bottom: 1px dashed #333;
+      user-select: none;
+    }
+
     /* Collapsible Quick Guide on Right Column */
     .quick-guide-bar {
       background: #0d0d0d;
@@ -674,22 +845,22 @@
         </div>
       </section>
 
-      <!-- SCREEN 2: DOCUMENTS -->
+      <!-- SCREEN 2: DOCUMENTS & KNOWLEDGE BASE -->
       <section class="screen-panel" id="screen-step-2">
         <div class="screen-header">
           <div class="screen-badge">Stage 2 · Knowledge Base</div>
-          <h2 class="screen-title">Document Scope</h2>
-          <p class="screen-subtitle">Choose document search scope or upload new PDFs to index live.</p>
+          <h2 class="screen-title">Knowledge Base & Documents</h2>
+          <p class="screen-subtitle">Explore indexed folders, view document text/pages (.pdf, .txt, .md), filter search scope, or upload new files.</p>
         </div>
 
         <div class="screen-body">
-          <!-- 2 Compact Radio Cards -->
+          <!-- 2 Compact Radio Cards for Scope Selection -->
           <div class="option-card-group">
             <div class="option-card selected" id="opt-scope-uploaded" onclick="selectSearchScopeOption('uploaded_only')">
               <input type="radio" name="scope_option" class="option-radio" checked>
               <div>
-                <div class="option-title">📂 Uploaded PDFs Only</div>
-                <div class="option-desc">Strictly queries your custom uploaded papers without textbook bias.</div>
+                <div class="option-title">📂 Uploaded Documents Only</div>
+                <div class="option-desc">Strictly queries your custom uploaded files without textbook bias.</div>
               </div>
             </div>
 
@@ -697,28 +868,51 @@
               <input type="radio" name="scope_option" class="option-radio">
               <div>
                 <div class="option-title">🔍 All Documents</div>
-                <div class="option-desc">Queries uploaded documents plus the 5 academic Computer Science textbooks.</div>
+                <div class="option-desc">Queries uploaded documents plus all textbook benchmark folders.</div>
               </div>
             </div>
           </div>
 
-          <!-- Compact Upload Box -->
+          <!-- Document Upload Box (Accepts .pdf, .txt, .md) -->
           <div class="onyx-card">
-            <div class="form-label">Upload Additional Academic PDFs</div>
+            <div class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Upload Documents (.pdf, .txt, .md)</span>
+              <span style="font-size: 10px; color: var(--color-ash-mute);">Auto-builds FAISS dual vectors</span>
+            </div>
             <div class="drop-zone" id="wizard-drop-zone" onclick="document.getElementById('wizard-file-input').click()">
-              <input type="file" id="wizard-file-input" multiple accept=".pdf" style="display: none;" onchange="handleWizardFiles(event)">
-              <div style="font-size: 18px; margin-bottom: 2px;">📄</div>
-              <div style="font-size: 12.5px; font-weight: 500;">Drop ANY PDF here or click to browse</div>
-              <div style="font-size: 10.5px; color: var(--color-ash-mute);">Auto-extracts page citations and builds FAISS vector index</div>
+              <input type="file" id="wizard-file-input" multiple accept=".pdf,.txt,.md" style="display: none;" onchange="handleWizardFiles(event)">
+              <div style="font-size: 18px; margin-bottom: 2px;">📁 📄</div>
+              <div style="font-size: 12.5px; font-weight: 500;">Drop PDF, TXT, or MD files here or click to browse</div>
+              <div style="font-size: 10.5px; color: var(--color-ash-mute);">Extracts page-by-page text, creates semantic chunks, and updates vector store</div>
             </div>
 
             <div class="chips-row" id="wizard-staged-chips" style="margin-top: 8px;"></div>
 
             <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-top: 10px;">
-              <input type="text" id="wizard-subject-input" class="form-input" value="uploaded_docs" placeholder="Collection tag (e.g. voice_ai, law)">
+              <input type="text" id="wizard-subject-input" class="form-input" value="uploaded_docs" placeholder="Collection/Folder tag (e.g. uploaded_docs, notes)">
               <button class="btn btn-solid-white btn-sm" id="btn-wizard-ingest" onclick="wizardUploadAndIngest()" disabled>
                 ⚡ Ingest & Build Vector Store
               </button>
+            </div>
+          </div>
+
+          <!-- KNOWLEDGE BASE EXPLORER (FOLDER VIEW) -->
+          <div class="onyx-card" style="margin-top: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12.5px; font-weight: 500; color: var(--color-paper-white);">📁 Knowledge Base Explorer</span>
+                <span id="kb-summary-pill" class="chip" style="font-size: 10.5px; padding: 2px 7px;">Loading...</span>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="text" id="kb-search-input" class="form-input" placeholder="Filter files or folders..." style="width: 170px; padding: 4px 8px; font-size: 11px;" oninput="filterFolderTree(this.value)">
+                <button class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="fetchDocumentTree()">↻ Refresh</button>
+              </div>
+            </div>
+
+            <div id="kb-folder-container" style="max-height: 290px; overflow-y: auto; padding-right: 4px;">
+              <div style="text-align: center; color: var(--color-ash-mute); padding: 20px; font-size: 11.5px;">
+                Loading document tree...
+              </div>
             </div>
           </div>
         </div>
@@ -892,6 +1086,70 @@
 
   </main>
 
+  <!-- IN-APP DOCUMENT VIEWER MODAL -->
+  <div id="doc-viewer-modal" class="doc-modal-overlay" onclick="handleDocModalClick(event)">
+    <div class="doc-modal-dialog">
+      <!-- Modal Header -->
+      <div class="doc-modal-head">
+        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden; flex: 1; margin-right: 12px;">
+          <span id="doc-modal-type-badge" class="badge-tag badge-pdf">PDF</span>
+          <div style="overflow: hidden; min-width: 0;">
+            <div id="doc-modal-filename" style="font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">filename.pdf</div>
+            <div style="font-size: 10.5px; color: var(--color-ash-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              Folder: <span id="doc-modal-folder" style="color: var(--color-signal-blue);">folder</span> · 
+              Size: <span id="doc-modal-size">0 KB</span> · 
+              Pages: <span id="doc-modal-pages">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls: View Mode / Search / Pager / Raw / Close -->
+        <div style="display: flex; align-items: center; gap: 7px; flex-shrink: 0;">
+          <!-- PDF toggle buttons (only shown for PDF) -->
+          <div id="pdf-view-mode-toggles" style="display: none; background: #111; border: var(--border-hairline); border-radius: var(--radius-tags); padding: 2px;">
+            <button class="btn btn-solid-white btn-sm" id="btn-mode-text" style="font-size: 10.5px; padding: 2px 7px;" onclick="switchDocViewMode('text')">📄 Text & Citations</button>
+            <button class="btn btn-ghost btn-sm" id="btn-mode-embed" style="font-size: 10.5px; padding: 2px 7px;" onclick="switchDocViewMode('embed')">📑 Native PDF</button>
+          </div>
+
+          <!-- In-Doc Search Input -->
+          <div style="display: flex; align-items: center; position: relative;">
+            <input type="text" id="doc-modal-search" class="form-input" placeholder="🔍 Search text..." style="font-size: 11px; padding: 4px 8px; width: 130px;" oninput="onDocSearchInput(this.value)">
+            <span id="doc-search-count-label" style="position: absolute; right: 6px; font-size: 9.5px; color: var(--color-ash-mute); pointer-events: none;"></span>
+          </div>
+
+          <!-- Page Jump (for text view) -->
+          <div id="doc-modal-pager" style="display: flex; align-items: center; gap: 3px;">
+            <button class="btn btn-secondary btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="jumpDocPage(-1)">◀</button>
+            <span id="doc-modal-page-num" style="font-size: 10px; color: var(--color-ash-mute); min-width: 48px; text-align: center; font-family: var(--font-mono);">P 1/1</span>
+            <button class="btn btn-secondary btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="jumpDocPage(1)">▶</button>
+          </div>
+
+          <!-- Copy text button -->
+          <button class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 3px 8px;" onclick="copyCurrentDocText()">📋 Copy</button>
+
+          <!-- Raw / New Tab button -->
+          <a id="doc-modal-raw-btn" href="#" target="_blank" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 3px 8px;" title="Open original file in new browser tab">↗️ Raw</a>
+
+          <!-- Close button -->
+          <button class="btn btn-ghost btn-sm" style="font-size: 16px; padding: 0 6px; color: var(--color-ash-mute);" onclick="closeDocViewer()">✕</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="doc-modal-body" id="doc-modal-body-container">
+        <!-- Text View Content -->
+        <div id="doc-modal-text-view" style="width: 100%; height: 100%; overflow-y: auto; padding: 14px 18px; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; color: #d6d6d6; white-space: pre-wrap; word-break: break-word;">
+          Loading document content...
+        </div>
+
+        <!-- Embedded PDF View Content -->
+        <div id="doc-modal-embed-view" style="display: none; width: 100%; height: 100%;">
+          <iframe id="doc-modal-iframe" src="about:blank" style="width: 100%; height: 100%; border: none; background: #222;"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     let currentStep = 1;
     let ws = null;
@@ -899,6 +1157,12 @@
     let activeScope = 'uploaded_only';
     let lastQueryRecord = null;
     let isGuideCollapsed = false;
+
+    // Knowledge Base Explorer & Document Viewer State
+    let kbTreeData = null;
+    let activeModalDoc = null;
+    let currentDocPageIndex = 0;
+    let currentDocViewMode = 'text'; // 'text' | 'embed'
 
     // Concise Stage Tips (Clean, non-verbose)
     const STAGE_TIPS = {
@@ -927,6 +1191,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initWebSocketTerminal();
       fetchEnvAndTelemetry();
+      fetchDocumentTree();
       fetchLatestReportContent();
       setupWizardDropZone();
       updateStageTip(1);
@@ -1074,7 +1339,7 @@
       el.type = el.type === 'password' ? 'text' : 'password';
     }
 
-    // Stage 2: Documents
+    // Stage 2: Scope & Drop Zone
     function selectSearchScopeOption(scopeVal) {
       activeScope = scopeVal;
       document.getElementById('opt-scope-uploaded').className = scopeVal === 'uploaded_only' ? 'option-card selected' : 'option-card';
@@ -1083,6 +1348,7 @@
 
     function setupWizardDropZone() {
       const dz = document.getElementById('wizard-drop-zone');
+      if (!dz) return;
       ['dragenter', 'dragover'].forEach(n => {
         dz.addEventListener(n, (e) => { e.preventDefault(); dz.classList.add('dragover'); }, false);
       });
@@ -1091,13 +1357,21 @@
       });
       dz.addEventListener('drop', (e) => {
         const dt = e.dataTransfer;
-        const files = Array.from(dt.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+        const allowed = ['.pdf', '.txt', '.md'];
+        const files = Array.from(dt.files).filter(f => {
+          const ext = '.' + f.name.split('.').pop().toLowerCase();
+          return allowed.includes(ext);
+        });
         addStagedFiles(files);
       });
     }
 
     function handleWizardFiles(e) {
-      const files = Array.from(e.target.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+      const allowed = ['.pdf', '.txt', '.md'];
+      const files = Array.from(e.target.files).filter(f => {
+        const ext = '.' + f.name.split('.').pop().toLowerCase();
+        return allowed.includes(ext);
+      });
       addStagedFiles(files);
     }
 
@@ -1119,9 +1393,14 @@
       const holder = document.getElementById('wizard-staged-chips');
       holder.innerHTML = '';
       stagedFiles.forEach((f, idx) => {
+        const ext = '.' + f.name.split('.').pop().toLowerCase();
+        let badge = 'PDF';
+        if (ext === '.txt') badge = 'TXT';
+        else if (ext === '.md') badge = 'MD';
+
         const chip = document.createElement('span');
         chip.className = 'sample-chip';
-        chip.innerHTML = `📄 ${f.name} <span onclick="removeStagedFile(${idx})" style="color: #f87171; cursor: pointer; margin-left: 4px;">&times;</span>`;
+        chip.innerHTML = `<span class="badge-tag badge-${badge.toLowerCase()}" style="font-size: 8.5px; padding: 1px 4px; margin-right: 4px;">${badge}</span>${f.name} <span onclick="removeStagedFile(${idx})" style="color: #f87171; cursor: pointer; margin-left: 6px;">&times;</span>`;
         holder.appendChild(chip);
       });
       document.getElementById('btn-wizard-ingest').disabled = stagedFiles.length === 0;
@@ -1139,14 +1418,15 @@
       formData.append('replace_corpus', 'false');
 
       try {
-        const resp = await fetch('/api/upload-pdfs', { method: 'POST', body: formData });
+        const resp = await fetch('/api/upload-docs', { method: 'POST', body: formData });
         const data = await resp.json();
         if (resp.ok) {
           stagedFiles = [];
           renderWizardChips();
           document.getElementById('wizard-file-input').value = '';
           fetchEnvAndTelemetry();
-          alert('PDF successfully ingested and vector stores rebuilt!');
+          fetchDocumentTree();
+          alert('Documents successfully ingested and vector stores rebuilt!');
         } else {
           alert('Upload error: ' + (data.error || 'Failed'));
         }
@@ -1156,6 +1436,317 @@
         btn.disabled = false;
         btn.innerText = '⚡ Ingest & Build Vector Store';
       }
+    }
+
+    // --------------------------------------------------------------------------
+    // Knowledge Base Explorer (Folder Tree View)
+    // --------------------------------------------------------------------------
+    async function fetchDocumentTree() {
+      const container = document.getElementById('kb-folder-container');
+      const pill = document.getElementById('kb-summary-pill');
+      if (!container) return;
+
+      try {
+        const resp = await fetch('/api/documents/tree');
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          kbTreeData = data;
+          const s = data.summary || {};
+          if (pill) {
+            pill.innerText = `${data.total_documents} Docs · ${s.pdf_count || 0} PDF · ${s.txt_count || 0} TXT · ${s.md_count || 0} MD`;
+          }
+          renderFolderTree('');
+        } else {
+          container.innerHTML = '<div style="color: #f87171; padding: 12px; font-size: 11px;">Failed to load documents.</div>';
+        }
+      } catch (err) {
+        container.innerHTML = `<div style="color: #f87171; padding: 12px; font-size: 11px;">Network error: ${err.message}</div>`;
+      }
+    }
+
+    function filterFolderTree(query) {
+      renderFolderTree(query.trim().toLowerCase());
+    }
+
+    function renderFolderTree(filter) {
+      const container = document.getElementById('kb-folder-container');
+      if (!container) return;
+      if (!kbTreeData || !kbTreeData.folders) {
+        container.innerHTML = '<div style="color: var(--color-ash-mute); padding: 12px; font-size: 11.5px;">No documents found.</div>';
+        return;
+      }
+
+      const folders = kbTreeData.folders;
+      const folderKeys = Object.keys(folders);
+      if (folderKeys.length === 0) {
+        container.innerHTML = '<div style="color: var(--color-ash-mute); padding: 12px; font-size: 11.5px;">Knowledge base is empty. Upload documents above.</div>';
+        return;
+      }
+
+      let html = '';
+      let renderedCount = 0;
+
+      folderKeys.forEach(folderName => {
+        const docs = folders[folderName] || [];
+        const filteredDocs = docs.filter(d => {
+          if (!filter) return true;
+          return d.name.toLowerCase().includes(filter) ||
+                 d.folder.toLowerCase().includes(filter) ||
+                 d.extension.toLowerCase().includes(filter);
+        });
+
+        if (filteredDocs.length === 0 && filter) return;
+
+        renderedCount += filteredDocs.length;
+        const totalChunksInFolder = filteredDocs.reduce((acc, d) => acc + (d.total_chunks || 0), 0);
+
+        html += `
+          <div class="folder-block" id="folder-block-${folderName}">
+            <div class="folder-header" onclick="toggleFolder('${folderName}')">
+              <div class="folder-title-wrap">
+                <span>📁</span>
+                <span style="font-family: var(--font-mono);">${folderName}/</span>
+                <span class="chip" style="font-size: 9.5px; padding: 1px 5px;">${filteredDocs.length} file${filteredDocs.length !== 1 ? 's' : ''} · ${totalChunksInFolder} chunks</span>
+              </div>
+              <span id="folder-caret-${folderName}" style="font-size: 10px; color: var(--color-ash-mute);">▾</span>
+            </div>
+            <div class="folder-files-list" id="folder-list-${folderName}">
+        `;
+
+        filteredDocs.forEach(doc => {
+          let badgeClass = 'badge-pdf';
+          if (doc.extension === '.txt') badgeClass = 'badge-txt';
+          else if (doc.extension === '.md') badgeClass = 'badge-md';
+
+          const encodedPath = encodeURIComponent(doc.relative_path);
+          html += `
+            <div class="doc-row-item">
+              <div class="doc-info">
+                <span class="badge-tag ${badgeClass}">${doc.type}</span>
+                <span class="doc-filename" title="${doc.name}">${doc.name}</span>
+                <div class="doc-meta-pills">
+                  <span>${doc.size_formatted}</span>
+                  <span>•</span>
+                  <span>${doc.total_pages} pg</span>
+                  <span>•</span>
+                  <span>${doc.total_chunks} chunks</span>
+                </div>
+              </div>
+              <div class="doc-actions">
+                <button class="btn btn-secondary btn-sm" style="font-size: 10.5px; padding: 2px 7px;" onclick="openDocViewer('${doc.relative_path}')">👁️ View</button>
+                <a href="/api/document/raw?path=${encodedPath}" target="_blank" class="btn btn-ghost btn-sm" style="font-size: 10.5px; padding: 2px 6px;" title="Open raw file in new tab">↗️</a>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      if (renderedCount === 0 && filter) {
+        html = `<div style="text-align: center; color: var(--color-ash-mute); padding: 16px; font-size: 11.5px;">No documents match "${filter}".</div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function toggleFolder(folderName) {
+      const list = document.getElementById(`folder-list-${folderName}`);
+      const caret = document.getElementById(`folder-caret-${folderName}`);
+      if (!list) return;
+      if (list.classList.contains('collapsed')) {
+        list.classList.remove('collapsed');
+        if (caret) caret.innerText = '▾';
+      } else {
+        list.classList.add('collapsed');
+        if (caret) caret.innerText = '▸';
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // In-App Document Viewer Modal Logic
+    // --------------------------------------------------------------------------
+    async function openDocViewer(relativePath) {
+      const modal = document.getElementById('doc-viewer-modal');
+      const textView = document.getElementById('doc-modal-text-view');
+      const embedView = document.getElementById('doc-modal-embed-view');
+      const iframe = document.getElementById('doc-modal-iframe');
+      const toggles = document.getElementById('pdf-view-mode-toggles');
+      const searchInput = document.getElementById('doc-modal-search');
+      const searchCount = document.getElementById('doc-search-count-label');
+
+      searchInput.value = '';
+      if (searchCount) searchCount.innerText = '';
+      textView.innerHTML = '<div style="color: var(--color-ash-mute); text-align: center; padding: 40px; font-size: 12px;">Extracting and loading document pages...</div>';
+      modal.classList.add('open');
+
+      try {
+        const resp = await fetch(`/api/document/view?path=${encodeURIComponent(relativePath)}`);
+        const data = await resp.json();
+        if (!resp.ok || !data.success) {
+          textView.innerHTML = `<div style="color: #f87171; padding: 20px;">Error: ${data.error || 'Failed to open document.'}</div>`;
+          return;
+        }
+
+        activeModalDoc = data;
+        currentDocPageIndex = 0;
+
+        // Populate Header info
+        document.getElementById('doc-modal-filename').innerText = data.file_name;
+        document.getElementById('doc-modal-filename').title = data.file_name;
+        document.getElementById('doc-modal-folder').innerText = data.folder;
+        document.getElementById('doc-modal-size').innerText = data.size_formatted;
+        document.getElementById('doc-modal-pages').innerText = data.total_pages;
+
+        // Badge
+        const typeBadge = document.getElementById('doc-modal-type-badge');
+        typeBadge.innerText = data.type;
+        typeBadge.className = 'badge-tag ' + (data.extension === '.pdf' ? 'badge-pdf' : (data.extension === '.txt' ? 'badge-txt' : 'badge-md'));
+
+        // Raw Link
+        const rawBtn = document.getElementById('doc-modal-raw-btn');
+        rawBtn.href = `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
+
+        // PDF toggle bar
+        if (data.can_embed_pdf) {
+          toggles.style.display = 'inline-flex';
+          iframe.src = `/api/document/raw?path=${encodeURIComponent(data.relative_path)}`;
+        } else {
+          toggles.style.display = 'none';
+          iframe.src = 'about:blank';
+        }
+
+        switchDocViewMode('text');
+        renderDocTextContent();
+        updateModalPager();
+      } catch (err) {
+        textView.innerHTML = `<div style="color: #f87171; padding: 20px;">Network error: ${err.message}</div>`;
+      }
+    }
+
+    function renderDocTextContent(searchQuery = '') {
+      const textView = document.getElementById('doc-modal-text-view');
+      if (!activeModalDoc || !activeModalDoc.pages) {
+        textView.innerText = 'No content available.';
+        return;
+      }
+
+      let html = '';
+      const query = searchQuery.trim().toLowerCase();
+      let matchCount = 0;
+
+      activeModalDoc.pages.forEach(p => {
+        let text = escapeHtml(p.text || '');
+        if (query) {
+          const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+          text = text.replace(regex, (m) => {
+            matchCount++;
+            return `<mark class="doc-highlight">${m}</mark>`;
+          });
+        }
+
+        html += `
+          <div class="page-marker-header" id="doc-page-marker-${p.page_number}">
+            📄 PAGE ${p.page_number} / ${activeModalDoc.total_pages} (${(p.text || '').length} characters)
+          </div>
+          <div class="page-text-block">${text}</div>
+        `;
+      });
+
+      textView.innerHTML = html;
+
+      const countLabel = document.getElementById('doc-search-count-label');
+      if (countLabel) {
+        countLabel.innerText = query ? `${matchCount} match${matchCount !== 1 ? 'es' : ''}` : '';
+      }
+
+      if (query && matchCount > 0) {
+        const firstMark = textView.querySelector('mark.doc-highlight');
+        if (firstMark) firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function onDocSearchInput(val) {
+      renderDocTextContent(val);
+    }
+
+    function switchDocViewMode(mode) {
+      currentDocViewMode = mode;
+      const textView = document.getElementById('doc-modal-text-view');
+      const embedView = document.getElementById('doc-modal-embed-view');
+      const btnText = document.getElementById('btn-mode-text');
+      const btnEmbed = document.getElementById('btn-mode-embed');
+
+      if (mode === 'embed') {
+        textView.style.display = 'none';
+        embedView.style.display = 'block';
+        if (btnEmbed) { btnEmbed.className = 'btn btn-solid-white btn-sm'; btnEmbed.style.padding = '2px 7px'; }
+        if (btnText) { btnText.className = 'btn btn-ghost btn-sm'; btnText.style.padding = '2px 7px'; }
+      } else {
+        embedView.style.display = 'none';
+        textView.style.display = 'block';
+        if (btnText) { btnText.className = 'btn btn-solid-white btn-sm'; btnText.style.padding = '2px 7px'; }
+        if (btnEmbed) { btnEmbed.className = 'btn btn-ghost btn-sm'; btnEmbed.style.padding = '2px 7px'; }
+      }
+    }
+
+    function jumpDocPage(delta) {
+      if (!activeModalDoc || !activeModalDoc.pages || activeModalDoc.pages.length === 0) return;
+      currentDocPageIndex = Math.max(0, Math.min(activeModalDoc.pages.length - 1, currentDocPageIndex + delta));
+      updateModalPager();
+      const targetPageNum = activeModalDoc.pages[currentDocPageIndex].page_number;
+      const el = document.getElementById(`doc-page-marker-${targetPageNum}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function updateModalPager() {
+      const lbl = document.getElementById('doc-modal-page-num');
+      if (!lbl || !activeModalDoc) return;
+      const current = currentDocPageIndex + 1;
+      const total = activeModalDoc.total_pages || 1;
+      lbl.innerText = `P ${current}/${total}`;
+    }
+
+    function copyCurrentDocText() {
+      if (!activeModalDoc || !activeModalDoc.full_text) return;
+      navigator.clipboard.writeText(activeModalDoc.full_text).then(() => {
+        alert('Document text copied to clipboard!');
+      });
+    }
+
+    function closeDocViewer() {
+      const modal = document.getElementById('doc-viewer-modal');
+      const iframe = document.getElementById('doc-modal-iframe');
+      if (iframe) iframe.src = 'about:blank';
+      if (modal) modal.classList.remove('open');
+      activeModalDoc = null;
+    }
+
+    function handleDocModalClick(e) {
+      if (e.target.id === 'doc-viewer-modal') {
+        closeDocViewer();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('doc-viewer-modal');
+        if (modal && modal.classList.contains('open')) {
+          closeDocViewer();
+        }
+      }
+    });
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
     // Stage 3: Query Formulation
@@ -1362,6 +1953,7 @@
         const data = await resp.json();
         if (resp.ok) {
           fetchEnvAndTelemetry();
+          fetchDocumentTree();
           fetchLatestReportContent();
           alert('Default 5 CS textbooks restored!');
         }

@@ -63,12 +63,30 @@
     "language": "en"
   },
   {
+    "document_id": "sai_international_sai_international_omni_agent_call_logic",
+    "file_name": "Sai International Omni Agent Call Logic.pdf",
+    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\sai_international\\Sai International Omni Agent Call Logic.pdf",
+    "subject": "sai_international",
+    "total_pages": 4,
+    "total_chunks": 4,
+    "language": "en"
+  },
+  {
     "document_id": "uploaded_docs_learn_python_the_hard_way_a_very",
     "file_name": "Learn_Python_the_Hard_Way_A_Very.pdf",
     "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\uploaded_docs\\Learn_Python_the_Hard_Way_A_Very.pdf",
     "subject": "uploaded_docs",
     "total_pages": 311,
     "total_chunks": 331,
+    "language": "en"
+  },
+  {
+    "document_id": "uploaded_docs_voice_ai_methodology",
+    "file_name": "voice_ai_methodology.md",
+    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\uploaded_docs\\voice_ai_methodology.md",
+    "subject": "uploaded_docs",
+    "total_pages": 3,
+    "total_chunks": 3,
     "language": "en"
   }
 ]

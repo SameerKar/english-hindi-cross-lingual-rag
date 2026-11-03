@@ -405,6 +405,66 @@
     }
   },
   {
+    "chunk_id": "sai_international_sai_international_omni_agent_call_logic_p1_c0",
+    "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+    "subject": "sai_international",
+    "page": 1,
+    "chunk_index": 0,
+    "text": "Sai International Omni Agent Call Logic & Action Plan Based on the recent discussion with the client and the newly updated Post-Call Analysis (PCA) schema, here is the comprehensive breakdown of the dialing strategy, updated lead stage mapping, and system requirements. 1. Dialing Strategy (Past, Current, and Future) ● What has been dialed/is currently being dialed: The team has processed data up to April, specifically working backwards (October, September, etc.) focusing primarily on the Inactive lead status. ● What will be dialed next: The client wants to target Ungraded leads from last December up to April 1st. 2. Before vs. After: PCA Logic Changes To address the client's concerns regarding wasted call minutes on unengaged leads, the AI's Post-Call Analysis rules have been strictly updated. Scenario Previous Logic (Before) Updated PCA Logic (After) Impact Early Hang-up (User says hello, hears brand intro, and immediately disconnects) Tagged as Ungraded or Customer disconnected . Stayed in the calling loop. Tagged as DO NOT CALL . Stage changes to Regret Not Interested . Follow-up: NO . Prevents endless recalling of leads who show intentional lack of interest. System/Voicemail/Mid-Call Drop Often caused confusion between Warm and Ungraded . Tagged as Customer disconnected during the call . Stage remains Inactive (No Change). Prevents false positives and stops overriding existing statuses without conclusive proof. 3. Conditions, Examples & Final Lead Stage Mapping The following table maps the exact conditions and behaviors from the call to the strict call_outcome output, and subsequently to the finalized lead_stage in the CRM.",
+    "token_count": 327,
+    "metadata": {
+      "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+      "subject": "sai_international",
+      "page": 1,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "sai_international_sai_international_omni_agent_call_logic_p2_c0",
+    "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+    "subject": "sai_international",
+    "page": 2,
+    "chunk_index": 0,
+    "text": "Call Conditions / Behaviors Specific Prompt Example Call Outcome Final Lead Stage Agent executed live transfer OR parent explicitly agreed. Parent asks about fees, agent offers transfer, parent says \"Yes, connect me.\" Call transfer Hot Parent explicitly expressed intent to visit the campus. \"We would like to come see the S-I-R-S campus tomorrow.\" Campus visit interested Hot Parent asked meaningful questions , declined transfer, and call closed naturally. Parent asks about CBSE vs Cambridge. Agent answers, offers transfer. Parent says \"No, I'll check the website.\" Agent says Goodbye (Closing Scenario D-2). Had a conversation Warm Parent is busy, driving, or explicitly requested a callback. Parent says \"I am driving, call me tomorrow\" (Flow 1). Busy asked to call later Warm Parent explicitly asked to receive admission details on WhatsApp. \"Can you send the fee structure on WhatsApp?\" WhatsApp details required Warm A. Voicemail/System: Hit an IVR or AI screener. B. Mid-Call Drop: Dropped after asking a question, but before conclusion. A. AI answers: \"Please leave your message.\" B. Parent asks \"Do you have horse riding?\", call drops while agent answers. Customer disconnected during the call Inactive (No Change) Early Hang-up: Parent hangs up during Opening Greeting or Initial Pitch. NO questions asked. Agent starts pitch: \"Sai International is ranked number one...\" -> Parent hangs up immediately. DO NOT CALL Regret Not Interested",
+    "token_count": 288,
+    "metadata": {
+      "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+      "subject": "sai_international",
+      "page": 2,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "sai_international_sai_international_omni_agent_call_logic_p3_c0",
+    "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+    "subject": "sai_international",
+    "page": 3,
+    "chunk_index": 0,
+    "text": "Call Conditions / Behaviors Specific Prompt Example Call Outcome Final Lead Stage Stated wrong number or never inquired. \"I don't have kids\" or \"Wrong number.\" INVALID OR WRONG NUMBER Regret Not Interested 4. Detailed Call Outcome Descriptions (Bifurcation Rules) To ensure accurate tagging, the AI will evaluate the conversation based strictly on the prompt's defined flows (Flow 1: Callback, Flow 2: Pitch, Flow 3: Correction), the Knowledge Base, and the Call Closing Protocols. Here is the strict bifurcation between Early Hang-ups, Mid-Call Drops, and Completed Conversations: 1. DO NOT CALL (Regret Not Interested - Early Hang-up) ● Definition: The parent intentionally drops the call in the very early stages before any real engagement occurs. The client interprets hearing the Sai brand intro and disconnecting immediately as an intentional lack of interest. ● Triggers: ○ The call disconnects during the Opening Script ( \"नमस्ते , मैं Meera बात कर रही हूँ Sai Educational Group...\" ). ○ The call disconnects during the Flow 2 Pitch ( e.g., \"...Sai Angan is actually the largest play school...\" ) BEFORE the parent asks a single meaningful question. ○ The call disconnects during the Flow 3 Correction ( e.g., parent says \"No, I'm looking for boarding\" and hangs up while the agent pivots to the S-I-R-S pitch). ● Crucial Rule: If the parent fails to ask a question from the Knowledge Base (Fees, Curriculum, Transport, etc.), it is an early drop. 2. Customer disconnected during the call (Inactive - No Grade Change) ● Definition: This outcome is reserved strictly for non-human connections or conversations that were progressing meaningfully but suffered a technical drop before a natural human conclusion. We do not want the lead grade to change here. ● Trigger A (System/Voicemail): The call was answered by an automated system. The agent's Voicemail Detection Rule triggered because it heard keywords like: \"leave your message\" , \"automated voice assistant\" , \"name and reason for calling\" , or \"after the beep\" . ● Trigger B (Mid-Call Drop): The conversation progressed past the initial pitch. The parent actively asked a meaningful question from the Knowledge Base (e.g., \"What is the fee structure?\" , \"How do you handle homesickness?\" ). The agent began to answer,",
+    "token_count": 474,
+    "metadata": {
+      "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+      "subject": "sai_international",
+      "page": 3,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "sai_international_sai_international_omni_agent_call_logic_p4_c0",
+    "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+    "subject": "sai_international",
+    "page": 4,
+    "chunk_index": 0,
+    "text": "but the call dropped abruptly mid-discussion , BEFORE the agent could execute the 2-Step Closing Protocol or offer a live transfer. 3. Had a conversation (Warm) ● Definition: A complete, successful, and mutually concluded interaction with a human where information was exchanged, but no live transfer occurred. ● Triggers & Conditions (ALL MUST BE MET): 1. Meaningful Engagement: The parent asked at least one specific question tied to the Knowledge Base (e.g., questions about CBSE/Cambridge, JEE/NEET prep, Boarding facilities, Sports/Horse Riding, Food/Veg options, or Admission Process). 2. No Live Transfer: The agent either successfully answered the questions without needing a transfer, OR the agent offered a transfer (Condition 1 or 2) and the parent explicitly declined ( \"No, I will discuss with my family\" ). 3. Formal Closing: The call ended naturally with the agent successfully delivering a Call Closing Protocol (Scenario A, Scenario B, Scenario C, or Scenario D-2) and saying goodbye. Other Notable Outcomes ● Busy asked to call later (Warm): Triggers during Flow 1 . The parent is genuinely occupied and explicitly provides an instruction to follow up (e.g., \"I am driving, call me tomorrow\" ). If they decline a live transfer specifically requesting a callback later (Scenario D-1), it also falls here. ● INVALID OR WRONG NUMBER (Regret Not Interested): The parent explicitly states that the number is wrong, or that they never submitted an inquiry for school admissions.",
+    "token_count": 302,
+    "metadata": {
+      "doc_id": "sai_international_sai_international_omni_agent_call_logic",
+      "subject": "sai_international",
+      "page": 4,
+      "chunk_index": 0
+    }
+  },
+  {
     "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p1_c0",
     "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
     "subject": "uploaded_docs",
@@ -5366,6 +5426,51 @@
       "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
       "subject": "uploaded_docs",
       "page": 311,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "uploaded_docs_voice_ai_methodology_p1_c0",
+    "doc_id": "uploaded_docs_voice_ai_methodology",
+    "subject": "uploaded_docs",
+    "page": 1,
+    "chunk_index": 0,
+    "text": "# Research Methodology on Voice AI",
+    "token_count": 7,
+    "metadata": {
+      "doc_id": "uploaded_docs_voice_ai_methodology",
+      "subject": "uploaded_docs",
+      "page": 1,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "uploaded_docs_voice_ai_methodology_p1_c0",
+    "doc_id": "uploaded_docs_voice_ai_methodology",
+    "subject": "uploaded_docs",
+    "page": 1,
+    "chunk_index": 0,
+    "text": "The voice agent platform utilizes WebSockets to stream PCM audio bidirectionally between the user client and the cloud inference pipeline. The speech-to-text pipeline processes acoustic packets in 20ms chunks using an optimized deep neural network.",
+    "token_count": 45,
+    "metadata": {
+      "doc_id": "uploaded_docs_voice_ai_methodology",
+      "subject": "uploaded_docs",
+      "page": 1,
+      "chunk_index": 0
+    }
+  },
+  {
+    "chunk_id": "uploaded_docs_voice_ai_methodology_p2_c0",
+    "doc_id": "uploaded_docs_voice_ai_methodology",
+    "subject": "uploaded_docs",
+    "page": 2,
+    "chunk_index": 0,
+    "text": "The dialogue manager maintains conversation state in a distributed cache with sub-10ms round-trip latency. Text-to-speech generation synthesizes phonemes with emotional prosody and pitch matching.",
+    "token_count": 31,
+    "metadata": {
+      "doc_id": "uploaded_docs_voice_ai_methodology",
+      "subject": "uploaded_docs",
+      "page": 2,
       "chunk_index": 0
     }
   }

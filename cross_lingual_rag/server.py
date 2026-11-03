@@ -203,24 +203,35 @@ async def get_chunks(subject: Optional[str] = None, search: Optional[str] = None
     return {"chunks": chunks, "total": len(chunks)}
 
 
+def format_file_size(size_bytes: int) -> str:
+    """Formats file size in bytes into human-readable string."""
+    if size_bytes < 1024:
+        return f"{size_bytes} B"
+    elif size_bytes < 1024 * 1024:
+        return f"{size_bytes / 1024:.1f} KB"
+    else:
+        return f"{size_bytes / (1024 * 1024):.2f} MB"
+
+
 @app.post("/api/upload-pdfs")
-async def upload_pdfs(
+@app.post("/api/upload-docs")
+async def upload_documents(
     files: List[UploadFile] = File(...),
-    subject: str = Form("custom_kb"),
+    subject: str = Form("uploaded_docs"),
     replace_corpus: bool = Form(False)
 ):
     """
-    Accepts a bunch of PDFs, saves them into data/corpus/<subject>/,
-    extracts physical pages with pypdf, creates page-aware chunks, and rebuilds FAISS indexes.
+    Accepts academic documents (.pdf, .txt, .md), saves them into data/corpus/<subject>/,
+    extracts physical/virtual pages, creates page-aware chunks, and rebuilds FAISS indexes.
     Streams progress live to the WebSocket terminal.
     """
     cfg = load_config()
     corpus_dir = Path(cfg["paths"]["corpus_dir"])
-    clean_subj = subject.strip().lower().replace(" ", "_").replace("-", "_")
+    clean_subj = subject.strip().lower().replace(" ", "_").replace("-", "_") or "uploaded_docs"
     target_dir = corpus_dir / clean_subj
     ensure_directory(str(target_dir))
 
-    await terminal.broadcast(f"[UPLOAD] Received {len(files)} PDF file(s) for subject category: '{clean_subj}'")
+    await terminal.broadcast(f"[UPLOAD] Received {len(files)} document(s) (.pdf, .txt, .md) for collection: '{clean_subj}'")
 
     if replace_corpus:
         await terminal.broadcast("[CLEAN] 'Replace Corpus' selected: archiving existing corpus files...")
@@ -237,22 +248,25 @@ async def upload_pdfs(
         ensure_directory(str(target_dir))
         await terminal.broadcast("[CLEAN] Corpus directory refreshed.")
 
-    # Save uploaded files
+    # Save uploaded files (.pdf, .txt, .md)
+    allowed_exts = {".pdf", ".txt", ".md"}
     saved_files = []
     for f in files:
-        if not f.filename.lower().endswith(".pdf"):
+        ext = Path(f.filename).suffix.lower()
+        if ext not in allowed_exts:
+            await terminal.broadcast(f"[WARN] Skipped unsupported file format: '{f.filename}' (only .pdf, .txt, .md accepted)")
             continue
         dest_path = target_dir / f.filename
         with open(dest_path, "wb") as buffer:
             shutil.copyfileobj(f.file, buffer)
         saved_files.append(dest_path)
-        await terminal.broadcast(f"[SAVE] Saved '{f.filename}' ({dest_path.stat().st_size / 1024:.1f} KB)")
+        await terminal.broadcast(f"[SAVE] Saved '{f.filename}' ({format_file_size(dest_path.stat().st_size)})")
 
     if not saved_files:
-        return JSONResponse(status_code=400, content={"error": "No valid PDF files were uploaded."})
+        return JSONResponse(status_code=400, content={"error": "No valid PDF, TXT, or MD files were uploaded."})
 
     # Step 1: Run Ingestion
-    await terminal.broadcast(f"[INGEST] Starting page-by-page text extraction on {len(saved_files)} new PDF(s)...")
+    await terminal.broadcast(f"[INGEST] Starting page-aware extraction across {len(saved_files)} new file(s)...")
     ingestor = CorpusIngestor(cfg)
     all_chunks = ingestor.ingest_corpus()
     await terminal.broadcast(f"[CHUNK] Created {len(all_chunks)} page-aware chunks across knowledge base.")
@@ -272,6 +286,234 @@ async def upload_pdfs(
         "total_chunks": len(all_chunks),
         "subject": clean_subj
     }
+
+
+@app.get("/api/documents/tree")
+async def get_documents_tree():
+    """
+    Scans data/corpus/ and returns a structured tree grouped by folder/subject,
+    with file metadata (format, size, pages, chunks, last modified).
+    """
+    cfg = load_config()
+    corpus_dir = Path(cfg["paths"]["corpus_dir"])
+    metadata_path = Path(cfg["paths"].get("processed_dir", "data/processed")) / "corpus_metadata.json"
+
+    meta_lookup = {}
+    if metadata_path.exists():
+        try:
+            with open(metadata_path, "r", encoding="utf-8") as f:
+                meta_list = json.load(f)
+                for item in meta_list:
+                    # Key by relative path or file_name + subject
+                    rel = item.get("file_name", "")
+                    subj = item.get("subject", "")
+                    meta_lookup[f"{subj}/{rel}"] = item
+                    meta_lookup[rel] = item
+        except Exception as e:
+            print(f"[Warning] Failed to load corpus_metadata.json: {e}")
+
+    supported_exts = {".pdf", ".txt", ".md"}
+    folders: Dict[str, List[Dict[str, Any]]] = {}
+    total_docs = 0
+    pdf_count = 0
+    txt_count = 0
+    md_count = 0
+
+    if corpus_dir.exists():
+        for file_path in sorted(corpus_dir.rglob("*")):
+            if not file_path.is_file():
+                continue
+            ext = file_path.suffix.lower()
+            if ext not in supported_exts:
+                continue
+
+            folder_name = file_path.parent.name if file_path.parent != corpus_dir else "general"
+            rel_path = str(file_path.relative_to(corpus_dir)).replace("\\", "/")
+
+            if ext == ".pdf":
+                pdf_count += 1
+                type_label = "PDF"
+            elif ext == ".md":
+                md_count += 1
+                type_label = "Markdown"
+            else:
+                txt_count += 1
+                type_label = "Text"
+
+            st = file_path.stat()
+            size_bytes = st.st_size
+            mod_time = datetime.fromtimestamp(st.st_mtime).strftime("%Y-%m-%d %H:%M")
+
+            # Look up ingestion metadata
+            meta = meta_lookup.get(f"{folder_name}/{file_path.name}") or meta_lookup.get(file_path.name) or {}
+            total_pages = meta.get("total_pages", 1)
+            total_chunks = meta.get("total_chunks", 0)
+            doc_id = meta.get("document_id", f"{folder_name}_{file_path.stem}".lower())
+
+            doc_info = {
+                "name": file_path.name,
+                "folder": folder_name,
+                "relative_path": rel_path,
+                "extension": ext,
+                "type": type_label,
+                "size_bytes": size_bytes,
+                "size_formatted": format_file_size(size_bytes),
+                "modified_at": mod_time,
+                "total_pages": total_pages,
+                "total_chunks": total_chunks,
+                "document_id": doc_id
+            }
+
+            if folder_name not in folders:
+                folders[folder_name] = []
+            folders[folder_name].append(doc_info)
+            total_docs += 1
+
+    return {
+        "success": True,
+        "total_documents": total_docs,
+        "total_folders": len(folders),
+        "summary": {
+            "pdf_count": pdf_count,
+            "txt_count": txt_count,
+            "md_count": md_count
+        },
+        "folders": folders
+    }
+
+
+@app.get("/api/document/view")
+async def view_document_content(path: str):
+    """
+    Securely reads and returns the extracted content and page-by-page breakdown of any document.
+    Supports .pdf (via pypdf), .txt, and .md files strictly within data/corpus/.
+    """
+    cfg = load_config()
+    corpus_dir = Path(cfg["paths"]["corpus_dir"]).resolve()
+    
+    # Path traversal protection
+    clean_path = path.strip().replace("\\", "/").lstrip("/")
+    target_file = (corpus_dir / clean_path).resolve()
+
+    if not str(target_file).startswith(str(corpus_dir)) or not target_file.exists() or not target_file.is_file():
+        return JSONResponse(status_code=404, content={"error": "Document not found or access denied."})
+
+    ext = target_file.suffix.lower()
+    rel_path = str(target_file.relative_to(corpus_dir)).replace("\\", "/")
+    file_size = target_file.stat().st_size
+    pages: List[Dict[str, Any]] = []
+
+    if ext == ".pdf":
+        try:
+            import pypdf
+            reader = pypdf.PdfReader(str(target_file))
+            for idx, page in enumerate(reader.pages):
+                txt = (page.extract_text() or "").strip()
+                pages.append({
+                    "page_number": idx + 1,
+                    "text": txt if txt else "[No extractable text found on this page - likely a scanned or diagram page]"
+                })
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Failed to extract PDF: {str(e)}"})
+        
+        full_text = "\n\n" + ("=" * 40) + "\n\n".join(f"--- PAGE {p['page_number']} ---\n{p['text']}" for p in pages)
+        return {
+            "success": True,
+            "file_name": target_file.name,
+            "folder": target_file.parent.name,
+            "relative_path": rel_path,
+            "extension": ext,
+            "type": "PDF",
+            "size_formatted": format_file_size(file_size),
+            "total_pages": len(pages),
+            "pages": pages,
+            "full_text": full_text,
+            "can_embed_pdf": True,
+            "raw_url": f"/api/document/raw?path={rel_path}"
+        }
+
+    elif ext in {".txt", ".md"}:
+        try:
+            with open(target_file, "r", encoding="utf-8", errors="replace") as f:
+                content = f.read()
+
+            # Check if page delimiters exist
+            if "--- PAGE" in content or "=== PAGE" in content:
+                import re
+                parts = re.split(r'(?:---|===)\s*PAGE\s*(\d+)\s*(?:---|===)', content)
+                if parts[0].strip():
+                    pages.append({"page_number": 1, "text": parts[0].strip()})
+                for i in range(1, len(parts), 2):
+                    page_num = int(parts[i])
+                    page_txt = parts[i+1].strip()
+                    pages.append({"page_number": page_num, "text": page_txt})
+            else:
+                # Break down into virtual pages
+                paragraphs = content.split("\n\n")
+                current_p = 1
+                current_chunks = []
+                cur_len = 0
+                for para in paragraphs:
+                    current_chunks.append(para)
+                    cur_len += len(para)
+                    if cur_len >= 3000:
+                        pages.append({"page_number": current_p, "text": "\n\n".join(current_chunks)})
+                        current_p += 1
+                        current_chunks = []
+                        cur_len = 0
+                if current_chunks:
+                    pages.append({"page_number": current_p, "text": "\n\n".join(current_chunks)})
+                if not pages:
+                    pages.append({"page_number": 1, "text": content})
+
+            return {
+                "success": True,
+                "file_name": target_file.name,
+                "folder": target_file.parent.name,
+                "relative_path": rel_path,
+                "extension": ext,
+                "type": "Markdown" if ext == ".md" else "Text",
+                "size_formatted": format_file_size(file_size),
+                "total_pages": len(pages),
+                "pages": pages,
+                "full_text": content,
+                "can_embed_pdf": False,
+                "raw_url": f"/api/document/raw?path={rel_path}"
+            }
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": f"Failed to read document: {str(e)}"})
+
+    return JSONResponse(status_code=400, content={"error": "Unsupported file format."})
+
+
+@app.get("/api/document/raw")
+async def get_raw_document(path: str):
+    """
+    Serves the raw document file directly for in-browser PDF viewing or raw text download.
+    Strictly constrained to data/corpus/.
+    """
+    cfg = load_config()
+    corpus_dir = Path(cfg["paths"]["corpus_dir"]).resolve()
+    clean_path = path.strip().replace("\\", "/").lstrip("/")
+    target_file = (corpus_dir / clean_path).resolve()
+
+    if not str(target_file).startswith(str(corpus_dir)) or not target_file.exists() or not target_file.is_file():
+        return JSONResponse(status_code=404, content={"error": "File not found or access denied."})
+
+    ext = target_file.suffix.lower()
+    media_map = {
+        ".pdf": "application/pdf",
+        ".txt": "text/plain; charset=utf-8",
+        ".md": "text/markdown; charset=utf-8"
+    }
+    media_type = media_map.get(ext, "application/octet-stream")
+
+    return FileResponse(
+        path=str(target_file),
+        media_type=media_type,
+        filename=target_file.name,
+        headers={"Content-Disposition": f"inline; filename=\"{target_file.name}\""}
+    )
 
 
 @app.post("/api/restore-default-corpus")
