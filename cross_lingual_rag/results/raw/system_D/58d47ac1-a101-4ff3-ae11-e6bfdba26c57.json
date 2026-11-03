@@ -1,0 +1,128 @@
+{
+  "run_id": "58d47ac1-a101-4ff3-ae11-e6bfdba26c57",
+  "timestamp": "2026-11-01T21:24:23.625097+00:00",
+  "question_id": "LIVE_Q",
+  "system_id": "D",
+  "subject": "custom",
+  "category": "general",
+  "original_question": "जब मैं इसे चलाता हूँ, तो मुझे ValueError: need more than 1 value to unpack त्रुटि मिलती है।",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "uploaded_docs_learn_python_the_hard_way_a_very_p104_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p241_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p253_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p300_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p129_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p104_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 104,
+      "score": 0.5558,
+      "relevance_pct": "55.6%",
+      "text": "ptg999 87EVEN MORE PRACTICE First, run this like normal with python ex25.py to ﬁ nd any errors you have made. Once you have found all the errors you can and ﬁ xed them, you will then want to follow the WYSS section to complete the exercise. What You Should See In this exercise, we’re going to interact with your .py ﬁ le inside the python interpreter you used periodically to do calculations. You run that from the shell like this: $ python Python 2.7.1 (r271:86832, Jun 16 2011, 16:59:05) [GCC 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2335.15.00)] on darwin Type \"help\", \"copyright\", \"credits\" or \"license\" for more information. >>> Yours will look a little different from mine, but once you see the >>> prompt you can then type Python code in and it will run immediately. Here’s what it looks like when I do it: Exercise 25 Python Session Python 2.7.1 (r271:86832, Jun 16 2011, 16:59:05) [GCC 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2335.15.00)] on darwin Type \"help\", \"copyright\", \"credits\" or \"license\" for more information. >>> import ex25 >>> sentence = \"All good things come to those who wait.\" >>> words = ex25.break_words(sentence) >>> words ['All', 'good', 'things', 'come', 'to', 'those', 'who', 'wait.'] >>> sorted_words = ex25.sort_words(words) >>> sorted_words ['All', 'come', 'good', 'things', 'those', 'to', 'wait.', 'who'] >>> ex25.print_first_word(words) All >>> ex25.print_last_word(words) wait. >>> wrods Traceback (most recent call last): File \"<stdin>\", line 1, in <module> NameError: name 'wrods' is not defined >>> words ['good', 'things', 'come', 'to', 'those', 'who'] >>> ex25.print_first_word(sorted_words) All >>> ex25.print_last_word(sorted_words) who >>> sorted_words From the Library of Zed Shaw",
+      "token_count": 351
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p241_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 241,
+      "score": 0.5082,
+      "relevance_pct": "50.8%",
+      "text": "ptg999 224 LEARN PYTHON THE HARD WAY Common Student Questions I get ImportError \"No module named bin.app\". Again, this is because either you are in the wrong directory, you did not make a bin/__init__.py ﬁ le, or you did not set PYTHONPATH=. in your shell. Always remember these solutions, as they are so incredibly common that running to ask why you’re getting that error will only slow you down. I get __template__() takes no arguments (1 given) when I run the template. You probably forgot to put $def with (greeting) or a similar variable declaration at the top of the template. From the Library of Zed Shaw",
+      "token_count": 139
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p253_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 253,
+      "score": 0.5053,
+      "relevance_pct": "50.5%",
+      "text": "ptg999 236 LEARN PYTHON THE HARD WAY Common Student Questions I’m using sessions in my game and I can’t test it with nosetests. You need to read about sessions in the reloader: http://webpy.org/cookbook/session_with_reloader. I get an ImportError. Wrong directory. Wrong Python version. PYTHONPATH not set. No __init__.py ﬁ le. Spelling mistake in import. From the Library of Zed Shaw",
+      "token_count": 76
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p300_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 300,
+      "score": 0.4923,
+      "relevance_pct": "49.2%",
+      "text": "ptg999 283INDEX I IDLE, 16 if- else statements, 198, 229 if- statements, 100– 106, 120, 122 loops and, 106, 110 rules for, 120 import command errors involving, 198, 234. See also ImportError ﬁ les, 62– 63, 86– 90 modules, 138– 141 packages, 46– 47, 56 practice, 145– 146, 180, 193, 198 ImportError, 89, 189, 198, 212, 224, 236 “increment by” operator, 101 inﬁ nite loops, 118 inheritance, 144– 145, 170– 178 altering before or after, 172– 175 composition vs. 176– 177 explicitly overriding, 172, 174– 175 implicit, 171, 174– 175 multiple, 154, 175. See also super() function input(), 42– 43. See also user input instances, 144– 146, 150– 151 attributes and, 143– 144, 150, 154 inheritance and, 170– 172, 209 in practice, 209 self and, 143 int(), 43, 48, 72, 118, 196. See also raw_input() int(raw_input()), 43, 80 is- a relationships, 144– 145, 150– 154, 176 J JavaScript, 178, 216, 238 join() function, 129– 131 K keywords, 122– 123, 198 def keyword, 66– 68, 75, 123, 140, 224 except, 196 global, 122, 182 raise, 123, 203 self, 140– 146, 148, 154, 173 try, 196 Kivy, 237 Konsole, 9 L launchpad.net, 83 learning ignoring other programmers, 10, 115, 180, 182, 207, 243, 246 index cards for, 68, 92, 122, 244, 246– 248, 252, 276 overthinking, 48, 269 practicing the hard way, 1– 4, 11 reading code, 82– 83, 126– 127 reviewing, 81, 84– 89, 122– 127 self- learning, 122– 127, 276 testing your knowledge, 90– 91, 188 len() function, 62, 64 less command, 271– 272 lexicons, 194– 198, 200– 204 Linux, 6 command line commands, 245– 247, 271 installing packages on, 9– 10, 184– 185, 206 setting up Python on, 9– 11 Terminal, 245– 246 lists accessing elements of, 114– 116 arguments and, 128– 129 arrays vs., 108 colons in, 148 commas in, 30, 68, 106 common questions about, 108, 130– 131 dicts (dictionaries) vs., 135 functions and, 128– 130 indexing into, 132 From the Library of Zed Shaw",
+      "token_count": 426
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p129_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 129,
+      "score": 0.4805,
+      "relevance_pct": "48.0%",
+      "text": "ptg999 112 LEARN PYTHON THE HARD WAY 4. Rewrite the script again to use this function to see what effect that has. 5. Now, write it to use for- loops and range instead. Do you need the incrementor in the middle anymore? What happens if you do not get rid of it? If at any time that you are doing this it goes crazy (it probably will), just hold down CTRL and hit c (CTRL- c) and the program will abort. Common Student Questions What’s the difference between a for- loop and a while- loop? A for- loop can only iterate (loop) “over” collections of things. A while- loop can do any kind of iteration (looping) you want. However, while- loops are harder to get right and you normally can get many things done with for- loops. Loops are hard. How do I ﬁ gure them out? The main reason people don’t understand loops is because they can’t follow the “jumping” that the code does. When a loop runs, it goes through its block of code, and at the end it jumps back to the top. To visualize this, put print statements all over the loop, printing out where in the loop Python is running and what the variables are set to at those points. Put prints before the loop, at the top of the loop, in the middle, and at the bottom. Study the output and try to understand the jumping that’s going on. From the Library of Zed Shaw",
+      "token_count": 326
+    }
+  ],
+  "retrieval_scores": [
+    0.5558022260665894,
+    0.5081965327262878,
+    0.5052592754364014,
+    0.49227532744407654,
+    0.4804757237434387
+  ],
+  "source_documents": [
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 104,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p104_c0",
+      "subject": "uploaded_docs",
+      "rank": 1
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 241,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p241_c0",
+      "subject": "uploaded_docs",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 253,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p253_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 300,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p300_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 129,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p129_c0",
+      "subject": "uploaded_docs",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Uploaded Docs' (पृष्ठ 104, खंड: `uploaded_docs_learn_python_the_hard_way_a_very_p104_c0`) के अनुसार:\n\nptg999 87EVEN अधिक अभ्यास सबसे पहले, इसे आपके द्वारा की गई किसी भी त्रुटि को दूर करने के लिए python ex25.py के साथ सामान्य रूप से चलाएं। निर्माण 5658) (LLVM निर्माण 2335.15.00)] डार्विन पर टाइप करें \"सहायता \",\" कॉपीराइट \", \"क्रेडिट\" या \"लाइसेंस\" अधिक जानकारी के लिए। निर्माण 5658) (LLVM निर्माण 2335.15.00)] डार्विन पर टाइप करें \"सहायता \",\" कॉपीराइट \", \"क्रेडिट\" या \"लाइसेंस\" अधिक जानकारी के लिए।\n\nयह विवरण पृष्ठ 104 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 129.9,
+    "generation_latency_ms": 5168.9,
+    "total_latency_ms": 5299.08
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

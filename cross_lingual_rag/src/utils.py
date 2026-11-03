@@ -33,8 +33,21 @@ def get_project_root() -> Path:
 def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Loads and parses config.yaml, resolving path references to absolute paths.
+    Automatically loads environment variables from .env if present.
     """
     root = get_project_root()
+    
+    # Auto-load .env from project root or parent workspace
+    try:
+        import dotenv
+        if (root / ".env").exists():
+            dotenv.load_dotenv(root / ".env")
+        if (root.parent / ".env").exists():
+            dotenv.load_dotenv(root.parent / ".env")
+        dotenv.load_dotenv()
+    except Exception:
+        pass
+
     if config_path is None:
         target_path = root / "config.yaml"
     else:

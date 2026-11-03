@@ -3,359 +3,539 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cross-Lingual Academic RAG — Interactive Studio & Live Console</title>
+  <title>Cross-Lingual Academic RAG — Interactive Studio & Scientific Console</title>
   
-  <!-- Fonts: Inter for UI, JetBrains Mono for Code & Terminal -->
+  <!-- Fonts: Inter with 400 & 500 weights (Endlesstools Style), JetBrains Mono for Code/Terminal -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
+    /* ==========================================================================
+       ENDLESSTOOLS DESIGN SYSTEM TOKENS
+       Black-box gallery wall aesthetic. Elevation is drawn, not dropped.
+       ========================================================================== */
     :root {
-      --bg-base: #07090e;
-      --bg-surface: #0d111a;
-      --bg-card: #121724;
-      --bg-card-hover: #171d2e;
-      --bg-input: #0a0d14;
-      --bg-terminal: #05060a;
-      
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-medium: rgba(255, 255, 255, 0.16);
-      --border-focus: #6366f1;
+      /* Surfaces & Colors */
+      --color-obsidian-canvas: #080808;
+      --color-onyx-card: #181818;
+      --color-graphite-layer: #1e1e1e;
+      --color-slate-border: #373737;
+      --color-iron-border: #505050;
+      --color-ash-mute: #959595;
+      --color-paper-white: #ffffff;
+      --color-signal-blue: #1d9bf0;
+      --color-prism-gradient: linear-gradient(97.25deg, rgb(184, 255, 69) 3%, rgb(255, 203, 69) 22%, rgb(255, 0, 184) 100%);
 
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
-      --text-secondary: #cbd5e1;
+      /* Typography: Monotone weight palette (only 400 and 500 exist) */
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
 
-      --indigo: #6366f1;
-      --indigo-glow: rgba(99, 102, 241, 0.25);
-      --cyan: #38bdf8;
-      --emerald: #10b981;
-      --amber: #f59e0b;
-      --rose: #f43f5e;
-      --purple: #a855f7;
+      /* Type Scale with tight negative tracking */
+      --text-caption: 12px;
+      --leading-caption: 1.17;
+      --tracking-caption: -0.033em;
 
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
+      --text-body-sm: 14px;
+      --leading-body-sm: 1.25;
+      --tracking-body-sm: -0.03em;
+
+      --text-body: 16px;
+      --leading-body: 1.29;
+      --tracking-body: -0.03em;
+
+      --text-subheading: 18px;
+      --leading-subheading: 1.5;
+      --tracking-subheading: -0.03em;
+
+      --text-heading-sm: 22px;
+      --leading-heading-sm: 1.15;
+      --tracking-heading-sm: -0.025em;
+
+      --text-display: 34px;
+      --leading-display: 1.12;
+      --tracking-display: -0.025em;
+
+      /* Spacing Scale */
+      --spacing-unit: 4px;
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-20: 20px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+
+      /* Radii */
+      --radius-tags: 7px;
+      --radius-cards: 10px;
+      --radius-inputs: 10px;
+      --radius-buttons: 10px;
       --radius-full: 9999px;
+
+      /* Elevation: Hairlines ONLY. Never drop shadows. */
+      --border-hairline: 1px solid var(--color-slate-border);
+      --border-emphasis: 1px solid var(--color-iron-border);
+      --border-white: 1px solid var(--color-paper-white);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: var(--bg-base);
-      color: var(--text-main);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 14.5px;
-      line-height: 1.6;
+      background-color: var(--color-obsidian-canvas);
+      color: var(--color-paper-white);
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      line-height: var(--leading-body-sm);
+      letter-spacing: var(--tracking-body-sm);
+      font-weight: 400;
       min-height: 100vh;
       overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(56, 189, 248, 0.06) 0%, transparent 45%),
-        radial-gradient(circle at 50% 90%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
-      background-attachment: fixed;
     }
 
-    /* Header Nav */
+    /* --------------------------------------------------------------------------
+       Top Navigation Bar (Minimalist Floating Header)
+       -------------------------------------------------------------------------- */
     header.top-nav {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(7, 9, 14, 0.94);
+      background-color: rgba(8, 8, 8, 0.95);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 12px 24px;
+      border-bottom: var(--border-hairline);
+      padding: 14px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .brand-wrap {
+
+    .brand-lockup {
       display: flex;
       align-items: center;
       gap: 12px;
-    }
-    .brand-logo {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--indigo), var(--cyan));
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      color: #fff;
-      box-shadow: 0 0 16px var(--indigo-glow);
-    }
-    .brand-text h1 {
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text-main);
-    }
-    .brand-text span {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
+      text-decoration: none;
+      color: inherit;
     }
 
-    .nav-status-group {
+    .brand-glyph {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 2px;
+    }
+    .glyph-dot {
+      background: var(--color-paper-white);
+      border-radius: 50%;
+      opacity: 0.85;
+    }
+    .glyph-dot:nth-child(2) { background: #b8ff45; }
+    .glyph-dot:nth-child(4) { background: #ffcb45; }
+    .glyph-dot:nth-child(6) { background: #ff00b8; }
+
+    .brand-text h1 {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      color: var(--color-paper-white);
+      line-height: 1.15;
+    }
+    .brand-text span {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: -0.033em;
+      color: var(--color-ash-mute);
+    }
+
+    .nav-actions {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-    .status-badge {
+
+    /* Status Pills */
+    .telemetry-chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 4px 10px;
-      border-radius: var(--radius-full);
-      font-size: 12px;
-      font-weight: 500;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
+      border-radius: var(--radius-tags);
+      font-size: var(--text-caption);
+      letter-spacing: var(--tracking-caption);
+      background: transparent;
+      border: var(--border-hairline);
+      color: var(--color-ash-mute);
     }
     .pulse-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 8px var(--emerald);
-      animation: pulse 2s infinite;
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+      animation: pulse 2.4s infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 0.35; transform: scale(0.85); }
     }
 
-    /* Buttons */
+    /* --------------------------------------------------------------------------
+       Buttons (Endlesstools Style: Outlined Primary, Filled Pill, Ghost Text)
+       -------------------------------------------------------------------------- */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 7px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-buttons);
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      letter-spacing: var(--tracking-body-sm);
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.15s ease;
-      border: 1px solid transparent;
       outline: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--color-paper-white);
+      text-decoration: none;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--indigo), #4f46e5);
-      color: #fff;
-      box-shadow: 0 2px 10px var(--indigo-glow);
+
+    /* Primary Outlined Button */
+    .btn-outline-primary {
+      border: var(--border-white);
+      background: transparent;
+      color: var(--color-paper-white);
     }
-    .btn-primary:hover:not(:disabled) {
-      background: linear-gradient(135deg, #4f46e5, #4338ca);
-      transform: translateY(-1px);
+    .btn-outline-primary:hover:not(:disabled) {
+      background: var(--color-paper-white);
+      color: var(--color-obsidian-canvas);
     }
-    .btn-primary:disabled {
-      opacity: 0.5;
+
+    /* Filled Primary Pill */
+    .btn-filled-primary {
+      background: var(--color-paper-white);
+      color: var(--color-obsidian-canvas);
+      border-color: var(--color-paper-white);
+    }
+    .btn-filled-primary:hover:not(:disabled) {
+      background: #e5e5e5;
+    }
+
+    /* Secondary Outlined Button */
+    .btn-outline-secondary {
+      border: var(--border-hairline);
+      background: var(--color-onyx-card);
+      color: var(--color-paper-white);
+    }
+    .btn-outline-secondary:hover:not(:disabled) {
+      border-color: var(--color-iron-border);
+      background: var(--color-graphite-layer);
+    }
+
+    /* Ghost Text Button */
+    .btn-ghost {
+      border: 1px solid transparent;
+      color: var(--color-ash-mute);
+      padding: 6px 12px;
+    }
+    .btn-ghost:hover {
+      color: var(--color-paper-white);
+    }
+
+    /* Signal Blue Accent Button */
+    .btn-signal {
+      border: 1px solid var(--color-signal-blue);
+      color: var(--color-signal-blue);
+      background: transparent;
+    }
+    .btn-signal:hover {
+      background: rgba(29, 155, 240, 0.1);
+    }
+
+    .btn-sm {
+      padding: 5px 11px;
+      font-size: var(--text-caption);
+      letter-spacing: var(--tracking-caption);
+      border-radius: var(--radius-tags);
+    }
+    .btn:disabled {
+      opacity: 0.35;
       cursor: not-allowed;
     }
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: var(--border-medium);
-      color: var(--text-main);
-    }
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-    .btn-danger {
-      background: rgba(244, 63, 94, 0.15);
-      border-color: rgba(244, 63, 94, 0.3);
-      color: #fb7185;
-    }
-    .btn-danger:hover {
-      background: rgba(244, 63, 94, 0.25);
-    }
-    .btn-sm { padding: 4px 10px; font-size: 11.5px; }
 
-    /* Layout Grid */
-    .main-container {
-      max-width: 1600px;
+    /* --------------------------------------------------------------------------
+       Layout Architecture
+       -------------------------------------------------------------------------- */
+    .main-canvas {
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 20px 24px 60px;
+      padding: 24px 28px 80px;
+    }
+
+    /* Hero Section Block */
+    .hero-block {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: var(--border-hairline);
+    }
+    .hero-headline {
+      font-size: var(--text-display);
+      font-weight: 500;
+      line-height: var(--leading-display);
+      letter-spacing: var(--tracking-display);
+      color: var(--color-paper-white);
+      margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      font-size: var(--text-body);
+      font-weight: 400;
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-ash-mute);
+      max-width: 880px;
+    }
+
+    /* Telemetry KPI Row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    @media (max-width: 900px) {
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    .kpi-card {
+      background: var(--color-onyx-card);
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+      padding: 12px 16px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: var(--tracking-caption);
+      color: var(--color-ash-mute);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+    }
+
+    /* Two-Column Studio Layout */
+    .studio-grid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 20px;
+      margin-top: 24px;
     }
-    @media (max-width: 1200px) {
-      .main-container { grid-template-columns: 1fr; }
+    @media (max-width: 1180px) {
+      .studio-grid { grid-template-columns: 1fr; }
     }
 
-    /* Cards */
-    .card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
+    /* Container Cards */
+    .onyx-panel {
+      background-color: var(--color-onyx-card);
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+      padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      position: relative;
     }
-    .card-header {
+
+    .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: var(--border-hairline);
     }
-    .card-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-main);
+    .panel-title {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      color: var(--color-paper-white);
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .card-subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
+    .panel-desc {
+      font-size: var(--text-caption);
+      color: var(--color-ash-mute);
+      margin-top: 2px;
     }
 
-    /* Upload Zone */
-    .upload-dropzone {
-      border: 2px dashed rgba(99, 102, 241, 0.35);
-      background: rgba(99, 102, 241, 0.03);
-      border-radius: var(--radius-md);
-      padding: 22px;
+    /* --------------------------------------------------------------------------
+       Dynamic Multi-PDF Ingestion Zone
+       -------------------------------------------------------------------------- */
+    .upload-zone {
+      border: 1px dashed var(--color-iron-border);
+      background-color: var(--color-graphite-layer);
+      border-radius: var(--radius-cards);
+      padding: 24px 20px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: border 0.15s ease, background 0.15s ease;
     }
-    .upload-dropzone:hover, .upload-dropzone.dragover {
-      border-color: var(--indigo);
-      background: rgba(99, 102, 241, 0.08);
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--color-paper-white);
+      background-color: #242424;
     }
     .upload-icon {
-      font-size: 30px;
+      font-size: 26px;
       margin-bottom: 6px;
-      color: var(--indigo);
+      color: var(--color-ash-mute);
     }
-    .upload-text {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 3px;
+    .upload-headline {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+      margin-bottom: 2px;
     }
-    .upload-hint {
-      font-size: 11.5px;
-      color: var(--text-dim);
+    .upload-sub {
+      font-size: var(--text-caption);
+      color: var(--color-ash-mute);
     }
-    .file-chip-list {
+
+    .tag-chip-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 12px;
     }
-    .file-chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
+    .file-tag {
+      background: transparent;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
       padding: 4px 8px;
-      font-size: 11.5px;
-      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--color-signal-blue);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: var(--cyan);
     }
-    .file-chip .remove-file {
+    .file-tag .remove-btn {
+      color: #f87171;
       cursor: pointer;
-      color: var(--rose);
-      font-weight: 700;
+      font-weight: 500;
     }
 
-    /* Form Controls */
+    /* Form Fields */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
     .form-group {
       margin-bottom: 12px;
     }
     .form-label {
       display: block;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-ash-mute);
       text-transform: uppercase;
       letter-spacing: 0.04em;
+      margin-bottom: 6px;
     }
     .form-input, .form-textarea, .form-select {
       width: 100%;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 9px 12px;
-      color: var(--text-main);
+      background: var(--color-graphite-layer);
+      border: var(--border-hairline);
+      border-radius: var(--radius-inputs);
+      padding: 10px 14px;
+      color: var(--color-paper-white);
       font-family: inherit;
-      font-size: 13.5px;
-      transition: border 0.15s ease;
+      font-size: var(--text-body-sm);
+      letter-spacing: var(--tracking-body-sm);
       outline: none;
+      transition: border 0.15s ease;
     }
     .form-input:focus, .form-textarea:focus, .form-select:focus {
-      border-color: var(--indigo);
-      box-shadow: 0 0 0 2px var(--indigo-glow);
+      border-color: var(--color-paper-white);
     }
     .form-textarea {
       resize: vertical;
-      min-height: 72px;
+      min-height: 74px;
+      line-height: 1.5;
     }
 
-    /* Quick Question Chips */
-    .sample-chips {
+    /* --------------------------------------------------------------------------
+       Quick Sample Chips
+       -------------------------------------------------------------------------- */
+    .sample-chips-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .sample-chip {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-full);
+      background: transparent;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
       padding: 3px 10px;
-      font-size: 11.5px;
-      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: var(--tracking-caption);
+      color: var(--color-ash-mute);
       cursor: pointer;
       transition: all 0.15s ease;
     }
     .sample-chip:hover {
-      background: rgba(99, 102, 241, 0.15);
-      border-color: rgba(99, 102, 241, 0.4);
-      color: var(--text-main);
+      border-color: var(--color-signal-blue);
+      color: var(--color-paper-white);
     }
-    .sample-chip.custom-sample {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: rgba(16, 185, 129, 0.3);
-      color: #34d399;
+    .sample-chip.highlight-custom {
+      border-color: rgba(29, 155, 240, 0.4);
+      color: var(--color-signal-blue);
     }
 
-    /* Results Grid */
+    /* Checkboxes */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 42px;
+      font-size: 13px;
+      color: var(--color-ash-mute);
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--color-signal-blue);
+    }
+
+    /* --------------------------------------------------------------------------
+       System Results Comparison Cards
+       -------------------------------------------------------------------------- */
     .results-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
       margin-top: 16px;
     }
-    .system-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
+    .sys-card {
+      background: var(--color-graphite-layer);
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
       padding: 16px;
       transition: border 0.15s ease;
     }
-    .system-card:hover {
-      border-color: rgba(255, 255, 255, 0.15);
+    .sys-card:hover {
+      border-color: var(--color-iron-border);
     }
-    .system-badge-header {
+    .sys-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -363,591 +543,702 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .sys-pill {
+    .sys-badge {
       font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: var(--radius-sm);
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: var(--radius-tags);
       letter-spacing: 0.04em;
+      border: 1px solid transparent;
     }
-    .sys-pill-c { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-    .sys-pill-d { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .sys-pill-b { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .sys-pill-a { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .sys-badge-c { border-color: var(--color-signal-blue); color: var(--color-signal-blue); }
+    .sys-badge-d { border-color: #34d399; color: #34d399; }
+    .sys-badge-b { border-color: #c084fc; color: #c084fc; }
+    .sys-badge-a { border-color: #fbbf24; color: #fbbf24; }
 
-    .latency-pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+    .latency-tag {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
       padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--color-ash-mute);
+      border: var(--border-hairline);
     }
-    .answer-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius-sm);
+
+    .answer-display-box {
+      background: #141414;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
       padding: 12px 14px;
       font-size: 13.5px;
-      line-height: 1.65;
+      line-height: 1.6;
+      color: #e5e5e5;
       margin: 10px 0;
-      color: #f1f5f9;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    /* Rich Chunk Evidence Cards */
-    .chunk-list {
-      margin-top: 10px;
-    }
+    /* Evidentiary Chunks */
     .chunk-evidence-card {
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: var(--radius-sm);
+      background: #121212;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
       padding: 10px 12px;
       margin-bottom: 8px;
-      transition: all 0.2s ease;
+      transition: border 0.15s ease;
     }
     .chunk-evidence-card:hover {
-      background: rgba(255, 255, 255, 0.045);
-      border-color: rgba(99, 102, 241, 0.35);
+      border-color: var(--color-iron-border);
     }
-    .chunk-evidence-header {
+    .chunk-meta-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 6px;
       flex-wrap: wrap;
       gap: 6px;
     }
-    .chunk-rank-badge {
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 2px 7px;
+    .chunk-rank-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid #404040;
+      color: var(--color-paper-white);
     }
-    .chunk-rank-1 { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .chunk-rank-2 { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
-    .chunk-rank-other { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-subtle); }
-
     .chunk-page-pill {
       font-size: 11px;
       padding: 2px 6px;
       border-radius: 4px;
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      border: 1px solid var(--color-slate-border);
+      color: var(--color-ash-mute);
     }
     .chunk-score-pill {
+      font-family: var(--font-mono);
       font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
+      padding: 2px 6px;
+      color: var(--color-signal-blue);
     }
-    .chunk-score-bar-bg {
+
+    .match-bar-bg {
       width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.08);
+      height: 3px;
+      background: #262626;
       border-radius: 2px;
       margin: 6px 0 8px;
       overflow: hidden;
     }
-    .chunk-score-bar-fill {
+    .match-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--indigo), var(--cyan));
+      background: var(--color-signal-blue);
       border-radius: 2px;
-      transition: width 0.4s ease;
+      transition: width 0.3s ease;
     }
-    .chunk-text-preview {
+
+    .chunk-preview-text {
       font-size: 12px;
-      color: var(--text-secondary);
+      color: #a3a3a3;
       line-height: 1.55;
-      margin-bottom: 6px;
     }
-    .chunk-text-full {
+    .chunk-full-text {
       display: none;
+      font-family: var(--font-mono);
       font-size: 11.5px;
-      font-family: 'JetBrains Mono', monospace;
-      color: #cbd5e1;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 8px 10px;
-      border-radius: 4px;
-      line-height: 1.55;
-      margin-top: 6px;
-      max-height: 190px;
+      color: #d4d4d4;
+      background: #0d0d0d;
+      border: 1px solid var(--color-slate-border);
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 8px;
+      max-height: 200px;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-word;
-      border-left: 2px solid var(--indigo);
-    }
-    .chunk-toggle-btn {
-      background: none;
-      border: none;
-      color: var(--cyan);
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: underline;
-    }
-    .chunk-toggle-btn:hover {
-      color: #7dd3fc;
     }
 
-    /* Terminal Window */
-    .terminal-card {
-      background: var(--bg-terminal);
-      border: 1px solid #1a2030;
-      border-radius: var(--radius-lg);
+    /* --------------------------------------------------------------------------
+       Live Terminal Window (Endlesstools Precision Dark)
+       -------------------------------------------------------------------------- */
+    .terminal-container {
+      background-color: var(--color-obsidian-canvas);
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 520px;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+      height: 480px;
     }
-    .terminal-header {
-      background: #0a0d16;
-      border-bottom: 1px solid #182033;
-      padding: 9px 14px;
+    .terminal-top-bar {
+      background-color: #121212;
+      border-bottom: var(--border-hairline);
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .term-dots {
+    .terminal-dots {
       display: flex;
       gap: 6px;
     }
     .term-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
     }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
+    .dot-red { background: #555; }
+    .dot-yellow { background: #666; }
+    .dot-green { background: #888; }
 
     .term-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11.5px;
-      color: var(--text-dim);
-    }
-    .term-actions {
-      display: flex;
-      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-ash-mute);
     }
 
-    .terminal-body {
+    .terminal-console {
       flex: 1;
-      padding: 12px 16px;
+      padding: 14px;
       overflow-y: auto;
-      font-family: 'JetBrains Mono', Consolas, monospace;
-      font-size: 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
       line-height: 1.65;
-      color: #cbd5e1;
+      color: #d4d4d4;
       white-space: pre-wrap;
       word-break: break-all;
     }
-    .terminal-line {
+    .term-line {
       margin-bottom: 2px;
     }
-    .term-tag-upload { color: #38bdf8; font-weight: 600; }
-    .term-tag-ingest { color: #818cf8; font-weight: 600; }
-    .term-tag-embed { color: #c084fc; font-weight: 600; }
-    .term-tag-faiss { color: #34d399; font-weight: 600; }
-    .term-tag-sysc { color: #38bdf8; font-weight: 600; }
-    .term-tag-sysd { color: #10b981; font-weight: 600; }
-    .term-tag-query { color: #f59e0b; font-weight: 600; }
-    .term-tag-system { color: #94a3b8; font-weight: 600; }
+    .term-tag-upload { color: var(--color-signal-blue); }
+    .term-tag-ingest { color: #a78bfa; }
+    .term-tag-embed { color: #f472b6; }
+    .term-tag-faiss { color: #34d399; }
+    .term-tag-sysc { color: var(--color-signal-blue); }
+    .term-tag-sysd { color: #10b981; }
+    .term-tag-query { color: #fbbf24; }
+    .term-tag-pytest { color: #38bdf8; }
 
-    /* Chunks Explorer List */
-    .chunks-scroll-area {
-      max-height: 480px;
+    /* --------------------------------------------------------------------------
+       Scientific Report Section
+       -------------------------------------------------------------------------- */
+    .report-viewer-box {
+      background: var(--color-graphite-layer);
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
+      padding: 14px;
+      max-height: 380px;
       overflow-y: auto;
-      padding-right: 6px;
-    }
-    .chunk-card-item {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 12.5px;
-      transition: all 0.15s ease;
-    }
-    .chunk-card-item:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(99, 102, 241, 0.3);
-    }
-    .chunk-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #d4d4d4;
+      white-space: pre-wrap;
     }
 
-    /* Modal Backdrop */
-    .modal-overlay {
+    /* --------------------------------------------------------------------------
+       Modals
+       -------------------------------------------------------------------------- */
+    .modal-backdrop {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(8, 8, 8, 0.85);
       backdrop-filter: blur(8px);
       z-index: 100;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
-    .modal-card {
-      background: #0f1422;
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-lg);
+    .modal-window {
+      background: var(--color-onyx-card);
+      border: var(--border-emphasis);
+      border-radius: var(--radius-cards);
       max-width: 680px;
-      width: 90%;
+      width: 100%;
       padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
     }
-    .modal-header {
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: var(--border-hairline);
     }
-    .modal-close {
+    .modal-head h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-paper-white);
+    }
+    .modal-close-btn {
       cursor: pointer;
       font-size: 20px;
-      color: var(--text-muted);
+      color: var(--color-ash-mute);
+    }
+    .modal-close-btn:hover { color: var(--color-paper-white); }
+
+    .code-block {
+      background: #0d0d0d;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-signal-blue);
+      margin: 8px 0;
+      overflow-x: auto;
     }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
+    ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
   </style>
 </head>
 <body>
 
-  <!-- Top Sticky Navigation Bar -->
+  <!-- Persistent Top Navigation Bar -->
   <header class="top-nav">
-    <div class="brand-wrap">
-      <div class="brand-logo">🔬</div>
+    <a href="#" class="brand-lockup">
+      <div class="brand-glyph">
+        <div class="glyph-dot"></div>
+        <div class="glyph-dot"></div>
+        <div class="glyph-dot"></div>
+        <div class="glyph-dot"></div>
+        <div class="glyph-dot"></div>
+        <div class="glyph-dot"></div>
+      </div>
       <div class="brand-text">
-        <h1>Cross-Lingual Academic RAG Studio</h1>
-        <span>v3.0 · Arbitrary Multi-PDF Dynamic Vector Ingestion & Real-Time Console</span>
+        <h1>Cross-Lingual Academic RAG</h1>
+        <span>v3.5 · Endlesstools Style Dark Instrument</span>
       </div>
-    </div>
+    </a>
 
-    <div class="nav-status-group">
-      <div class="status-badge">
-        <div class="pulse-dot" id="ws-indicator"></div>
-        <span id="ws-status-text">Live Console Connected</span>
+    <div class="nav-actions">
+      <div class="telemetry-chip">
+        <div class="pulse-dot" id="socket-pulse"></div>
+        <span id="socket-status">Console Connected</span>
       </div>
-      <div class="status-badge">
-        📚 <span id="stat-chunks-count">...</span> Chunks Indexed
+
+      <div class="telemetry-chip">
+        📚 <span id="stat-chunks-counter" style="color: var(--color-paper-white); font-weight: 500;">...</span> Chunks
       </div>
-      <div class="status-badge" style="cursor: pointer;" onclick="openInfoModal()">
-        🤖 <span id="stat-model-mode">Dynamic Synthesis ($0)</span>
+
+      <div class="telemetry-chip" style="cursor: pointer;" onclick="openEnvModal()">
+        🤖 <span id="stat-active-mode" style="color: var(--color-signal-blue);">Detecting LLM...</span>
       </div>
-      <button class="btn btn-outline btn-sm" onclick="openInfoModal()">
-        ℹ️ API Transparency & Costs
+
+      <button class="btn btn-outline-secondary btn-sm" onclick="openEnvModal()">
+        ⚡ Gemini API Setup
       </button>
-      <button class="btn btn-outline btn-sm" onclick="restoreDefaultCorpus()">
-        🔄 Reset Default 5 CS Books
+
+      <button class="btn btn-outline-primary btn-sm" onclick="openReportModal()">
+        📥 Benchmark Report
+      </button>
+
+      <button class="btn btn-ghost btn-sm" onclick="restoreDefaultCorpus()">
+        ↺ Reset 5 CS Books
       </button>
     </div>
   </header>
 
-  <!-- Main Grid Dashboard -->
-  <main class="main-container">
+  <!-- Main Canvas -->
+  <main class="main-canvas">
 
-    <!-- LEFT COLUMN: PDF Upload Studio & Query Lab -->
-    <div class="left-col">
+    <!-- Hero Intro Block -->
+    <div class="hero-block">
+      <h2 class="hero-headline">English–Hindi Cross-Lingual Academic RAG Studio</h2>
+      <p class="hero-subtitle">
+        Empirical evaluation laboratory comparing Translation-Mediated RAG (System C) and Zero-Shot Multilingual Vector Alignment (System D) against Monolingual Upper Bounds (System B) across any arbitrary PDF.
+      </p>
 
-      <!-- 1. DYNAMIC PDF UPLOAD STUDIO -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📥 Dynamic Multi-PDF Ingestion Studio</div>
-            <div class="card-subtitle">Drop ANY bunch of academic PDFs. Extracts physical pages, creates page-aware chunks, and builds FAISS vector stores live.</div>
-          </div>
+      <!-- Micro KPI Row -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Evaluated Runs</div>
+          <div class="kpi-value" id="kpi-runs">73 Deduplicated</div>
         </div>
-
-        <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('pdf-file-input').click()">
-          <input type="file" id="pdf-file-input" multiple accept=".pdf" style="display: none;" onchange="handleFileSelect(event)">
-          <div class="upload-icon">📄</div>
-          <div class="upload-text">Drag & drop ANY PDFs here, or click to browse</div>
-          <div class="upload-hint">Upload Textbooks, Research Papers, Lecture Slides, System Architecture Guides, Notes, etc.</div>
+        <div class="kpi-card">
+          <div class="kpi-label">System B (English RAG) MRR</div>
+          <div class="kpi-value" style="color: #c084fc;">0.944</div>
         </div>
-
-        <div class="file-chip-list" id="selected-files-list"></div>
-
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px; margin-top: 14px;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Subject / Collection Tag</label>
-            <input type="text" id="subject-input" class="form-input" value="uploaded_docs" placeholder="e.g. voice_agent, medical_ai, physics">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Corpus Action Mode</label>
-            <select id="replace-corpus-select" class="form-select">
-              <option value="false">Append to Existing Corpus</option>
-              <option value="true">Replace Entire Corpus (Wipe old)</option>
-            </select>
-          </div>
+        <div class="kpi-card">
+          <div class="kpi-label">System C (Translation) MRR</div>
+          <div class="kpi-value" style="color: var(--color-signal-blue);">0.895</div>
         </div>
-
-        <div style="margin-top: 14px; display: flex; justify-content: flex-end; gap: 10px;">
-          <button class="btn btn-primary" id="btn-ingest" onclick="uploadAndIngestPDFs()" disabled>
-            ⚡ Ingest & Build Dual Vector Stores
-          </button>
+        <div class="kpi-card">
+          <div class="kpi-label">System D (Multilingual) MRR</div>
+          <div class="kpi-value" style="color: #34d399;">0.708</div>
         </div>
-      </section>
-
-      <!-- 2. INTERACTIVE QUERY LAB -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">💬 Cross-Lingual Question Lab (Systems A, B, C, D)</div>
-            <div class="card-subtitle">Formulate queries in Hindi. Inspect real chunk evidence, physical page citations, and Cosine similarity scoring.</div>
-          </div>
-        </div>
-
-        <!-- Quick Sample Chips -->
-        <div class="sample-chips">
-          <span style="font-size: 11px; color: var(--text-dim); margin-right: 4px;">Sample Queries:</span>
-          <span class="sample-chip custom-sample" onclick="loadSample('वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?', 'What is the architecture of the voice agent platform?', 'VOICE_01', 'Voice AI')">🎙️ Voice Agent Architecture</span>
-          <span class="sample-chip" onclick="loadSample('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail when a graph contains negative edge weights?', 'ALGO_01', 'Algorithms')">Dijkstra Negative Weights</span>
-          <span class="sample-chip" onclick="loadSample('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four necessary conditions for deadlock?', 'OS_01', 'Operating Systems')">Deadlock 4 Conditions</span>
-          <span class="sample-chip" onclick="loadSample('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for in transaction processing?', 'DBMS_01', 'DBMS')">ACID Properties</span>
-          <span class="sample-chip" onclick="loadSample('टीसीपी 3-वे हैंडशेक के तीन चरण क्या हैं?', 'What are the three steps in the TCP 3-Way Handshake?', 'NET_01', 'Computer Networks')">TCP 3-Way Handshake</span>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="form-group">
-            <label class="form-label">Hindi Question (Inputs for Systems C & D)</label>
-            <textarea id="query-hi-input" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें (जैसे: वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?)..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">English Question (Optional Baseline for B)</label>
-            <textarea id="query-en-input" class="form-textarea" placeholder="English equivalent question for monolingual upper-bound baseline..."></textarea>
-          </div>
-        </div>
-
-        <!-- Scope & System Selectors -->
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-top: 6px; align-items: center;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Search Scope Filter (Eliminates Bias)</label>
-            <select id="query-scope-select" class="form-select">
-              <option value="all">🔍 Search All Documents (Uploaded PDFs + Benchmark CS Books)</option>
-              <option value="uploaded_only" selected>📂 Search Uploaded PDFs Only (Strictly Arbitrary Ingested Docs)</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Active Systems</label>
-            <div style="display: flex; gap: 10px; align-items: center; height: 38px; font-size: 12px; color: var(--text-muted);">
-              <label style="cursor: pointer;"><input type="checkbox" id="chk-c" checked> System C</label>
-              <label style="cursor: pointer;"><input type="checkbox" id="chk-d" checked> System D</label>
-              <label style="cursor: pointer;"><input type="checkbox" id="chk-b" checked> System B</label>
-              <label style="cursor: pointer;"><input type="checkbox" id="chk-a"> System A</label>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
-          <button class="btn btn-primary" id="btn-run-query" onclick="executeCrossLingualQuery()">
-            🚀 Run Query Across Systems
-          </button>
-        </div>
-
-        <!-- Results Display Cards -->
-        <div class="results-grid" id="results-container" style="display: none;">
-          
-          <!-- System C -->
-          <div class="system-card" id="card-sys-c">
-            <div class="system-badge-header">
-              <div>
-                <span class="sys-pill sys-pill-c">SYSTEM C · TRANSLATION RAG</span>
-                <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 8px;">Hindi $\to$ English MT $\to$ all-mpnet-base-v2</span>
-              </div>
-              <span class="latency-pill" id="lat-sys-c">0.0 ms</span>
-            </div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 4px;">
-              <strong>Translated Query:</strong> <span id="trans-query-c" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace;">-</span>
-            </div>
-            <div class="answer-box" id="ans-sys-c">Awaiting execution...</div>
-            <div class="chunk-list" id="chunks-sys-c"></div>
-          </div>
-
-          <!-- System D -->
-          <div class="system-card" id="card-sys-d">
-            <div class="system-badge-header">
-              <div>
-                <span class="sys-pill sys-pill-d">SYSTEM D · DIRECT MULTILINGUAL RAG</span>
-                <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 8px;">Zero MT · paraphrase-multilingual-MiniLM-L12-v2</span>
-              </div>
-              <span class="latency-pill" id="lat-sys-d">0.0 ms</span>
-            </div>
-            <div class="answer-box" id="ans-sys-d">Awaiting execution...</div>
-            <div class="chunk-list" id="chunks-sys-d"></div>
-          </div>
-
-          <!-- System B -->
-          <div class="system-card" id="card-sys-b">
-            <div class="system-badge-header">
-              <div>
-                <span class="sys-pill sys-pill-b">SYSTEM B · MONOLINGUAL ENGLISH RAG</span>
-                <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 8px;">Monolingual Upper-Bound Baseline</span>
-              </div>
-              <span class="latency-pill" id="lat-sys-b">0.0 ms</span>
-            </div>
-            <div class="answer-box" id="ans-sys-b">Awaiting execution...</div>
-            <div class="chunk-list" id="chunks-sys-b"></div>
-          </div>
-
-          <!-- System A -->
-          <div class="system-card" id="card-sys-a">
-            <div class="system-badge-header">
-              <div>
-                <span class="sys-pill sys-pill-a">SYSTEM A · DIRECT LLM BASELINE</span>
-                <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 8px;">Zero-Retrieval Parametric Baseline</span>
-              </div>
-              <span class="latency-pill" id="lat-sys-a">0.0 ms</span>
-            </div>
-            <div class="answer-box" id="ans-sys-a">Awaiting execution...</div>
-          </div>
-
-        </div>
-      </section>
-
+      </div>
     </div>
 
-    <!-- RIGHT COLUMN: Live Terminal & Active Chunks Explorer -->
-    <div class="right-col">
+    <!-- Studio Grid (Left: Ingestion & Query Lab, Right: Terminal & Reports) -->
+    <div class="studio-grid">
 
-      <!-- 3. LIVE TERMINAL WINDOW -->
-      <section class="terminal-card">
-        <div class="terminal-header">
-          <div class="term-dots">
-            <div class="term-dot dot-red"></div>
-            <div class="term-dot dot-yellow"></div>
-            <div class="term-dot dot-green"></div>
+      <!-- LEFT COLUMN -->
+      <div class="studio-left">
+
+        <!-- 1. DYNAMIC PDF INGESTION STUDIO -->
+        <section class="onyx-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">📥 Dynamic Multi-PDF Ingestion Studio</div>
+              <div class="panel-desc">Drop ANY academic or technical PDFs. Ingests pages, builds dual FAISS indexes live with zero hardcoded domain bias.</div>
+            </div>
           </div>
-          <div class="term-title">bash — cross_lingual_rag.live_terminal</div>
-          <div class="term-actions">
-            <button class="btn btn-outline btn-sm" onclick="runPytestCommand()">🧪 Run Pytest</button>
-            <button class="btn btn-outline btn-sm" onclick="runBenchmarkCommand()">📊 Benchmark</button>
-            <button class="btn btn-outline btn-sm" onclick="clearTerminal()">🧹 Clear</button>
+
+          <div class="upload-zone" id="drop-target" onclick="document.getElementById('file-selector').click()">
+            <input type="file" id="file-selector" multiple accept=".pdf" style="display: none;" onchange="handleFileSelection(event)">
+            <div class="upload-icon">📄</div>
+            <div class="upload-headline">Drop ANY PDF documents here, or click to browse</div>
+            <div class="upload-sub">Textbooks, research papers, technical guides, lecture slides (PDF format)</div>
           </div>
-        </div>
-        <div class="terminal-body" id="terminal-body">
-          <div class="terminal-line">[SYSTEM] Initializing Cross-Lingual Academic RAG Live Terminal...</div>
-          <div class="terminal-line">[SYSTEM] English Embedder: sentence-transformers/all-mpnet-base-v2 (768d)</div>
-          <div class="terminal-line">[SYSTEM] Multilingual Embedder: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 (384d)</div>
-          <div class="terminal-line">[SYSTEM] Terminal socket listening on ws://localhost:8000/ws/terminal.</div>
-        </div>
-      </section>
 
-      <!-- 4. ACTIVE CHUNKS EXPLORER -->
-      <section class="card" style="margin-top: 20px;">
-        <div class="card-header">
-          <div>
-            <div class="card-title">📚 Active Chunks & Vector Store Explorer</div>
-            <div class="card-subtitle">Real-time inspection of all page-aware chunks indexed in the FAISS vector stores.</div>
+          <div class="tag-chip-row" id="staged-files-list"></div>
+
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Subject / Collection Identifier</label>
+              <input type="text" id="target-subject" class="form-input" value="uploaded_docs" placeholder="e.g. voice_agent, medical_ai, physics">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Corpus Action Mode</label>
+              <select id="corpus-action-mode" class="form-select">
+                <option value="false">Append to Existing Corpus</option>
+                <option value="true">Replace Entire Corpus (Wipe Old)</option>
+              </select>
+            </div>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="fetchChunksList()">🔄 Refresh</button>
-        </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
-          <input type="text" id="chunk-search-input" class="form-input" placeholder="🔍 Search chunk text..." oninput="filterChunksDisplay()">
-          <select id="chunk-subject-select" class="form-select" onchange="filterChunksDisplay()">
-            <option value="all">All Subjects</option>
-          </select>
-        </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button class="btn btn-filled-primary" id="btn-ingest-exec" onclick="uploadAndBuildVectorStore()" disabled>
+              ⚡ Ingest & Build Dual Vector Stores
+            </button>
+          </div>
+        </section>
 
-        <div class="chunks-scroll-area" id="chunks-container">
-          <div style="text-align: center; padding: 20px; color: var(--text-dim);">Loading active chunks...</div>
-        </div>
-      </section>
+        <!-- 2. CROSS-LINGUAL QUERY LAB -->
+        <section class="onyx-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">💬 Cross-Lingual Question Lab (Systems A, B, C, D)</div>
+              <div class="panel-desc">Input questions in Hindi. Inspect real chunk evidence, cosine similarity matching, and page-grounded citations.</div>
+            </div>
+          </div>
+
+          <!-- Sample Benchmark Chips -->
+          <div class="sample-chips-row">
+            <span style="font-size: 11px; color: var(--color-ash-mute); margin-right: 4px; display: flex; align-items: center;">Samples:</span>
+            <span class="sample-chip highlight-custom" onclick="loadBenchmarkSample('वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?', 'What is the architecture of the voice agent platform?', 'VOICE_01', 'Voice AI')">🎙️ Voice Agent Architecture</span>
+            <span class="sample-chip" onclick="loadBenchmarkSample('डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?', 'Why does Dijkstra\'s algorithm fail when a graph contains negative edge weights?', 'ALGO_01', 'Algorithms')">Dijkstra Negative Weights</span>
+            <span class="sample-chip" onclick="loadBenchmarkSample('डेडलॉक की चार आवश्यक कॉफमैन शर्तें क्या हैं?', 'What are Coffman\'s four necessary conditions for deadlock?', 'OS_01', 'Operating Systems')">Deadlock 4 Conditions</span>
+            <span class="sample-chip" onclick="loadBenchmarkSample('ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों का पूरा अर्थ क्या है?', 'What do the ACID properties stand for in transaction processing?', 'DBMS_01', 'DBMS')">ACID Properties</span>
+            <span class="sample-chip" onclick="loadBenchmarkSample('टीसीपी 3-वे हैंडशेक के तीन चरण क्या हैं?', 'What are the three steps in the TCP 3-Way Handshake?', 'NET_01', 'Computer Networks')">TCP 3-Way Handshake</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Hindi Question (Inputs for Systems C & D)</label>
+              <textarea id="input-query-hi" class="form-textarea" placeholder="यहाँ अपना प्रश्न हिंदी में लिखें (जैसे: वॉयस एजेंट प्लेटफॉर्म का आर्किटेक्चर क्या है?)..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">English Baseline Question (Optional for System B)</label>
+              <textarea id="input-query-en" class="form-textarea" placeholder="English equivalent question for monolingual upper-bound baseline..."></textarea>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 12px; margin-top: 4px; align-items: center;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Search Scope Filter (Eliminates Bias)</label>
+              <select id="select-scope-filter" class="form-select">
+                <option value="uploaded_only" selected>📂 Search Uploaded PDFs Only (Strictly Arbitrary Ingested Docs)</option>
+                <option value="all">🔍 Search All Documents (Uploaded PDFs + Benchmark CS Books)</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Active Comparison Systems</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" id="chk-sys-c" checked> System C</label>
+                <label><input type="checkbox" id="chk-sys-d" checked> System D</label>
+                <label><input type="checkbox" id="chk-sys-b" checked> System B</label>
+                <label><input type="checkbox" id="chk-sys-a"> System A</label>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <button class="btn btn-outline-secondary btn-sm" id="btn-download-query-report" onclick="downloadCurrentQueryReport()" style="display: none;">
+              📄 Download Query Execution Report (.md)
+            </button>
+            <div style="margin-left: auto;">
+              <button class="btn btn-outline-primary" id="btn-run-query" onclick="executeCrossLingualQuery()">
+                🚀 Run Query Across Systems
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Results Comparison Grid -->
+          <div class="results-grid" id="query-results-panel" style="display: none;">
+
+            <!-- System C -->
+            <div class="sys-card" id="card-c">
+              <div class="sys-header">
+                <div>
+                  <span class="sys-badge sys-badge-c">SYSTEM C · TRANSLATION RAG</span>
+                  <span style="font-size: 11.5px; color: var(--color-ash-mute); margin-left: 8px;">Hindi $\to$ MT $\to$ all-mpnet-base-v2 (768d)</span>
+                </div>
+                <span class="latency-tag" id="lat-c">0.0 ms</span>
+              </div>
+              <div style="font-size: 12px; color: var(--color-ash-mute); margin-bottom: 6px; background: #111; padding: 6px 10px; border-radius: 4px; border: var(--border-hairline);">
+                <strong>Translated Query:</strong> <span id="trans-text-c" style="color: var(--color-signal-blue); font-family: var(--font-mono);">-</span>
+              </div>
+              <div class="answer-display-box" id="ans-c">Awaiting execution...</div>
+              <div class="chunks-holder" id="chunks-c"></div>
+            </div>
+
+            <!-- System D -->
+            <div class="sys-card" id="card-d">
+              <div class="sys-header">
+                <div>
+                  <span class="sys-badge sys-badge-d">SYSTEM D · DIRECT MULTILINGUAL RAG</span>
+                  <span style="font-size: 11.5px; color: var(--color-ash-mute); margin-left: 8px;">Zero MT · paraphrase-multilingual-MiniLM-L12-v2 (384d)</span>
+                </div>
+                <span class="latency-tag" id="lat-d">0.0 ms (Zero MT)</span>
+              </div>
+              <div class="answer-display-box" id="ans-d">Awaiting execution...</div>
+              <div class="chunks-holder" id="chunks-d"></div>
+            </div>
+
+            <!-- System B -->
+            <div class="sys-card" id="card-b">
+              <div class="sys-header">
+                <div>
+                  <span class="sys-badge sys-badge-b">SYSTEM B · MONOLINGUAL ENGLISH RAG</span>
+                  <span style="font-size: 11.5px; color: var(--color-ash-mute); margin-left: 8px;">Monolingual Upper-Bound Baseline</span>
+                </div>
+                <span class="latency-tag" id="lat-b">0.0 ms</span>
+              </div>
+              <div class="answer-display-box" id="ans-b">Awaiting execution...</div>
+              <div class="chunks-holder" id="chunks-b"></div>
+            </div>
+
+            <!-- System A -->
+            <div class="sys-card" id="card-a">
+              <div class="sys-header">
+                <div>
+                  <span class="sys-badge sys-badge-a">SYSTEM A · DIRECT LLM BASELINE</span>
+                  <span style="font-size: 11.5px; color: var(--color-ash-mute); margin-left: 8px;">Zero-Retrieval Parametric Baseline</span>
+                </div>
+                <span class="latency-tag" id="lat-a">0.0 ms</span>
+              </div>
+              <div class="answer-display-box" id="ans-a">Awaiting execution...</div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="studio-right">
+
+        <!-- 3. REAL-TIME TERMINAL & COMMAND CENTER -->
+        <section class="terminal-container">
+          <div class="terminal-top-bar">
+            <div class="terminal-dots">
+              <div class="term-dot dot-red"></div>
+              <div class="term-dot dot-yellow"></div>
+              <div class="term-dot dot-green"></div>
+            </div>
+            <div class="term-title">bash — cross_lingual_rag.live_terminal</div>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-outline-secondary btn-sm" onclick="triggerPytest()">🧪 Pytest</button>
+              <button class="btn btn-outline-secondary btn-sm" onclick="triggerBenchmark()">📊 Benchmark</button>
+              <button class="btn btn-ghost btn-sm" onclick="clearTerminalLogs()">Clear</button>
+            </div>
+          </div>
+          <div class="terminal-console" id="terminal-screen">
+            <div class="term-line">[SYSTEM] Initializing Cross-Lingual Academic RAG Live Terminal...</div>
+            <div class="term-line">[SYSTEM] Ready. WebSocket connected to ws://localhost:8000/ws/terminal.</div>
+          </div>
+        </section>
+
+        <!-- 4. SCIENTIFIC EVALUATION REPORT & DOWNLOADS -->
+        <section class="onyx-panel" style="margin-top: 20px;">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">📊 Scientific Evaluation Report</div>
+              <div class="panel-desc" id="report-last-updated">Benchmark results across Systems A, B, C, D.</div>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <a href="/api/report/download/markdown" class="btn btn-outline-primary btn-sm" download>
+                📥 Download .md
+              </a>
+              <a href="/api/report/download/csv" class="btn btn-outline-secondary btn-sm" download>
+                📊 Download .csv
+              </a>
+              <button class="btn btn-ghost btn-sm" onclick="fetchLatestEvaluationReport()">
+                🔄
+              </button>
+            </div>
+          </div>
+
+          <div class="report-viewer-box" id="report-preview-text">
+            Loading latest evaluation report...
+          </div>
+        </section>
+
+        <!-- 5. ACTIVE CHUNKS & VECTOR STORE EXPLORER -->
+        <section class="onyx-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">📚 Active Chunks Explorer</div>
+              <div class="panel-desc">Real-time inspection of chunks indexed in the active FAISS indexes.</div>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm" onclick="fetchActiveChunks()">🔄 Refresh</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+            <input type="text" id="chunk-search-filter" class="form-input" style="padding: 6px 10px; font-size: 12px;" placeholder="🔍 Filter chunk text..." oninput="filterChunksList()">
+            <select id="chunk-subject-filter" class="form-select" style="padding: 6px 10px; font-size: 12px;" onchange="filterChunksList()">
+              <option value="all">All Subjects</option>
+            </select>
+          </div>
+
+          <div id="chunks-scroll-list" style="max-height: 320px; overflow-y: auto; padding-right: 4px;">
+            <div style="text-align: center; color: var(--color-ash-mute); padding: 16px;">Loading indexed chunks...</div>
+          </div>
+        </section>
+
+      </div>
 
     </div>
 
   </main>
 
-  <!-- AI Model & API Transparency Modal -->
-  <div class="modal-overlay" id="info-modal" onclick="if(event.target===this) closeInfoModal()">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 style="font-size: 16px; font-weight: 700;">🤖 AI Model & API Key Transparency Guide</h3>
-        <span class="modal-close" onclick="closeInfoModal()">&times;</span>
+  <!-- MODAL 1: GEMINI & ENVIRONMENT VARIABLE GUIDE -->
+  <div class="modal-backdrop" id="modal-env" onclick="if(event.target===this) closeEnvModal()">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>⚡ Gemini API & Environment Variable Configuration</h3>
+        <span class="modal-close-btn" onclick="closeEnvModal()">&times;</span>
       </div>
-      <div style="font-size: 13.5px; line-height: 1.7; color: var(--text-muted);">
-        <p><strong>1. Why did `gpt-4o-mini` appear in the configuration?</strong><br>
-        `gpt-4o-mini` was set as the default model name label in `cross_lingual_rag/config.yaml` to specify the target architecture for academic research comparisons.</p>
-        
-        <p style="margin-top: 10px;"><strong>2. Did it use an API key or charge you anything?</strong><br>
-        <span style="color: var(--emerald); font-weight: 600;">No! Absolutely not. $0 charged.</span> The generator checks <code>os.getenv("OPENAI_API_KEY")</code>. Since you did not provide an OpenAI key, the system operated in <strong>Deterministic Context-Grounded Synthesis</strong> mode with zero network calls and zero cost.</p>
 
-        <p style="margin-top: 10px;"><strong>3. Are the chunk details and answers genuine?</strong><br>
-        <span style="color: var(--cyan); font-weight: 600;">Yes, 100% genuine!</span> Every chunk is physically extracted from your uploaded PDFs using <code>pypdf</code>, embedded into FAISS using genuine PyTorch transformer models (<code>all-mpnet-base-v2</code> and <code>paraphrase-multilingual-MiniLM-L12-v2</code>), and scored via mathematical Inner Product / Cosine Similarity. The answers dynamically cite the exact source document name and physical page number.</p>
+      <div style="font-size: 13.5px; line-height: 1.7; color: var(--color-ash-mute);">
+        <p>
+          <strong>Active Generation Mode:</strong> 
+          <span id="modal-active-mode-tag" style="color: var(--color-signal-blue); font-weight: 500;">Deterministic Context-Grounded Synthesizer ($0 Cost)</span>
+        </p>
 
-        <p style="margin-top: 10px;"><strong>4. How can I connect a 100% Free LLM?</strong><br>
-        You can use <strong>Google Gemini 2.0 Flash</strong> completely free via Google AI Studio. Simply run in your PowerShell terminal before starting the server:
-        <pre style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 4px; margin-top: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--cyan);">$env:GEMINI_API_KEY = "YOUR_FREE_GEMINI_KEY"</pre>
-        The system will detect it automatically and stream responses directly from Gemini!</p>
+        <p style="margin-top: 12px;">
+          <strong>Where to set your Gemini API Key:</strong><br>
+          You can obtain a 100% Free Gemini API key from <a href="https://aistudio.google.com/" target="_blank" style="color: var(--color-signal-blue);">Google AI Studio</a>. Add it using any of the three methods below:
+        </p>
+
+        <div style="margin-top: 10px;">
+          <strong style="color: var(--color-paper-white);">Method 1: PowerShell Terminal (Recommended & Instant)</strong>
+          <div class="code-block">$env:GEMINI_API_KEY = "AIzaSyYourActualGeminiKeyHere"
+python cross_lingual_rag/server.py</div>
+        </div>
+
+        <div style="margin-top: 10px;">
+          <strong style="color: var(--color-paper-white);">Method 2: Create a `.env` File (Persistent)</strong>
+          <p style="font-size: 12.5px;">Create a file named <code>.env</code> in your project root or <code>cross_lingual_rag/.env</code>:</p>
+          <div class="code-block">GEMINI_API_KEY=AIzaSyYourActualGeminiKeyHere</div>
+        </div>
+
+        <div style="margin-top: 10px;">
+          <strong style="color: var(--color-paper-white);">Method 3: Windows Persistent System Variable</strong>
+          <div class="code-block">setx GEMINI_API_KEY "AIzaSyYourActualGeminiKeyHere"</div>
+        </div>
+
+        <p style="margin-top: 14px; font-size: 12.5px; border-left: 2px solid var(--color-signal-blue); padding-left: 8px;">
+          <strong>No API key? No problem!</strong> Without a key, the system runs locally with $0 cost, extracting facts dynamically from the retrieved PDF chunks and citing the exact document name and page number.
+        </p>
       </div>
-      <div style="margin-top: 18px; text-align: right;">
-        <button class="btn btn-primary btn-sm" onclick="closeInfoModal()">Understood</button>
+
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-outline-primary btn-sm" onclick="closeEnvModal()">Done</button>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript Client -->
+  <!-- MODAL 2: FULL SCIENTIFIC REPORT VIEWER -->
+  <div class="modal-backdrop" id="modal-report" onclick="if(event.target===this) closeReportModal()">
+    <div class="modal-window" style="max-width: 860px;">
+      <div class="modal-head">
+        <h3>📊 Comprehensive Scientific Evaluation Report</h3>
+        <span class="modal-close-btn" onclick="closeReportModal()">&times;</span>
+      </div>
+
+      <div class="report-viewer-box" id="full-report-markdown" style="max-height: 480px; font-size: 12px;">
+        Loading report...
+      </div>
+
+      <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 8px;">
+          <a href="/api/report/download/markdown" class="btn btn-outline-primary btn-sm" download>
+            📥 Download Report (.md)
+          </a>
+          <a href="/api/report/download/csv" class="btn btn-outline-secondary btn-sm" download>
+            📊 Download Dataset (.csv)
+          </a>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeReportModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Client Controller -->
   <script>
     let ws = null;
     let selectedFiles = [];
-    let allChunksCache = [];
+    let chunksCache = [];
+    let lastQueryExecutionData = null;
 
-    // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
-      initWebSocket();
-      fetchSystemStatus();
-      fetchChunksList();
-      setupDragDrop();
+      connectTerminalWebSocket();
+      fetchTelemetryStatus();
+      fetchActiveChunks();
+      fetchLatestEvaluationReport();
+      initializeDragAndDrop();
     });
 
-    // WebSocket Management
-    function initWebSocket() {
+    // --------------------------------------------------------------------------
+    // WebSocket Terminal Stream
+    // --------------------------------------------------------------------------
+    function connectTerminalWebSocket() {
       const loc = window.location;
-      const wsUri = (loc.protocol === "https:" ? "wss:" : "ws:") + "//" + loc.host + "/ws/terminal";
-      ws = new WebSocket(wsUri);
+      const wsProtocol = loc.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${wsProtocol}//${loc.host}/ws/terminal`;
+      ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
-        document.getElementById('ws-status-text').innerText = "Live Console Connected";
-        document.getElementById('ws-indicator').style.background = "#10b981";
+        document.getElementById('socket-status').innerText = 'Console Connected';
+        document.getElementById('socket-pulse').style.background = '#10b981';
       };
 
       ws.onmessage = (event) => {
-        appendTerminalLine(event.data);
+        appendTerminalMessage(event.data);
       };
 
       ws.onclose = () => {
-        document.getElementById('ws-status-text').innerText = "Reconnecting...";
-        document.getElementById('ws-indicator').style.background = "#ef4444";
-        setTimeout(initWebSocket, 2500);
+        document.getElementById('socket-status').innerText = 'Reconnecting...';
+        document.getElementById('socket-pulse').style.background = '#ef4444';
+        setTimeout(connectTerminalWebSocket, 2500);
       };
     }
 
-    function appendTerminalLine(text) {
-      const termBody = document.getElementById('terminal-body');
-      const div = document.createElement('div');
-      div.className = 'terminal-line';
+    function appendTerminalMessage(rawText) {
+      const screen = document.getElementById('terminal-screen');
+      const line = document.createElement('div');
+      line.className = 'term-line';
 
-      // Syntax highlight tags
-      let html = text
+      let formatted = rawText
         .replace(/\[UPLOAD\]/g, '<span class="term-tag-upload">[UPLOAD]</span>')
         .replace(/\[INGEST\]/g, '<span class="term-tag-ingest">[INGEST]</span>')
         .replace(/\[CHUNK\]/g, '<span class="term-tag-embed">[CHUNK]</span>')
@@ -957,120 +1248,122 @@
         .replace(/\[SYS-D\]/g, '<span class="term-tag-sysd">[SYS-D]</span>')
         .replace(/\[SYS-B\]/g, '<span class="term-tag-embed">[SYS-B]</span>')
         .replace(/\[QUERY\]/g, '<span class="term-tag-query">[QUERY]</span>')
-        .replace(/\[PYTEST\]/g, '<span class="term-tag-embed">[PYTEST]</span>')
+        .replace(/\[PYTEST\]/g, '<span class="term-tag-pytest">[PYTEST]</span>')
         .replace(/\[BENCHMARK\]/g, '<span class="term-tag-query">[BENCHMARK]</span>');
 
-      div.innerHTML = html;
-      termBody.appendChild(div);
-      termBody.scrollTop = termBody.scrollHeight;
+      line.innerHTML = formatted;
+      screen.appendChild(line);
+      screen.scrollTop = screen.scrollHeight;
     }
 
-    function clearTerminal() {
-      document.getElementById('terminal-body').innerHTML = '<div class="terminal-line">[SYSTEM] Terminal console cleared.</div>';
+    function clearTerminalLogs() {
+      document.getElementById('terminal-screen').innerHTML = '<div class="term-line">[SYSTEM] Console cleared.</div>';
     }
 
-    // Drag and Drop Handling
-    function setupDragDrop() {
-      const dz = document.getElementById('dropzone');
+    // --------------------------------------------------------------------------
+    // Drag & Drop Ingestion
+    // --------------------------------------------------------------------------
+    function initializeDragAndDrop() {
+      const dropBox = document.getElementById('drop-target');
       ['dragenter', 'dragover'].forEach(name => {
-        dz.addEventListener(name, (e) => { e.preventDefault(); dz.classList.add('dragover'); }, false);
+        dropBox.addEventListener(name, (e) => { e.preventDefault(); dropBox.classList.add('dragover'); }, false);
       });
       ['dragleave', 'drop'].forEach(name => {
-        dz.addEventListener(name, (e) => { e.preventDefault(); dz.classList.remove('dragover'); }, false);
+        dropBox.addEventListener(name, (e) => { e.preventDefault(); dropBox.classList.remove('dragover'); }, false);
       });
-      dz.addEventListener('drop', (e) => {
+      dropBox.addEventListener('drop', (e) => {
         const dt = e.dataTransfer;
         const files = Array.from(dt.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
-        addFiles(files);
+        addStagedFiles(files);
       });
     }
 
-    function handleFileSelect(e) {
+    function handleFileSelection(e) {
       const files = Array.from(e.target.files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
-      addFiles(files);
+      addStagedFiles(files);
     }
 
-    function addFiles(files) {
+    function addStagedFiles(files) {
       files.forEach(f => {
         if (!selectedFiles.some(cur => cur.name === f.name)) {
           selectedFiles.push(f);
         }
       });
-      renderFileChips();
+      renderStagedChips();
     }
 
-    function removeFile(index) {
-      selectedFiles.splice(index, 1);
-      renderFileChips();
+    function removeStagedFile(idx) {
+      selectedFiles.splice(idx, 1);
+      renderStagedChips();
     }
 
-    function renderFileChips() {
-      const list = document.getElementById('selected-files-list');
+    function renderStagedChips() {
+      const list = document.getElementById('staged-files-list');
       list.innerHTML = '';
       selectedFiles.forEach((f, idx) => {
-        const chip = document.createElement('div');
-        chip.className = 'file-chip';
-        chip.innerHTML = `📄 ${f.name} (${(f.size/1024).toFixed(0)} KB) <span class="remove-file" onclick="removeFile(${idx})">&times;</span>`;
-        list.appendChild(chip);
+        const tag = document.createElement('div');
+        tag.className = 'file-tag';
+        tag.innerHTML = `📄 ${f.name} (${(f.size/1024).toFixed(0)} KB) <span class="remove-btn" onclick="removeStagedFile(${idx})">&times;</span>`;
+        list.appendChild(tag);
       });
-      document.getElementById('btn-ingest').disabled = selectedFiles.length === 0;
+      document.getElementById('btn-ingest-exec').disabled = selectedFiles.length === 0;
     }
 
-    // Upload & Ingest PDFs
-    async function uploadAndIngestPDFs() {
+    async function uploadAndBuildVectorStore() {
       if (selectedFiles.length === 0) return;
-      const btn = document.getElementById('btn-ingest');
+      const btn = document.getElementById('btn-ingest-exec');
       btn.disabled = true;
       btn.innerText = '⚡ Ingesting & Building FAISS...';
 
       const formData = new FormData();
       selectedFiles.forEach(f => formData.append('files', f));
-      formData.append('subject', document.getElementById('subject-input').value.trim() || 'uploaded_docs');
-      formData.append('replace_corpus', document.getElementById('replace-corpus-select').value);
+      formData.append('subject', document.getElementById('target-subject').value.trim() || 'uploaded_docs');
+      formData.append('replace_corpus', document.getElementById('corpus-action-mode').value);
 
       try {
         const resp = await fetch('/api/upload-pdfs', { method: 'POST', body: formData });
         const data = await resp.json();
         if (resp.ok) {
           selectedFiles = [];
-          renderFileChips();
-          document.getElementById('pdf-file-input').value = '';
-          fetchSystemStatus();
-          fetchChunksList();
+          renderStagedChips();
+          document.getElementById('file-selector').value = '';
+          fetchTelemetryStatus();
+          fetchActiveChunks();
         } else {
           alert('Upload failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
-        alert('Network error during upload: ' + err.message);
+        alert('Upload network error: ' + err.message);
       } finally {
         btn.disabled = false;
         btn.innerText = '⚡ Ingest & Build Dual Vector Stores';
       }
     }
 
-    // Execute Cross-Lingual Query
+    // --------------------------------------------------------------------------
+    // Query Execution
+    // --------------------------------------------------------------------------
     async function executeCrossLingualQuery() {
-      const qHi = document.getElementById('query-hi-input').value.trim();
-      const qEn = document.getElementById('query-en-input').value.trim();
+      const qHi = document.getElementById('input-query-hi').value.trim();
+      const qEn = document.getElementById('input-query-en').value.trim();
       if (!qHi) {
         alert('Please enter a query in Hindi.');
         return;
       }
 
       const systems = [];
-      if (document.getElementById('chk-c').checked) systems.push('C');
-      if (document.getElementById('chk-d').checked) systems.push('D');
-      if (document.getElementById('chk-b').checked) systems.push('B');
-      if (document.getElementById('chk-a').checked) systems.push('A');
+      if (document.getElementById('chk-sys-c').checked) systems.push('C');
+      if (document.getElementById('chk-sys-d').checked) systems.push('D');
+      if (document.getElementById('chk-sys-b').checked) systems.push('B');
+      if (document.getElementById('chk-sys-a').checked) systems.push('A');
 
-      const scopeFilter = document.getElementById('query-scope-select') ? document.getElementById('query-scope-select').value : 'all';
+      const scopeFilter = document.getElementById('select-scope-filter').value;
 
       const btn = document.getElementById('btn-run-query');
       btn.disabled = true;
       btn.innerText = '⏳ Executing...';
 
-      const resultsBox = document.getElementById('results-container');
-      resultsBox.style.display = 'grid';
+      document.getElementById('query-results-panel').style.display = 'grid';
 
       try {
         const resp = await fetch('/api/query', {
@@ -1083,63 +1376,71 @@
             subject_filter: scopeFilter
           })
         });
+
         const data = await resp.json();
         if (resp.ok && data.results) {
-          renderQueryResults(data.results);
+          lastQueryExecutionData = {
+            question_hi: qHi,
+            question_en: qEn,
+            scope: scopeFilter,
+            results: data.results
+          };
+          document.getElementById('btn-download-query-report').style.display = 'inline-flex';
+          renderSystemExecutionResults(data.results);
         } else {
           alert('Query failed.');
         }
       } catch (err) {
-        alert('Network error executing query: ' + err.message);
+        alert('Query network error: ' + err.message);
       } finally {
         btn.disabled = false;
         btn.innerText = '🚀 Run Query Across Systems';
       }
     }
 
-    function renderQueryResults(res) {
+    function renderSystemExecutionResults(res) {
       // System C
       if (res.C) {
-        document.getElementById('card-sys-c').style.display = 'block';
-        document.getElementById('lat-sys-c').innerText = `${res.C.latencies.total_latency_ms.toFixed(1)} ms`;
-        document.getElementById('trans-query-c').innerText = res.C.translated_question || 'None';
-        document.getElementById('ans-sys-c').innerText = res.C.generated_answer || 'No answer generated.';
-        renderChunksDetailed('chunks-sys-c', res.C.retrieved_chunks_details, res.C.retrieved_chunks, res.C.retrieval_scores);
+        document.getElementById('card-c').style.display = 'block';
+        document.getElementById('lat-c').innerText = `${res.C.latencies.total_latency_ms.toFixed(1)} ms`;
+        document.getElementById('trans-text-c').innerText = res.C.translated_question || 'None';
+        document.getElementById('ans-c').innerText = res.C.generated_answer || 'No answer generated.';
+        renderEvidentiaryChunks('chunks-c', res.C.retrieved_chunks_details, res.C.retrieved_chunks, res.C.retrieval_scores);
       } else {
-        document.getElementById('card-sys-c').style.display = 'none';
+        document.getElementById('card-c').style.display = 'none';
       }
 
       // System D
       if (res.D) {
-        document.getElementById('card-sys-d').style.display = 'block';
-        document.getElementById('lat-sys-d').innerText = `${res.D.latencies.total_latency_ms.toFixed(1)} ms (Zero MT)`;
-        document.getElementById('ans-sys-d').innerText = res.D.generated_answer || 'No answer generated.';
-        renderChunksDetailed('chunks-sys-d', res.D.retrieved_chunks_details, res.D.retrieved_chunks, res.D.retrieval_scores);
+        document.getElementById('card-d').style.display = 'block';
+        document.getElementById('lat-d').innerText = `${res.D.latencies.total_latency_ms.toFixed(1)} ms (Zero MT)`;
+        document.getElementById('ans-d').innerText = res.D.generated_answer || 'No answer generated.';
+        renderEvidentiaryChunks('chunks-d', res.D.retrieved_chunks_details, res.D.retrieved_chunks, res.D.retrieval_scores);
       } else {
-        document.getElementById('card-sys-d').style.display = 'none';
+        document.getElementById('card-d').style.display = 'none';
       }
 
       // System B
       if (res.B) {
-        document.getElementById('card-sys-b').style.display = 'block';
-        document.getElementById('lat-sys-b').innerText = `${res.B.latencies.total_latency_ms.toFixed(1)} ms`;
-        document.getElementById('ans-sys-b').innerText = res.B.generated_answer || 'No answer generated.';
-        renderChunksDetailed('chunks-sys-b', res.B.retrieved_chunks_details, res.B.retrieved_chunks, res.B.retrieval_scores);
+        document.getElementById('card-b').style.display = 'block';
+        document.getElementById('lat-b').innerText = `${res.B.latencies.total_latency_ms.toFixed(1)} ms`;
+        document.getElementById('ans-b').innerText = res.B.generated_answer || 'No answer generated.';
+        renderEvidentiaryChunks('chunks-b', res.B.retrieved_chunks_details, res.B.retrieved_chunks, res.B.retrieval_scores);
       } else {
-        document.getElementById('card-sys-b').style.display = 'none';
+        document.getElementById('card-b').style.display = 'none';
       }
 
       // System A
       if (res.A) {
-        document.getElementById('card-sys-a').style.display = 'block';
-        document.getElementById('lat-sys-a').innerText = `${res.A.latencies.total_latency_ms.toFixed(1)} ms`;
-        document.getElementById('ans-sys-a').innerText = res.A.generated_answer || 'No answer generated.';
+        document.getElementById('card-a').style.display = 'block';
+        document.getElementById('lat-a').innerText = `${res.A.latencies.total_latency_ms.toFixed(1)} ms (Zero Retrieval)`;
+        document.getElementById('ans-a').innerText = res.A.generated_answer || 'No answer generated.';
       } else {
-        document.getElementById('card-sys-a').style.display = 'none';
+        document.getElementById('card-a').style.display = 'none';
       }
     }
 
-    function renderChunksDetailed(containerId, details, fallbackChunks, fallbackScores) {
+    function renderEvidentiaryChunks(containerId, details, fallbackChunks, fallbackScores) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
 
@@ -1153,26 +1454,25 @@
           page: (cid.match(/_p(\d+)/) || [null, 1])[1],
           score: fallbackScores && fallbackScores[i] !== undefined ? fallbackScores[i] : 0.0,
           relevance_pct: fallbackScores && fallbackScores[i] !== undefined ? Math.max(0, fallbackScores[i]) * 100 : 0.0,
-          text: "Passage excerpt extracted from indexed corpus.",
+          text: 'Passage excerpt extracted from indexed corpus.',
           token_count: 0
         }));
       }
 
       if (list.length === 0) {
-        container.innerHTML = '<div style="font-size: 11.5px; color: var(--text-dim); padding: 4px;">No relevant chunks found for this search filter.</div>';
+        container.innerHTML = '<div style="font-size: 11.5px; color: var(--color-ash-mute); padding: 4px;">No relevant chunks found.</div>';
         return;
       }
 
-      const titleDiv = document.createElement('div');
-      titleDiv.style = "font-size: 11px; font-weight: 700; color: var(--text-muted); margin: 10px 0 6px; text-transform: uppercase; letter-spacing: 0.05em;";
-      titleDiv.innerText = `Top-${Math.min(list.length, 5)} Evidentiary Passages Retrieved from PDF(s):`;
-      container.appendChild(titleDiv);
+      const title = document.createElement('div');
+      title.style = 'font-size: 11px; font-weight: 500; color: var(--color-ash-mute); margin: 8px 0 4px; text-transform: uppercase; letter-spacing: 0.04em;';
+      title.innerText = `Top-${Math.min(list.length, 5)} Evidentiary Passages Retrieved from PDF(s):`;
+      container.appendChild(title);
 
       list.slice(0, 5).forEach((item, idx) => {
         const card = document.createElement('div');
         card.className = 'chunk-evidence-card';
 
-        const rankClass = idx === 0 ? 'chunk-rank-1' : (idx < 3 ? 'chunk-rank-2' : 'chunk-rank-other');
         const scoreVal = typeof item.score === 'number' ? item.score.toFixed(4) : parseFloat(item.score || 0).toFixed(4);
         const pctVal = typeof item.relevance_pct === 'number' ? item.relevance_pct.toFixed(1) : (parseFloat(item.score || 0) * 100).toFixed(1);
         const pNum = item.page || 1;
@@ -1182,31 +1482,31 @@
         const uid = 'chunk_' + containerId + '_' + idx;
 
         card.innerHTML = `
-          <div class="chunk-evidence-header">
+          <div class="chunk-meta-row">
             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-              <span class="chunk-rank-badge ${rankClass}">Rank #${idx + 1}</span>
+              <span class="chunk-rank-pill">#${idx + 1}</span>
               <span class="chunk-page-pill">📄 Page ${pNum}</span>
-              <span style="font-size: 12px; font-weight: 600; color: #e2e8f0;" title="${docName}">${docName}</span>
+              <span style="font-size: 12px; color: var(--color-paper-white); font-weight: 500;" title="${docName}">${docName}</span>
             </div>
             <div>
               <span class="chunk-score-pill">Cosine: <strong>${scoreVal}</strong> (${pctVal}%)</span>
             </div>
           </div>
-          <div class="chunk-score-bar-bg">
-            <div class="chunk-score-bar-fill" style="width: ${Math.min(100, Math.max(0, pctVal))}%;"></div>
+          <div class="match-bar-bg">
+            <div class="match-bar-fill" style="width: ${Math.min(100, Math.max(0, pctVal))}%;"></div>
           </div>
-          <div class="chunk-text-preview" id="${uid}_preview">${shortText}</div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-            <button class="chunk-toggle-btn" onclick="toggleChunkFull('${uid}', this)">[+ View Full Extracted Passage (${item.token_count || 'N/A'} tokens)]</button>
-            <button class="btn btn-outline btn-sm" style="padding: 2px 7px; font-size: 10.5px;" onclick="copyChunkText('${uid}')">📋 Copy Excerpt</button>
+          <div class="chunk-preview-text" id="${uid}_preview">${shortText}</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+            <button class="btn btn-ghost btn-sm" style="padding: 2px 0; color: var(--color-signal-blue);" onclick="toggleChunkExpansion('${uid}', this)">[+ View Full Extracted Passage (${item.token_count || 'N/A'} tokens)]</button>
+            <button class="btn btn-outline-secondary btn-sm" style="padding: 2px 8px; font-size: 10px;" onclick="copyChunkContent('${uid}')">📋 Copy</button>
           </div>
-          <div class="chunk-text-full" id="${uid}">${textSnippet}</div>
+          <div class="chunk-full-text" id="${uid}">${textSnippet}</div>
         `;
         container.appendChild(card);
       });
     }
 
-    function toggleChunkFull(uid, btn) {
+    function toggleChunkExpansion(uid, btn) {
       const el = document.getElementById(uid);
       const preview = document.getElementById(uid + '_preview');
       if (el.style.display === 'block') {
@@ -1220,39 +1520,59 @@
       }
     }
 
-    function copyChunkText(uid) {
+    function copyChunkContent(uid) {
       const el = document.getElementById(uid);
       if (el) {
         navigator.clipboard.writeText(el.innerText).then(() => {
           alert('Passage copied to clipboard!');
-        }).catch(err => {
-          console.error(err);
         });
       }
     }
 
-    // Sample Question Loader
-    function loadSample(qHi, qEn, qid, subj) {
-      document.getElementById('query-hi-input').value = qHi;
-      document.getElementById('query-en-input').value = qEn;
-      if (qid === 'VOICE_01') {
-        document.getElementById('query-scope-select').value = 'uploaded_only';
-      } else {
-        document.getElementById('query-scope-select').value = 'all';
+    // --------------------------------------------------------------------------
+    // Download Current Query Execution Report
+    // --------------------------------------------------------------------------
+    async function downloadCurrentQueryReport() {
+      if (!lastQueryExecutionData) return;
+      try {
+        const resp = await fetch('/api/report/download/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(lastQueryExecutionData)
+        });
+        const blob = await resp.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'latest_query_execution_report.md';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } catch (e) {
+        alert('Download error: ' + e.message);
       }
-      appendTerminalLine(`[QUERY] Loaded sample query: ${qid} (${subj})`);
     }
 
-    // System Status & Chunks
-    async function fetchSystemStatus() {
+    // --------------------------------------------------------------------------
+    // Telemetry & Evaluation Reports
+    // --------------------------------------------------------------------------
+    async function fetchTelemetryStatus() {
       try {
         const resp = await fetch('/api/system-status');
         const data = await resp.json();
-        document.getElementById('stat-chunks-count').innerText = data.total_chunks_indexed || 0;
-        document.getElementById('stat-model-mode').innerText = data.active_mode;
+        document.getElementById('stat-chunks-counter').innerText = data.total_chunks_indexed || 0;
+        
+        let modeLabel = 'Deterministic Synthesizer ($0)';
+        if (data.has_gemini_key) {
+          modeLabel = 'Gemini 2.0 Flash (Free API)';
+        } else if (data.has_openai_key) {
+          modeLabel = 'OpenAI API';
+        }
+        document.getElementById('stat-active-mode').innerText = modeLabel;
+        document.getElementById('modal-active-mode-tag').innerText = modeLabel;
 
-        // Populate subjects in filter
-        const sel = document.getElementById('chunk-subject-select');
+        // Subject selector
+        const sel = document.getElementById('chunk-subject-filter');
         sel.innerHTML = '<option value="all">All Subjects</option>';
         (data.subjects || []).forEach(s => {
           const opt = document.createElement('option');
@@ -1261,28 +1581,44 @@
           sel.appendChild(opt);
         });
       } catch (e) {
-        console.error('Failed to fetch system status', e);
+        console.error('Telemetry fetch error', e);
       }
     }
 
-    async function fetchChunksList() {
-      const container = document.getElementById('chunks-container');
+    async function fetchLatestEvaluationReport() {
+      try {
+        const resp = await fetch('/api/report/latest');
+        const data = await resp.json();
+        if (data.success && data.markdown) {
+          document.getElementById('report-preview-text').innerText = data.markdown;
+          document.getElementById('full-report-markdown').innerText = data.markdown;
+          if (data.last_updated) {
+            document.getElementById('report-last-updated').innerText = `Last updated: ${data.last_updated}`;
+          }
+        }
+      } catch (e) {
+        document.getElementById('report-preview-text').innerText = 'Failed to load report.';
+      }
+    }
+
+    async function fetchActiveChunks() {
+      const list = document.getElementById('chunks-scroll-list');
       try {
         const resp = await fetch('/api/chunks');
         const data = await resp.json();
-        allChunksCache = data.chunks || [];
-        filterChunksDisplay();
+        chunksCache = data.chunks || [];
+        filterChunksList();
       } catch (e) {
-        container.innerHTML = '<div style="color: var(--rose); padding: 12px;">Failed to load chunks.</div>';
+        list.innerHTML = '<div style="color: #f87171; padding: 12px;">Failed to load active chunks.</div>';
       }
     }
 
-    function filterChunksDisplay() {
-      const container = document.getElementById('chunks-container');
-      const subj = document.getElementById('chunk-subject-select').value;
-      const search = document.getElementById('chunk-search-input').value.toLowerCase().trim();
+    function filterChunksList() {
+      const container = document.getElementById('chunks-scroll-list');
+      const subj = document.getElementById('chunk-subject-filter').value;
+      const search = document.getElementById('chunk-search-filter').value.toLowerCase().trim();
 
-      let filtered = allChunksCache;
+      let filtered = chunksCache;
       if (subj !== 'all') {
         filtered = filtered.filter(c => (c.subject || '').toLowerCase() === subj.toLowerCase());
       }
@@ -1295,22 +1631,33 @@
 
       container.innerHTML = '';
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align: center; color: var(--text-dim); padding: 20px;">No chunks match filter.</div>';
+        container.innerHTML = '<div style="text-align: center; color: var(--color-ash-mute); padding: 16px;">No matching chunks found.</div>';
         return;
       }
 
       filtered.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'chunk-card-item';
-        div.innerHTML = `
-          <div class="chunk-meta">
-            <span><strong>${c.chunk_id}</strong> (Page ${c.page || '1'})</span>
-            <span style="color: var(--cyan);">${c.subject || 'general'} · ${c.token_count || 0} tokens</span>
+        const card = document.createElement('div');
+        card.className = 'chunk-evidence-card';
+        card.innerHTML = `
+          <div class="chunk-meta-row">
+            <span style="font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-white); font-weight: 500;">${c.chunk_id}</span>
+            <span class="chunk-page-pill">Page ${c.page || 1} · ${c.subject || 'general'}</span>
           </div>
-          <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">${(c.text || '').substring(0, 180)}...</div>
+          <div class="chunk-preview-text">${(c.text || '').substring(0, 160)}...</div>
         `;
-        container.appendChild(div);
+        container.appendChild(card);
       });
+    }
+
+    function loadBenchmarkSample(qHi, qEn, qid, subj) {
+      document.getElementById('input-query-hi').value = qHi;
+      document.getElementById('input-query-en').value = qEn;
+      if (qid === 'VOICE_01') {
+        document.getElementById('select-scope-filter').value = 'uploaded_only';
+      } else {
+        document.getElementById('select-scope-filter').value = 'all';
+      }
+      appendTerminalMessage(`[QUERY] Loaded benchmark question: ${qid} (${subj})`);
     }
 
     async function restoreDefaultCorpus() {
@@ -1319,38 +1666,40 @@
         const resp = await fetch('/api/restore-default-corpus', { method: 'POST' });
         const data = await resp.json();
         if (resp.ok) {
-          fetchSystemStatus();
-          fetchChunksList();
+          fetchTelemetryStatus();
+          fetchActiveChunks();
+          fetchLatestEvaluationReport();
         }
       } catch (e) {
-        alert('Restore failed: ' + e.message);
+        alert('Restore error: ' + e.message);
       }
     }
 
-    // Commands triggered from Terminal
-    async function runPytestCommand() {
+    async function triggerPytest() {
       try {
         await fetch('/api/run-pytest', { method: 'POST' });
       } catch (e) {
-        alert('Failed to trigger pytest: ' + e.message);
+        alert('Pytest trigger failed: ' + e.message);
       }
     }
 
-    async function runBenchmarkCommand() {
+    async function triggerBenchmark() {
       try {
         await fetch('/api/run-benchmark', { method: 'POST' });
+        fetchLatestEvaluationReport();
       } catch (e) {
-        alert('Failed to trigger benchmark: ' + e.message);
+        alert('Benchmark trigger failed: ' + e.message);
       }
     }
 
-    // Info Modal
-    function openInfoModal() {
-      document.getElementById('info-modal').style.display = 'flex';
+    // Modal Helpers
+    function openEnvModal() { document.getElementById('modal-env').style.display = 'flex'; }
+    function closeEnvModal() { document.getElementById('modal-env').style.display = 'none'; }
+    function openReportModal() { 
+      fetchLatestEvaluationReport();
+      document.getElementById('modal-report').style.display = 'flex'; 
     }
-    function closeInfoModal() {
-      document.getElementById('info-modal').style.display = 'none';
-    }
+    function closeReportModal() { document.getElementById('modal-report').style.display = 'none'; }
   </script>
 </body>
 </html>

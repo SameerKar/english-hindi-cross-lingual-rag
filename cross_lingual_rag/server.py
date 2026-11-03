@@ -29,7 +29,7 @@ if sys.stderr and hasattr(sys.stderr, "reconfigure"):
 
 from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 # Ensure cross_lingual_rag and project root are in sys.path
@@ -43,6 +43,7 @@ if str(script_dir) not in sys.path:
 from src.utils import load_config, ensure_directory, get_project_root
 from src.ingestion import CorpusIngestor
 from src.vector_store import build_dual_indexes
+from src.evaluation import EvaluationHarness
 from src.pipelines import PipelineOrchestrator
 from src.evaluation import EvaluationHarness
 
@@ -399,6 +400,159 @@ async def run_benchmark_command():
     reload_orchestrator_instance()
     await terminal.broadcast("[BENCHMARK] Complete 68-Run Execution Finished and Reports Updated.")
     return {"success": proc.returncode == 0, "exit_code": proc.returncode}
+
+
+# ---------------------------------------------------------------------------
+# Report Generation & Download Endpoints
+# ---------------------------------------------------------------------------
+
+@app.get("/api/report/latest")
+async def get_latest_report():
+    """
+    Returns the latest scientific evaluation report in Markdown and summary metrics.
+    If the report file doesn't exist yet, it automatically runs the evaluation harness.
+    """
+    cfg = load_config()
+    report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+    csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+
+    if not report_path.exists():
+        harness = EvaluationHarness(cfg)
+        harness.run_evaluation()
+
+    content = ""
+    if report_path.exists():
+        with open(report_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+    mtime_str = ""
+    if report_path.exists():
+        mtime = datetime.fromtimestamp(report_path.stat().st_mtime)
+        mtime_str = mtime.strftime("%Y-%m-%d %H:%M:%S")
+
+    return {
+        "success": True,
+        "markdown": content,
+        "last_updated": mtime_str,
+        "has_csv": csv_path.exists(),
+        "has_markdown": report_path.exists()
+    }
+
+
+@app.get("/api/report/download/markdown")
+async def download_report_markdown():
+    """Downloads the evaluation_report.md file as an attachment."""
+    cfg = load_config()
+    report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+    if not report_path.exists():
+        harness = EvaluationHarness(cfg)
+        harness.run_evaluation()
+    if not report_path.exists():
+        return JSONResponse(status_code=404, content={"error": "Report not found"})
+    return FileResponse(
+        str(report_path),
+        media_type="text/markdown",
+        filename="cross_lingual_rag_evaluation_report.md"
+    )
+
+
+@app.get("/api/report/download/csv")
+async def download_report_csv():
+    """Downloads the consolidated benchmark_results.csv as an attachment."""
+    cfg = load_config()
+    csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+    if not csv_path.exists():
+        harness = EvaluationHarness(cfg)
+        harness.run_evaluation()
+    if not csv_path.exists():
+        return JSONResponse(status_code=404, content={"error": "Benchmark CSV not found"})
+    return FileResponse(
+        str(csv_path),
+        media_type="text/csv",
+        filename="cross_lingual_rag_benchmark_results.csv"
+    )
+
+
+class QueryReportPayload(BaseModel):
+    question_hi: str
+    question_en: Optional[str] = ""
+    scope: Optional[str] = "all"
+    results: Dict[str, Any]
+
+
+@app.post("/api/report/download/query")
+async def download_query_report(payload: QueryReportPayload):
+    """
+    Dynamically generates and returns a structured Markdown evaluation report for the latest live query execution.
+    """
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    md = []
+    md.append("# Live Query Execution Report: English–Hindi Cross-Lingual RAG")
+    md.append(f"**Execution Timestamp:** {ts}")
+    md.append(f"**Search Scope Filter:** `{payload.scope}`\n")
+    md.append("## Query Inputs")
+    md.append(f"- **Hindi Input Query:** {payload.question_hi}")
+    if payload.question_en:
+        md.append(f"- **English Baseline Query:** {payload.question_en}")
+    md.append("\n---\n")
+
+    md.append("## Systems Comparison Breakdown\n")
+
+    res = payload.results
+    # System C
+    if "C" in res:
+        c = res["C"]
+        lat = c.get("latencies", {}).get("total_latency_ms", 0.0)
+        trans = c.get("translated_question", "N/A")
+        ans = c.get("generated_answer", "")
+        md.append("### System C · Translation-Mediated RAG")
+        md.append(f"- **Total Latency:** {lat:.1f} ms")
+        md.append(f"- **Machine Translated Query:** `{trans}`")
+        md.append(f"- **Synthesized Answer:**\n> {ans}\n")
+        md.append("#### Retrieved Evidentiary Chunks (Top-5):")
+        for idx, item in enumerate(c.get("retrieved_chunks_details", [])[:5]):
+            md.append(f"{idx+1}. **`{item.get('chunk_id')}`** | Doc: `{item.get('doc_id')}` | Page: **{item.get('page')}** | Cosine Score: **{item.get('score')}** ({item.get('relevance_pct')}%)")
+            md.append(f"   > *Snippet:* {item.get('text', '')[:220]}...\n")
+
+    # System D
+    if "D" in res:
+        d = res["D"]
+        lat = d.get("latencies", {}).get("total_latency_ms", 0.0)
+        ans = d.get("generated_answer", "")
+        md.append("### System D · Direct Multilingual RAG (Zero MT)")
+        md.append(f"- **Total Latency:** {lat:.1f} ms (Zero Machine Translation)")
+        md.append(f"- **Synthesized Answer:**\n> {ans}\n")
+        md.append("#### Retrieved Evidentiary Chunks (Top-5):")
+        for idx, item in enumerate(d.get("retrieved_chunks_details", [])[:5]):
+            md.append(f"{idx+1}. **`{item.get('chunk_id')}`** | Doc: `{item.get('doc_id')}` | Page: **{item.get('page')}** | Cosine Score: **{item.get('score')}** ({item.get('relevance_pct')}%)")
+            md.append(f"   > *Snippet:* {item.get('text', '')[:220]}...\n")
+
+    # System B
+    if "B" in res:
+        b = res["B"]
+        lat = b.get("latencies", {}).get("total_latency_ms", 0.0)
+        ans = b.get("generated_answer", "")
+        md.append("### System B · Monolingual English RAG (Upper Bound)")
+        md.append(f"- **Total Latency:** {lat:.1f} ms")
+        md.append(f"- **Synthesized Answer:**\n> {ans}\n")
+        for idx, item in enumerate(b.get("retrieved_chunks_details", [])[:3]):
+            md.append(f"{idx+1}. **`{item.get('chunk_id')}`** | Page: **{item.get('page')}** | Score: **{item.get('score')}**")
+
+    # System A
+    if "A" in res:
+        a = res["A"]
+        lat = a.get("latencies", {}).get("total_latency_ms", 0.0)
+        ans = a.get("generated_answer", "")
+        md.append("### System A · Direct Parametric LLM Baseline")
+        md.append(f"- **Total Latency:** {lat:.1f} ms (Zero Retrieval)")
+        md.append(f"- **Generated Answer:**\n> {ans}\n")
+
+    report_text = "\n".join(md)
+    return Response(
+        content=report_text,
+        media_type="text/markdown",
+        headers={"Content-Disposition": f"attachment; filename=latest_query_execution_report.md"}
+    )
 
 
 # ---------------------------------------------------------------------------

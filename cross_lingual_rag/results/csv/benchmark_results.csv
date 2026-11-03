@@ -43,6 +43,9 @@ e9ed6e57-338b-4e83-818d-ac3715bea359,DBMS_03,A,DBMS,Conceptual explanation,0.0,0
 313da1ac-4b1b-412c-b177-ead36ce4839d,DBMS_03,B,DBMS,Conceptual explanation,1.0,1.0,1.0,1.0,1.0,dbms_database_systems_p3_c0,dbms_database_systems_p3_c0,0.4703,0.0,44.22,0.19,44.57,NONE,SUCCESS
 1d6e1253-7aee-4a45-adb4-b91425daba98,DBMS_03,C,DBMS,Conceptual explanation,1.0,1.0,1.0,1.0,1.0,dbms_database_systems_p3_c0,dbms_database_systems_p3_c0,0.4703,15803.52,34.14,0.21,15838.11,NONE,FAILURE
 f8735aec-41f8-4ae6-ba34-df0d5a51d9ff,DBMS_03,D,DBMS,Conceptual explanation,1.0,1.0,1.0,1.0,1.0,dbms_database_systems_p3_c0,dbms_database_systems_p3_c0,0.517,0.0,16.1,0.15,16.38,NONE,SUCCESS
+4fa797bc-6ebb-49b9-a53c-e6ee53ab655d,LIVE_Q,B,custom,general,0.0,0.0,0.0,0.0,0.0,uploaded_docs_learn_python_the_hard_way_a_very_p65_c0,,0.4952,0.0,74.65,1.02,75.93,NONE,SUCCESS
+dcb9afc0-29c6-4b1b-97b1-a3242ae75764,LIVE_Q,C,custom,general,0.0,0.0,0.0,0.0,0.0,uploaded_docs_learn_python_the_hard_way_a_very_p65_c0,,0.4912,4820.87,149.88,4917.91,9889.03,NONE,SUCCESS
+58d47ac1-a101-4ff3-ae11-e6bfdba26c57,LIVE_Q,D,custom,general,0.0,0.0,0.0,0.0,0.0,uploaded_docs_learn_python_the_hard_way_a_very_p104_c0,,0.5558,0.0,129.9,5168.9,5299.08,NONE,SUCCESS
 6493c204-5531-4e7e-9816-11943f2cb66c,NET_01,A,Computer Networks,Procedure/algorithmic,0.0,0.0,0.0,0.0,0.0,NONE,computer_networks_computer_networks_p1_c0,0.0,0.0,0.0,0.05,0.12,NONE,SUCCESS
 ff69ae09-3330-42aa-b4d4-857f684ba98a,NET_01,B,Computer Networks,Procedure/algorithmic,1.0,1.0,1.0,1.0,1.0,computer_networks_computer_networks_p1_c0,computer_networks_computer_networks_p1_c0,0.7257,0.0,36.9,0.14,37.15,NONE,SUCCESS
 ddb9af5d-2177-4839-9783-863b126199ef,NET_01,C,Computer Networks,Procedure/algorithmic,1.0,1.0,1.0,1.0,1.0,computer_networks_computer_networks_p1_c0,computer_networks_computer_networks_p1_c0,0.7257,10503.88,35.75,0.18,10540.01,NONE,FAILURE

@@ -61,5 +61,14 @@
     "total_pages": 3,
     "total_chunks": 3,
     "language": "en"
+  },
+  {
+    "document_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+    "file_name": "Learn_Python_the_Hard_Way_A_Very.pdf",
+    "file_path": "D:\\ai projects\\rag research\\cross_lingual_rag\\data\\corpus\\uploaded_docs\\Learn_Python_the_Hard_Way_A_Very.pdf",
+    "subject": "uploaded_docs",
+    "total_pages": 311,
+    "total_chunks": 331,
+    "language": "en"
   }
 ]
