@@ -1,0 +1,128 @@
+{
+  "run_id": "3a8b1074-8053-4bcc-be76-7500a9780ec6",
+  "timestamp": "2026-11-03T06:50:44.606645+00:00",
+  "question_id": "AUTO_04",
+  "system_id": "D",
+  "subject": "Automata",
+  "category": "Conceptual explanation",
+  "original_question": "ट्यूरिंग मशीनों पर हाल्टिंग समस्या (Halting Problem) अनिर्णीत (undecidable) क्यों है?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "automata_automata_theory_p3_c0",
+    "operating_systems_operating_systems_p1_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p173_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+    "operating_systems_operating_systems_p2_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "automata_automata_theory_p3_c0",
+      "doc_id": "automata_automata_theory",
+      "subject": "automata",
+      "page": 3,
+      "score": 0.6304,
+      "relevance_pct": "63.0%",
+      "text": "Turing Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).",
+      "token_count": 208
+    },
+    {
+      "chunk_id": "operating_systems_operating_systems_p1_c0",
+      "doc_id": "operating_systems_operating_systems",
+      "subject": "operating_systems",
+      "page": 1,
+      "score": 0.5117,
+      "relevance_pct": "51.2%",
+      "text": "Operating Systems: Process Synchronization and Deadlocks In multiprogramming environments, concurrent access to shared data can lead to data inconsistency. A race condition arises when several processes access and manipulate the same data concurrently and the outcome depends on the particular order in which access takes place. The critical-section problem requires three structural conditions to be satisfied: 1. Mutual Exclusion: If process P_i is executing in its critical section, then no other processes can be executing in their critical sections. 2. Progress: If no process is executing in its critical section and there exist some processes that wish to enter their critical section, then only those processes not executing in their remainder sections can participate in deciding which will enter next. 3. Bounded Waiting: There must be a bound on the number of times other processes are allowed to enter their critical sections after a process has made a request to enter and before that request is granted.",
+      "token_count": 204
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p173_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 173,
+      "score": 0.4923,
+      "relevance_pct": "49.2%",
+      "text": "ptg999 156 EXERCISE 43 Basic Object- Oriented Analysis and Design I ’m going to describe a process to use when you want to build something using Python, speciﬁ - cally with object- oriented programming (OOP). What I mean by a “process” is that I’ll give you a set of steps that you do in order but that you aren’t meant to be a slave to or that will totally always work for every problem. They are just a good starting point for many programming problems and shouldn’t be considered the only way to solve these types of problems. This process is just one way to do it that you can follow. The process is as follows: 1. Write or draw about the problem. 2. Extract key concepts from #1 and research them. 3. Create a class hierarchy and object map for the concepts. 4. Code the classes and a test to run them. 5. Repeat and reﬁ ne. The way to look at this process is that it is “top down,” meaning it starts from the very abstract, loose idea and then slowly reﬁ nes it until the idea is solid and something you can code. First I start by just writing about the problem and trying to think up anything I can about it. Maybe I’ll even draw a diagram or two, maybe a map of some kind, or even write myself a series of emails describing the problem. This gives me a way to express the key concepts in the problem and also explore what I might already know about it. Then I go through these notes, drawings, and descriptions, and I pull out the key concepts. There’s a simple trick to doing this: Simply make a list of all the nouns and verbs in your writing and drawings, then write out how they’re related. This gives me a good list of names for classes, objects, and functions in the next step. I take this list of concepts and then research any that I don’t understand so I can reﬁ ne them further if I needed. Once I have my list of concepts, I create a simple outline/tree of the concepts and how they are related as classes. You can usually take your list of nouns and start asking, “Is this one like other concept nouns? That means they have a common parent class, so what is it called?” Keep doing this until you have a class hierarchy that’s just a simple tree list or a diagram. Then take the verbs you have and see if those are function names for each class and put them in your tree. From the Library of Zed Shaw",
+      "token_count": 581
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 179,
+      "score": 0.4506,
+      "relevance_pct": "45.1%",
+      "text": "ptg999 162 LEARN PYTHON THE HARD WAY This process I ﬁ nd is better once you’re more solid at programming and are naturally thinking in code about problems. This process is very good when you know small pieces of the overall puzzle but maybe don’t have enough information yet about the overall concept. Breaking it down in little pieces and exploring with code then helps you slowly grind away at the problem until you’ve solved it. However, remember that your solution will probably be meandering and weird, so that’s why my version of this process involves going back and ﬁ nding research then cleaning things up based on what you’ve learned. The Code for “Gothons from Planet Percal #25” Stop! I’m going to show you my ﬁ nal solution to the above problem but I don’t want you to just jump in and type this up. I want you to take the rough skeleton code I did above and then try to make it work based on the description. Once you have your solution, then you can come back and see how I did it. I’m going to break this ﬁ nal ﬁ le ex43.py down into sections and explain each one rather than dump all the code at once. ex43.py 1 from sys import exit 2 from random import randint This is just our basic imports for the game, nothing fancy really. ex43.py 1 class Scene(object): 2 3 def enter(self): 4 print \"This scene is not yet configured. Subclass it and implement enter().\" 5 exit(1) As you saw in the skeleton code, I have a base class for Scene that will have the common things that all scenes do. In this simple program, they don’t do much, so this is more a demonstration of what you would do to make a base class. ex43.py 1 class Engine(object): 2 3 def __init__(self, scene_map): 4 self.scene_map = scene_map 5 6 def play(self): 7 current_scene = self.scene_map.opening_scene() 8 9 while True: From the Library of Zed Shaw",
+      "token_count": 435
+    },
+    {
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "doc_id": "operating_systems_operating_systems",
+      "subject": "operating_systems",
+      "page": 2,
+      "score": 0.4409,
+      "relevance_pct": "44.1%",
+      "text": "Coffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).",
+      "token_count": 223
+    }
+  ],
+  "retrieval_scores": [
+    0.6303515434265137,
+    0.5117210149765015,
+    0.49232274293899536,
+    0.45059821009635925,
+    0.4408506155014038
+  ],
+  "source_documents": [
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 3,
+      "chunk_id": "automata_automata_theory_p3_c0",
+      "subject": "automata",
+      "rank": 1
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 1,
+      "chunk_id": "operating_systems_operating_systems_p1_c0",
+      "subject": "operating_systems",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 173,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p173_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 179,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 2,
+      "chunk_id": "operating_systems_operating_systems_p2_c0",
+      "subject": "operating_systems",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Automata' (पृष्ठ 3, खंड: `automata_automata_theory_p3_c0`) के अनुसार:\n\nट्यूरिंग मशीन और हाल्टिंग प्रॉब्लम एक ट्यूरिंग मशीन (टीएम) 1936 में एलन ट्यूरिंग द्वारा शुरू की गई गणना का एक औपचारिक मॉडल है। हाल्टिंग प्रॉब्लम पूछती है कि क्या दी गई ट्यूरिंग मशीन M एक विशिष्ट इनपुट स्ट्रिंग w पर रुकेगी। यदि ठहराव की समस्या के लिए एक निर्णायक H मौजूद था, तो कोई एक प्रतिकूल मशीन D का निर्माण कर सकता है जो अपने स्वयं के विवरण पर H के निर्णय को उलट देता है, जिससे एक अदम्य तार्किक विरोधाभास उत्पन्न होता है (D यदि और केवल तभी रुकता है जब D रुकता नहीं है)।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 23.67,
+    "generation_latency_ms": 3813.73,
+    "total_latency_ms": 3837.6
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

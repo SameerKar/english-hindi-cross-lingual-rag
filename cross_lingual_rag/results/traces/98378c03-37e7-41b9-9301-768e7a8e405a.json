@@ -1,0 +1,98 @@
+{
+  "trace_id": "98378c03-37e7-41b9-9301-768e7a8e405a",
+  "run_id": "98378c03-37e7-41b9-9301-768e7a8e405a",
+  "question_id": "OS_02",
+  "system_id": "C",
+  "query": "पेज रिप्लेसमेंट में बेलाडी की विसंगति (Belady's Anomaly) क्या है?",
+  "start_time": "2026-11-03T06:51:25.708167+00:00",
+  "end_time": "2026-11-03T06:51:33.405109+00:00",
+  "total_latency_ms": 7696.68,
+  "spans": [
+    {
+      "span_id": "be9a3493-a5c4-4020-8be9-922aed0b1b9f",
+      "trace_id": "98378c03-37e7-41b9-9301-768e7a8e405a",
+      "name": "machine_translation",
+      "span_type": "tool",
+      "start_time": "2026-11-03T06:51:25.708167+00:00",
+      "end_time": "2026-11-03T06:51:29.411985+00:00",
+      "latency_ms": 3703.31,
+      "inputs": {
+        "source_query": "पेज रिप्लेसमेंट में बेलाडी की विसंगति (Belady's Anomaly) क्या है?",
+        "from": "hi",
+        "to": "en"
+      },
+      "outputs": {
+        "translated_query": "What is Belady's Anomaly in Page Replacement?"
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "2e8bb621-5c4c-4e72-b988-04b1df8ce7bd",
+      "trace_id": "98378c03-37e7-41b9-9301-768e7a8e405a",
+      "name": "english_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:51:29.411985+00:00",
+      "end_time": "2026-11-03T06:51:29.451071+00:00",
+      "latency_ms": 39.68,
+      "inputs": {
+        "query": "What is Belady's Anomaly in Page Replacement?",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "operating_systems_operating_systems_p3_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p40_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p34_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p22_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p17_c0"
+        ],
+        "scores": [
+          0.5763933062553406,
+          0.4364122152328491,
+          0.4364122152328491,
+          0.4364122152328491,
+          0.4364122152328491
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "69522160-05c6-4aaa-9966-9db1c6a59291",
+      "trace_id": "98378c03-37e7-41b9-9301-768e7a8e405a",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:51:29.451071+00:00",
+      "end_time": "2026-11-03T06:51:33.405109+00:00",
+      "latency_ms": 3953.69,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: पेज रिप्लेसमेंट में बेलाडी की विसंगति (Belady's Anomaly) क्या है?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: operating_systems_operating_systems_p3_c0 | Page: 3 | Subject: operating_systems] ---\nVirtual Memory and Page Replacement Algorithms Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. Memory is organized into fixed-size blocks called pages (in logical memory) and frames (in physical memory). When a process attempts to access a page not currently residing in physical RAM, the memory management unit (MMU) generates a page fault hardware interrupt. When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out: - FIFO (First-In, First-Out): Replaces the oldest page loaded in memory. Can suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults. - Optimal (OPT / Belady's Min): Replaces the page that will not be used for the longest period of time in the future. Provides the lowest page fault rate but is impossible to implement in practice because future references cannot be known. - Least Recently Used (LRU): Replaces the page that has not been used for the longest period in the past. Approximates the optimal algorithm by using past temporal locality.\n\n--- [Document Passage 2 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p40_c0 | Page: 40 | Subject: uploaded_docs] ---\nptg999 This page intentionally left blank From the Library of Zed Shaw\n\n--- [Document Passage 3 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p34_c0 | Page: 34 | Subject: uploaded_docs] ---\nptg999 This page intentionally left blank From the Library of Zed Shaw\n\n--- [Document Passage 4 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p22_c0 | Page: 22 | Subject: uploaded_docs] ---\nptg999 This page intentionally left blank From the Library of Zed Shaw\n\n--- [Document Passage 5 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p17_c0 | Page: 17 | Subject: uploaded_docs] ---\nptg999 This page intentionally left blank From the Library of Zed Shaw\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 3, खंड: `operating_systems_operating_systems_p3_c0`) के अनुसार:\n\nबेलाडी की विसंगति से पीड़ित हो सकते हैं, जहां पेज फ्रेम की संख्या में वृद्धि के परिणामस्वरूप पेज दोषों की संख्या में वृद्धि होती है। - इष्टतम (ऑप्ट / बेलाडी का न्यूनतम): उस पेज को बदल देता है जिसका इस्तेमाल भविष्य में सबसे लंबे समय तक नहीं किया जाएगा। वर्चुअल मेमोरी और पेज रिप्लेसमेंट एल्गोरिदम वर्चुअल मेमोरी उपयोगकर्ता की तार्किक मेमोरी को भौतिक मेमोरी से अलग करती है, जिससे उन प्रक्रियाओं के निष्पादन की अनुमति मिलती है जिनके एड्रेस स्पेस उपलब्ध भौतिक रैम से अधिक हैं।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 404,
+          "completion_tokens": 111,
+          "total_tokens": 515
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Operating Systems",
+    "category": "Conceptual explanation",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 3, खंड: `operating_systems_operating_systems_p3_c0`) के अनुसार:\n\nबेलाडी की विसंगति से पीड़ित हो सकते हैं, जहां पेज फ्रेम की संख्या में वृद्धि के परिणामस्वरूप पेज दोषों की संख्या में वृद्धि होती है। - इष्टतम (ऑप्ट / बेलाडी का न्यूनतम): उस पेज को बदल देता है जिसका इस्तेमाल भविष्य में सबसे लंबे समय तक नहीं किया जाएगा। वर्चुअल मेमोरी और पेज रिप्लेसमेंट एल्गोरिदम वर्चुअल मेमोरी उपयोगकर्ता की तार्किक मेमोरी को भौतिक मेमोरी से अलग करती है, जिससे उन प्रक्रियाओं के निष्पादन की अनुमति मिलती है जिनके एड्रेस स्पेस उपलब्ध भौतिक रैम से अधिक हैं।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

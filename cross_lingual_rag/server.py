@@ -283,6 +283,104 @@ async def restore_default_corpus():
     return {"success": True, "total_chunks": len(chunks)}
 
 
+class SaveEnvRequest(BaseModel):
+    gemini_api_key: Optional[str] = ""
+    openai_api_key: Optional[str] = ""
+
+
+@app.get("/api/get-env")
+async def get_env_config():
+    """Returns the current environment setup and masked keys."""
+    g_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
+    o_key = os.getenv("OPENAI_API_KEY") or ""
+    
+    masked_g = (g_key[:6] + "..." + g_key[-4:]) if len(g_key) > 10 else ("***" if g_key else "")
+    masked_o = (o_key[:5] + "..." + o_key[-4:]) if len(o_key) > 9 else ("***" if o_key else "")
+
+    orch = get_orchestrator_instance()
+    active_mode = "Gemini 2.0 Flash (Free API)" if g_key else ("OpenAI API" if o_key else "Deterministic Context-Grounded Synthesizer ($0 Cost)")
+
+    return {
+        "has_gemini_key": bool(g_key),
+        "has_openai_key": bool(o_key),
+        "masked_gemini_key": masked_g,
+        "masked_openai_key": masked_o,
+        "active_mode": active_mode,
+        "provider": orch.generator.provider,
+        "model_name": orch.generator.model_name
+    }
+
+
+@app.post("/api/save-env")
+async def save_env_config(req: SaveEnvRequest):
+    """
+    Saves the user's API key directly into .env file,
+    updates os.environ, and reloads the generation pipeline live.
+    """
+    cfg = load_config()
+    root = get_project_root()
+    env_file = root / ".env"
+    if not env_file.exists() and (root.parent / ".env").exists():
+        env_file = root.parent / ".env"
+    elif not env_file.exists():
+        env_file = root / ".env"
+
+    g_key = (req.gemini_api_key or "").strip()
+    o_key = (req.openai_api_key or "").strip()
+
+    # Read existing lines if any
+    existing_lines = []
+    if env_file.exists():
+        with open(env_file, "r", encoding="utf-8") as f:
+            existing_lines = [line.strip() for line in f.readlines() if line.strip()]
+
+    # Filter out existing GEMINI_API_KEY and OPENAI_API_KEY
+    new_lines = [line for line in existing_lines if not line.startswith("GEMINI_API_KEY=") and not line.startswith("OPENAI_API_KEY=")]
+    
+    if g_key:
+        new_lines.append(f"GEMINI_API_KEY={g_key}")
+        os.environ["GEMINI_API_KEY"] = g_key
+    elif "GEMINI_API_KEY" in os.environ and not g_key:
+        del os.environ["GEMINI_API_KEY"]
+
+    if o_key:
+        new_lines.append(f"OPENAI_API_KEY={o_key}")
+        os.environ["OPENAI_API_KEY"] = o_key
+    elif "OPENAI_API_KEY" in os.environ and not o_key:
+        del os.environ["OPENAI_API_KEY"]
+
+    # Write back to .env
+    with open(env_file, "w", encoding="utf-8") as f:
+        f.write("# Cross-Lingual Academic RAG Auto-Generated .env\n")
+        for line in new_lines:
+            f.write(line + "\n")
+
+    # Also sync to cross_lingual_rag/.env if distinct
+    alt_env = script_dir / ".env"
+    if alt_env != env_file:
+        try:
+            shutil.copy(env_file, alt_env)
+        except Exception:
+            pass
+
+    # Reload orchestrator live
+    reload_orchestrator_instance()
+    orch = get_orchestrator_instance()
+
+    active_mode = "Gemini 2.0 Flash (Free API)" if g_key else ("OpenAI API" if o_key else "Deterministic Context-Grounded Synthesizer ($0 Cost)")
+    await terminal.broadcast(f"[ENV] Environment updated live! Active LLM Mode: {active_mode} (Provider: {orch.generator.provider}, Model: {orch.generator.model_name})")
+
+    return {
+        "success": True,
+        "active_mode": active_mode,
+        "provider": orch.generator.provider,
+        "model_name": orch.generator.model_name,
+        "has_gemini_key": bool(g_key),
+        "has_openai_key": bool(o_key),
+        "env_path": str(env_file)
+    }
+
+
 class QueryRequest(BaseModel):
     question_hi: str
     question_en: Optional[str] = None

@@ -1,0 +1,128 @@
+{
+  "run_id": "8489d894-a8ed-40c0-ae56-e0611d65e974",
+  "timestamp": "2026-11-03T06:50:56.080105+00:00",
+  "question_id": "DBMS_01",
+  "system_id": "D",
+  "subject": "DBMS",
+  "category": "Factual/definition",
+  "original_question": "ट्रांजेक्शन प्रोसेसिंग में ACID संपत्तियों (properties) का पूरा अर्थ क्या है?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "uploaded_docs_learn_python_the_hard_way_a_very_p5_c0",
+    "dbms_database_systems_p1_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p188_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p193_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p158_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p5_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 5,
+      "score": 0.3227,
+      "relevance_pct": "32.3%",
+      "text": "ptg999 Many of the designations used by manufacturers and sellers to distinguish their products are claimed as trademarks. Where those designations appear in this book, and the publisher was aware of a trademark claim, the designations have been printed with initial capital letters or in all capitals. The author and publisher have taken care in the preparation of this book, but make no expressed or implied warranty of any kind and assume no responsibility for errors or omissions. No liability is assumed for incidental or consequential damages in connection with or arising out of the use of the information or programs contained herein. The publisher offers excellent discounts on this book when ordered in quantity for bulk purchases or special sales, which may include electronic versions and/or custom covers and content particular to your business, training goals, marketing focus, and branding interests. For more information, please contact: U.S. Corporate and Government Sales (800) 382-3419 corpsales@pearsontechgroup.com For sales outside the United States, please contact: International Sales international@pearson.com Visit us on the Web: informit.com/aw Library of Congress Cataloging-in-Publication Data Shaw, Zed. Learn Python the hard way : a very simple introduction to the terrifyingly beautiful world of computers and code / Zed A. Shaw.—Third edition. pages cm Includes index. ISBN 978-0-321-88491-6 (paperback : alkaline paper) 1. Python (Computer program language) 2. Python (Computer program language)—Problems, exercises, etc. 3. Computer programming—Problems, exercises, etc. I. Title. QA76.73.P98S53 2014 005.13'3—dc23 2013029738 Copyright © 2014 Zed A. Shaw All rights reserved. Printed in the United States of America. This publication is protected by copyright, and permission must be obtained from the publisher prior to any prohibited reproduction, storage in a retrieval system, or transmission in any form or by any means, electronic, mechanical, photocopying, recording, or likewise. To obtain permission to use material from this work, please submit a written request to Pearson Education, Inc., Permissions Department, One Lake Street, Upper Saddle River, New Jersey 07458, or you may fax your request to (201) 236-3290. ISBN-13: 978-0-321-88491-6 ISBN-10: 0-321-88491-4 Text printed in the United States on recycled paper at RR Donnelley in Crawfordsville, Indiana. First printing, September 2013 From the Library of Zed Shaw",
+      "token_count": 465
+    },
+    {
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "doc_id": "dbms_database_systems",
+      "subject": "dbms",
+      "page": 1,
+      "score": 0.3203,
+      "relevance_pct": "32.0%",
+      "text": "Database Management Systems: ACID Transactions and Concurrency Control A transaction in a database management system is a logical unit of database processing that includes one or more database access operations. Transactions must satisfy the ACID properties: 1. Atomicity: Either all operations of the transaction are executed and reflected in the database, or none are. Handled by the write-ahead logging (WAL) recovery manager. 2. Consistency: Execution of a transaction in isolation preserves database consistency invariants and integrity constraints. 3. Isolation: Even if multiple transactions execute concurrently, the system guarantees that for every pair of transactions T_i and T_j, it appears to T_i that either T_j finished execution before T_i started, or T_j started execution after T_i finished. 4. Durability: Once a transaction successfully commits, the updates made to the database persist even in the event of system crashes.",
+      "token_count": 178
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p188_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 188,
+      "score": 0.2838,
+      "relevance_pct": "28.4%",
+      "text": "ptg999 171INHERITANCE VS. COMPOSITION When you are doing this kind of specialization, there are three ways that the parent and child classes can interact: 1. Actions on the child imply an action on the parent. 2. Actions on the child override the action on the parent. 3. Actions on the child alter the action on the parent. I will now demonstrate each of these in order and show you code for them. Implicit Inheritance First I will show you the implicit actions that happen when you deﬁ ne a function in the parent, but not in the child. ex44a.py 1 class Parent(object): 2 3 def implicit(self): 4 print \"PARENT implicit()\" 5 6 class Child(Parent): 7 pass 8 9 dad = Parent() 10 son = Child() 11 12 dad.implicit() 13 son.implicit() The use of pass under the class Child: is how you tell Python that you want an empty block. This creates a class named Child but says that there’s nothing new to deﬁ ne in it. Instead, it will inherit all its behavior from Parent. When you run this code you get the following: Exercise 44a Session $ python ex44a.py PARENT implicit() PARENT implicit() Notice how even though I’m calling son.implicit() on line 16, and even though Child does not have an implicit function deﬁ ned, it still works and it calls the one deﬁ ned in Parent. This shows you that, if you put functions in a base class (i.e., Parent), then all subclasses (i.e., Child) will automatically get those features. Very handy for repetitive code you need in many classes. From the Library of Zed Shaw",
+      "token_count": 348
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p193_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 193,
+      "score": 0.2723,
+      "relevance_pct": "27.2%",
+      "text": "ptg999 176 LEARN PYTHON THE HARD WAY Composition Inheritance is useful, but another way to do the exact same thing is just to use other classes and modules, rather than rely on implicit inheritance. If you look at the three ways to exploit inheritance, two of the three involve writing new code to replace or alter functionality. This can easily be replicated by just calling functions in another class. Here’s an example of doing this: ex44e.py 1 class Other(object): 2 3 def override(self): 4 print \"OTHER override()\" 5 6 def implicit(self): 7 print \"OTHER implicit()\" 8 9 def altered(self): 10 print \"OTHER altered()\" 11 12 class Child(object): 13 14 def __init__(self): 15 self.other = Other() 16 17 def implicit(self): 18 self.other.implicit() 19 20 def override(self): 21 print \"CHILD override()\" 22 23 def altered(self): 24 print \"CHILD, BEFORE OTHER altered()\" 25 self.other.altered() 26 print \"CHILD, AFTER OTHER altered()\" 27 28 son = Child() 29 30 son.implicit() 31 son.override() 32 son.altered() In this code I’m not using the name Parent, since there is not a parent- child is- a relationship. This is a has- a relationship, where Child has- a Other that it uses to get its work done. When I run this, I get the following output: Exercise 44e Session $ python ex44e.py OTHER implicit() CHILD override() CHILD, BEFORE OTHER altered() From the Library of Zed Shaw",
+      "token_count": 293
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p158_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 158,
+      "score": 0.2706,
+      "relevance_pct": "27.1%",
+      "text": "ptg999 141MODULES, CLASSES, AND OBJECTS That’s the basics of how Python does this “mini- import” when you call a class like a function. Remember that this is not giving you the class, but instead it is using the class as a blueprint for how to build a copy of that type of thing. Keep in mind that I’m giving you a slightly inaccurate idea for how these work so that you can start to build up an understanding of classes based on what you know of modules. The truth is, classes and objects suddenly diverge from modules at this point. If I were being totally honest, I’d say something more like this: • Classes are like blueprints or deﬁ nitions for creating new mini- modules. • Instantiation is how you make one of these mini- modules and import it at the same time. • The resulting created mini- module is called an object and you then assign it to a variable to work with it. After this, though, classes and objects become very different from modules, and this should only serve as a way for you to bridge over to understanding classes. Getting Things from Things I now have three ways to get things from things: # dict style mystuff['apples'] # module style mystuff.apples() print mystuff.tangerine # class style thing = MyStuff() thing.apples() print thing.tangerine A First-Class Example You should start seeing the similarities in these three key=value container types and probably have a bunch of questions. Hang on with the questions, as the next exercise is going to hammer home your “object- oriented vocabulary.” In this exercise, I just want you to type in this code and get it working so that you have some experience before moving on. ex40.py 1 class Song(object): 2 3 def __init__(self, lyrics): From the Library of Zed Shaw",
+      "token_count": 396
+    }
+  ],
+  "retrieval_scores": [
+    0.322664350271225,
+    0.3202677071094513,
+    0.28380250930786133,
+    0.2723459005355835,
+    0.27056047320365906
+  ],
+  "source_documents": [
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 5,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p5_c0",
+      "subject": "uploaded_docs",
+      "rank": 1
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 1,
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "subject": "dbms",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 188,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p188_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 193,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p193_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 158,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p158_c0",
+      "subject": "uploaded_docs",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Uploaded Docs' (पृष्ठ 5, खंड: `uploaded_docs_learn_python_the_hard_way_a_very_p5_c0`) के अनुसार:\n\nptg999 निर्माताओं और विक्रेताओं द्वारा अपने उत्पादों को अलग करने के लिए उपयोग किए जाने वाले कई पदनामों को ट्रेडमार्क के रूप में दावा किया जाता है। जहां वे पदनाम इस पुस्तक में दिखाई देते हैं, और प्रकाशक को ट्रेडमार्क दावे के बारे में पता था, पदनाम प्रारंभिक बड़े अक्षरों या सभी राजधानियों में मुद्रित किए गए हैं। लेखक और प्रकाशक ने इस पुस्तक की तैयारी में ध्यान रखा है, लेकिन किसी भी प्रकार की कोई व्यक्त या निहित वारंटी नहीं दी है और त्रुटियों या चूक के लिए कोई ज़िम्मेदारी नहीं ली है।\n\nयह विवरण पृष्ठ 5 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 23.0,
+    "generation_latency_ms": 3882.51,
+    "total_latency_ms": 3905.7
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

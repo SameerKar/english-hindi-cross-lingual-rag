@@ -1,0 +1,128 @@
+{
+  "run_id": "9d5e0b4f-fd90-4b03-ab4d-7551da7d1293",
+  "timestamp": "2026-11-03T06:51:25.707164+00:00",
+  "question_id": "OS_02",
+  "system_id": "B",
+  "subject": "Operating Systems",
+  "category": "Conceptual explanation",
+  "original_question": "What is Belady's Anomaly in page replacement?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "operating_systems_operating_systems_p3_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p40_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p34_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p22_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p17_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "operating_systems_operating_systems_p3_c0",
+      "doc_id": "operating_systems_operating_systems",
+      "subject": "operating_systems",
+      "page": 3,
+      "score": 0.5764,
+      "relevance_pct": "57.6%",
+      "text": "Virtual Memory and Page Replacement Algorithms Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. Memory is organized into fixed-size blocks called pages (in logical memory) and frames (in physical memory). When a process attempts to access a page not currently residing in physical RAM, the memory management unit (MMU) generates a page fault hardware interrupt. When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out: - FIFO (First-In, First-Out): Replaces the oldest page loaded in memory. Can suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults. - Optimal (OPT / Belady's Min): Replaces the page that will not be used for the longest period of time in the future. Provides the lowest page fault rate but is impossible to implement in practice because future references cannot be known. - Least Recently Used (LRU): Replaces the page that has not been used for the longest period in the past. Approximates the optimal algorithm by using past temporal locality.",
+      "token_count": 250
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p40_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 40,
+      "score": 0.4364,
+      "relevance_pct": "43.6%",
+      "text": "ptg999 This page intentionally left blank From the Library of Zed Shaw",
+      "token_count": 15
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p34_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 34,
+      "score": 0.4364,
+      "relevance_pct": "43.6%",
+      "text": "ptg999 This page intentionally left blank From the Library of Zed Shaw",
+      "token_count": 15
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p22_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 22,
+      "score": 0.4364,
+      "relevance_pct": "43.6%",
+      "text": "ptg999 This page intentionally left blank From the Library of Zed Shaw",
+      "token_count": 15
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p17_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 17,
+      "score": 0.4364,
+      "relevance_pct": "43.6%",
+      "text": "ptg999 This page intentionally left blank From the Library of Zed Shaw",
+      "token_count": 15
+    }
+  ],
+  "retrieval_scores": [
+    0.5763933062553406,
+    0.4364122152328491,
+    0.4364122152328491,
+    0.4364122152328491,
+    0.4364122152328491
+  ],
+  "source_documents": [
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 3,
+      "chunk_id": "operating_systems_operating_systems_p3_c0",
+      "subject": "operating_systems",
+      "rank": 1
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 40,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p40_c0",
+      "subject": "uploaded_docs",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 34,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p34_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 22,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p22_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 17,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p17_c0",
+      "subject": "uploaded_docs",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "According to the retrieved academic passage from 'Operating Systems' (Document: `operating_systems_operating_systems_p3_c0`, Page 3):\n\nCan suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults. Virtual Memory and Page Replacement Algorithms Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out: - FIFO (First-In, First-Out): Replaces the oldest page loaded in memory.\n\nThis conclusion is directly grounded in the authoritative text extracted from Page 3.",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 41.7,
+    "generation_latency_ms": 0.19,
+    "total_latency_ms": 42.02
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

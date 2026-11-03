@@ -1,0 +1,78 @@
+{
+  "trace_id": "4cb2784c-5d7b-404d-b55f-3f0be62216b5",
+  "run_id": "4cb2784c-5d7b-404d-b55f-3f0be62216b5",
+  "question_id": "OS_01",
+  "system_id": "D",
+  "query": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+  "start_time": "2026-11-03T06:51:21.516236+00:00",
+  "end_time": "2026-11-03T06:51:25.660387+00:00",
+  "total_latency_ms": 4144.05,
+  "spans": [
+    {
+      "span_id": "d900014f-5a37-4ca6-bf0b-e434f086a15a",
+      "trace_id": "4cb2784c-5d7b-404d-b55f-3f0be62216b5",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:51:21.516236+00:00",
+      "end_time": "2026-11-03T06:51:21.536262+00:00",
+      "latency_ms": 19.59,
+      "inputs": {
+        "query": "डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "operating_systems_operating_systems_p2_c0",
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p88_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p114_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p142_c0"
+        ],
+        "scores": [
+          0.5121431350708008,
+          0.3432212471961975,
+          0.31433117389678955,
+          0.3134320378303528,
+          0.31200045347213745
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "40995808-6a62-4b8d-b2d1-ccf96e7af2c0",
+      "trace_id": "4cb2784c-5d7b-404d-b55f-3f0be62216b5",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:51:21.536262+00:00",
+      "end_time": "2026-11-03T06:51:25.660387+00:00",
+      "latency_ms": 4124.46,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: डेडलॉक की चार आवश्यक कॉफमैन शर्तें (Coffman's conditions) क्या हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: operating_systems_operating_systems_p2_c0 | Page: 2 | Subject: operating_systems] ---\nCoffman's Four Conditions for Deadlock A deadlock is a state in which each process in a set is waiting for an event that only another process in the set can cause. Edward G. Coffman Jr. formalized that a deadlock situation can arise if and only if all four of the following conditions hold simultaneously: 1. Mutual Exclusion: At least one resource must be held in a non-shareable mode (only one process can use the resource at a time). 2. Hold and Wait: A process must be currently holding at least one resource and requesting additional resources that are currently being held by other processes. 3. No Preemption: Resources cannot be forcibly preempted from a process; a resource can only be released voluntarily by the process holding it after completing its task. 4. Circular Wait: A closed chain of processes exists such that each process holds at least one resource needed by the next process in the chain (P_0 waits for resource held by P_1, ..., P_n waits for resource held by P_0).\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 3 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p88_c0 | Page: 88 | Subject: uploaded_docs] ---\nptg999 71FUNCTIONS AND VARIABLES What You Should See You should study the output of this script and compare it with what you think you should get for each of the examples in the script. Exercise 19 Session $ python ex19.py We can just give the function numbers directly: You have 20 cheeses! You have 30 boxes of crackers! Man that's enough for a party! Get a blanket. OR, we can use variables from our script: You have 10 cheeses! You have 50 boxes of crackers! Man that's enough for a party! Get a blanket. We can even do math inside too: You have 30 cheeses! You have 11 boxes of crackers! Man that's enough for a party! Get a blanket. And we can combine the two, variables and math: You have 110 cheeses! You have 1050 boxes of crackers! Man that's enough for a party! Get a blanket. Study Drills 1. Go back through the script and type a comment above each line, explaining in English what it does. 2. Start at the bottom and read each line backward, saying all the important characters. 3. Write at least one more function of your own design, and run it 10 different ways. Common Student Questions How can there possibly be 10 different ways to run a function? Believe it or not, there’s a theoretically inﬁ nite number of ways to call any function. In this case, do it like I’ve got with lines 8– 12 and be creative. From the Library of Zed Shaw\n\n--- [Document Passage 4 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p114_c0 | Page: 114 | Subject: uploaded_docs] ---\nptg999 97BOOLEAN PRACTICE I will also give you a trick to help you ﬁ gure out the more complicated ones toward the end. Whenever you see these boolean logic statements, you can solve them easily by this simple process: 1. Find an equality test (== or !=) and replace it with its truth. 2. Find each and/or inside parentheses and solve those ﬁ rst. 3. Find each not and invert it. 4. Find any remaining and/or and solve it. 5. When you are done, you should have True or False. I will demonstrate with a variation on #20: 3 != 4 and not (\"testing\" != \"test\" or \"Python\" == \"Python\") Here’s me going through each of the steps and showing you the translation until I’ve boiled it down to a single result: 1. Solve each equality test: a. 3 != 4 is True: True and not (\"testing\" != \"test\" or \"Python\" == \"Python\") b. \"testing\" != \"test\" is True: True and not (True or \"Python\" == \"Python\") c. \"Python\" == \"Python\": True and not (True or True) 2. Find each and/or in parentheses (): a. (True or True) is True: True and not (True) 3. Find each not and invert it: a. not (True) is False: True and False 4. Find any remaining and/or and solve them: a. True and False is False With that, we’re done and know the result is False. WARNING! The more complicated ones may seem very hard at ﬁ rst. You should be able to give a good ﬁ rst stab at solving them, but do not get discouraged. I’m just getting you primed for more of these “logic gymnastics” so that later cool stuff is much easier. Just stick with it, and keep track of what you get wrong, but do not worry that it’s not getting in your head quite yet. It’ll come. From the Library of Zed Shaw\n\n--- [Document Passage 5 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p142_c0 | Page: 142 | Subject: uploaded_docs] ---\nptg999 125SYMBOL REVIEW • %c • %r • %s • %% Operators Some of these may be unfamiliar to you, but look them up anyway. Find out what they do, and if you still can’t ﬁ gure it out, save it for later. • + • - • * • ** • / • // • % • < • > • <= • >= • == • != • <> • ( ) • [ ] • { } • @ • , • : From the Library of Zed Shaw\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 2, खंड: `operating_systems_operating_systems_p2_c0`) के अनुसार:\n\nगतिरोध के लिए कॉफमैन की चार शर्तें एक गतिरोध एक ऐसी स्थिति है जिसमें एक सेट में प्रत्येक प्रक्रिया एक ऐसी घटना की प्रतीक्षा कर रही है जो सेट में केवल एक अन्य प्रक्रिया का कारण बन सकती है। औपचारिक रूप से कहा गया है कि गतिरोध की स्थिति तब उत्पन्न हो सकती है जब और केवल तभी जब निम्नलिखित सभी चार शर्तें एक साथ हों: 1. पारस्परिक बहिष्करण: कम से कम एक संसाधन को गैर - साझा मोड में रखा जाना चाहिए (एक समय में केवल एक प्रक्रिया संसाधन का उपयोग कर सकती है)।\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 1147,
+          "completion_tokens": 120,
+          "total_tokens": 1267
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Operating Systems",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Operating Systems' (पृष्ठ 2, खंड: `operating_systems_operating_systems_p2_c0`) के अनुसार:\n\nगतिरोध के लिए कॉफमैन की चार शर्तें एक गतिरोध एक ऐसी स्थिति है जिसमें एक सेट में प्रत्येक प्रक्रिया एक ऐसी घटना की प्रतीक्षा कर रही है जो सेट में केवल एक अन्य प्रक्रिया का कारण बन सकती है। औपचारिक रूप से कहा गया है कि गतिरोध की स्थिति तब उत्पन्न हो सकती है जब और केवल तभी जब निम्नलिखित सभी चार शर्तें एक साथ हों: 1. पारस्परिक बहिष्करण: कम से कम एक संसाधन को गैर - साझा मोड में रखा जाना चाहिए (एक समय में केवल एक प्रक्रिया संसाधन का उपयोग कर सकती है)।\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

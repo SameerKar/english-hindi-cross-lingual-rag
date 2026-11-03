@@ -1,0 +1,128 @@
+{
+  "run_id": "3f48773b-adc5-402c-9376-86cfbb962e7e",
+  "timestamp": "2026-11-03T06:51:48.007245+00:00",
+  "question_id": "OS_03",
+  "system_id": "D",
+  "subject": "Operating Systems",
+  "category": "Factual/definition",
+  "original_question": "क्रिटिकल सेक्शन समस्या के समाधान को किन तीन आवश्यकताओं को पूरा करना चाहिए?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "uploaded_docs_learn_python_the_hard_way_a_very_p114_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p195_c0",
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "dbms_database_systems_p1_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p114_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 114,
+      "score": 0.4516,
+      "relevance_pct": "45.2%",
+      "text": "ptg999 97BOOLEAN PRACTICE I will also give you a trick to help you ﬁ gure out the more complicated ones toward the end. Whenever you see these boolean logic statements, you can solve them easily by this simple process: 1. Find an equality test (== or !=) and replace it with its truth. 2. Find each and/or inside parentheses and solve those ﬁ rst. 3. Find each not and invert it. 4. Find any remaining and/or and solve it. 5. When you are done, you should have True or False. I will demonstrate with a variation on #20: 3 != 4 and not (\"testing\" != \"test\" or \"Python\" == \"Python\") Here’s me going through each of the steps and showing you the translation until I’ve boiled it down to a single result: 1. Solve each equality test: a. 3 != 4 is True: True and not (\"testing\" != \"test\" or \"Python\" == \"Python\") b. \"testing\" != \"test\" is True: True and not (True or \"Python\" == \"Python\") c. \"Python\" == \"Python\": True and not (True or True) 2. Find each and/or in parentheses (): a. (True or True) is True: True and not (True) 3. Find each not and invert it: a. not (True) is False: True and False 4. Find any remaining and/or and solve them: a. True and False is False With that, we’re done and know the result is False. WARNING! The more complicated ones may seem very hard at ﬁ rst. You should be able to give a good ﬁ rst stab at solving them, but do not get discouraged. I’m just getting you primed for more of these “logic gymnastics” so that later cool stuff is much easier. Just stick with it, and keep track of what you get wrong, but do not worry that it’s not getting in your head quite yet. It’ll come. From the Library of Zed Shaw",
+      "token_count": 410
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 179,
+      "score": 0.3718,
+      "relevance_pct": "37.2%",
+      "text": "ptg999 162 LEARN PYTHON THE HARD WAY This process I ﬁ nd is better once you’re more solid at programming and are naturally thinking in code about problems. This process is very good when you know small pieces of the overall puzzle but maybe don’t have enough information yet about the overall concept. Breaking it down in little pieces and exploring with code then helps you slowly grind away at the problem until you’ve solved it. However, remember that your solution will probably be meandering and weird, so that’s why my version of this process involves going back and ﬁ nding research then cleaning things up based on what you’ve learned. The Code for “Gothons from Planet Percal #25” Stop! I’m going to show you my ﬁ nal solution to the above problem but I don’t want you to just jump in and type this up. I want you to take the rough skeleton code I did above and then try to make it work based on the description. Once you have your solution, then you can come back and see how I did it. I’m going to break this ﬁ nal ﬁ le ex43.py down into sections and explain each one rather than dump all the code at once. ex43.py 1 from sys import exit 2 from random import randint This is just our basic imports for the game, nothing fancy really. ex43.py 1 class Scene(object): 2 3 def enter(self): 4 print \"This scene is not yet configured. Subclass it and implement enter().\" 5 exit(1) As you saw in the skeleton code, I have a base class for Scene that will have the common things that all scenes do. In this simple program, they don’t do much, so this is more a demonstration of what you would do to make a base class. ex43.py 1 class Engine(object): 2 3 def __init__(self, scene_map): 4 self.scene_map = scene_map 5 6 def play(self): 7 current_scene = self.scene_map.opening_scene() 8 9 while True: From the Library of Zed Shaw",
+      "token_count": 435
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p195_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 195,
+      "score": 0.3624,
+      "relevance_pct": "36.2%",
+      "text": "ptg999 178 LEARN PYTHON THE HARD WAY suggest you also do this, as comprehension is more important than impressing everyone with your knowledge of esoteric style rules. Common Student Questions How do I get better at solving problems that I haven’t seen before? The only way to get better at solving problems is to solve as many problems as you can by yourself. Typically people hit a difﬁ cult problem and then rush out to ﬁ nd an answer. This is ﬁ ne when you have to get things done, but if you have the time to solve it yourself, then take that time. Stop and bang your head against the problem for as long as possible, trying every possible thing, until you solve it or give up. After that, the answers you ﬁ nd will be more satisfying and you’ll eventually get better at solving problems. Aren’t objects just copies of classes? In some languages (like JavaScript), that is true. These are called prototype languages and there are not many differences between objects and classes other than usage. In Python, however, classes act as templates that “mint” new objects, similar to how coins were minted using a die (template). From the Library of Zed Shaw",
+      "token_count": 267
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 2,
+      "score": 0.351,
+      "relevance_pct": "35.1%",
+      "text": "Limitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.",
+      "token_count": 196
+    },
+    {
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "doc_id": "dbms_database_systems",
+      "subject": "dbms",
+      "page": 1,
+      "score": 0.3441,
+      "relevance_pct": "34.4%",
+      "text": "Database Management Systems: ACID Transactions and Concurrency Control A transaction in a database management system is a logical unit of database processing that includes one or more database access operations. Transactions must satisfy the ACID properties: 1. Atomicity: Either all operations of the transaction are executed and reflected in the database, or none are. Handled by the write-ahead logging (WAL) recovery manager. 2. Consistency: Execution of a transaction in isolation preserves database consistency invariants and integrity constraints. 3. Isolation: Even if multiple transactions execute concurrently, the system guarantees that for every pair of transactions T_i and T_j, it appears to T_i that either T_j finished execution before T_i started, or T_j started execution after T_i finished. 4. Durability: Once a transaction successfully commits, the updates made to the database persist even in the event of system crashes.",
+      "token_count": 178
+    }
+  ],
+  "retrieval_scores": [
+    0.4515705704689026,
+    0.37182947993278503,
+    0.36235561966896057,
+    0.35102248191833496,
+    0.34406083822250366
+  ],
+  "source_documents": [
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 114,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p114_c0",
+      "subject": "uploaded_docs",
+      "rank": 1
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 179,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+      "subject": "uploaded_docs",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 195,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p195_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 4
+    },
+    {
+      "doc_id": "dbms_database_systems",
+      "page": 1,
+      "chunk_id": "dbms_database_systems_p1_c0",
+      "subject": "dbms",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Uploaded Docs' (पृष्ठ 114, खंड: `uploaded_docs_learn_python_the_hard_way_a_very_p114_c0`) के अनुसार:\n\nptg999 97BOOLEAN अभ्यास मैं आपको अंत की ओर अधिक जटिल लोगों का पता लगाने में मदद करने के लिए एक चाल भी दूंगा। जब भी आप इन बूलियन लॉजिक स्टेटमेंट को देखते हैं, तो आप इस सरल प्रक्रिया द्वारा उन्हें आसानी से हल कर सकते हैं: 1. एक समानता परीक्षण (== या !=) खोजें और इसे इसके सत्य के साथ बदलें।\n\nयह विवरण पृष्ठ 114 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 22.74,
+    "generation_latency_ms": 3534.25,
+    "total_latency_ms": 3557.21
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

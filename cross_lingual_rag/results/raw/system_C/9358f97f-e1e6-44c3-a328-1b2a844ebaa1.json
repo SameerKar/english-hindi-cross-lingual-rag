@@ -1,0 +1,128 @@
+{
+  "run_id": "9358f97f-e1e6-44c3-a328-1b2a844ebaa1",
+  "timestamp": "2026-11-03T06:49:53.981240+00:00",
+  "question_id": "ALGO_03",
+  "system_id": "C",
+  "subject": "Algorithms",
+  "category": "Factual/definition",
+  "original_question": "बाइनरी मिन-हीप का उपयोग करके डाइक्स्ट्रा के एल्गोरिदम की समय जटिलता (time complexity) क्या है?",
+  "translated_question": "What is the time complexity of Dyxtra's algorithm using binary min-heap?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "algorithms_algorithms_fundamentals_p3_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p108_c0",
+    "operating_systems_operating_systems_p3_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 1,
+      "score": 0.4729,
+      "relevance_pct": "47.3%",
+      "text": "Algorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).",
+      "token_count": 215
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 2,
+      "score": 0.2804,
+      "relevance_pct": "28.0%",
+      "text": "Limitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.",
+      "token_count": 196
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 3,
+      "score": 0.2637,
+      "relevance_pct": "26.4%",
+      "text": "Dynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.",
+      "token_count": 201
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p108_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 108,
+      "score": 0.2382,
+      "relevance_pct": "23.8%",
+      "text": "ptg999 91CONGRATULATIONS, TAKE A TEST! Can we run the code while we’re ﬁ xing it? You most certainly may. The computer is there to help, so use it as much as possible. From the Library of Zed Shaw",
+      "token_count": 49
+    },
+    {
+      "chunk_id": "operating_systems_operating_systems_p3_c0",
+      "doc_id": "operating_systems_operating_systems",
+      "subject": "operating_systems",
+      "page": 3,
+      "score": 0.233,
+      "relevance_pct": "23.3%",
+      "text": "Virtual Memory and Page Replacement Algorithms Virtual memory decouples the user's logical memory from physical memory, allowing execution of processes whose address spaces exceed available physical RAM. Memory is organized into fixed-size blocks called pages (in logical memory) and frames (in physical memory). When a process attempts to access a page not currently residing in physical RAM, the memory management unit (MMU) generates a page fault hardware interrupt. When a page fault occurs and all memory frames are occupied, a page replacement algorithm must select a victim frame to swap out: - FIFO (First-In, First-Out): Replaces the oldest page loaded in memory. Can suffer from Belady's Anomaly, where increasing the number of page frames results in an increased number of page faults. - Optimal (OPT / Belady's Min): Replaces the page that will not be used for the longest period of time in the future. Provides the lowest page fault rate but is impossible to implement in practice because future references cannot be known. - Least Recently Used (LRU): Replaces the page that has not been used for the longest period in the past. Approximates the optimal algorithm by using past temporal locality.",
+      "token_count": 250
+    }
+  ],
+  "retrieval_scores": [
+    0.47290968894958496,
+    0.28042083978652954,
+    0.2636743485927582,
+    0.238217294216156,
+    0.23300155997276306
+  ],
+  "source_documents": [
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 3,
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "subject": "algorithms",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 108,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p108_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "operating_systems_operating_systems",
+      "page": 3,
+      "chunk_id": "operating_systems_operating_systems_p3_c0",
+      "subject": "operating_systems",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Algorithms' (पृष्ठ 1, खंड: `algorithms_algorithms_fundamentals_p1_c0`) के अनुसार:\n\nद्विआधारी न्यूनतम - ढेर के साथ लागू किए गए Dijkstra के एल्गोरिथ्म की समय जटिलता O((V + E) लॉग V) है, जहां V शीर्षों की संख्या है और E किनारों की संख्या है। यदि फिबोनाची ढेर के साथ लागू किया जाता है, तो चलने का समय O(E + V लॉग V) में सुधार होता है। एल्गोरिदम और डेटा संरचनाएं: ग्राफ ट्रैवर्सल और लघुतम पथ Dijkstra का एल्गोरिदम एक मौलिक एकल - स्रोत लघुतम पथ एल्गोरिदम है जिसे गैर - नकारात्मक किनारे के वजन के साथ भारित निर्देशित या अप्रत्यक्ष ग्राफ के लिए डिज़ाइन किया गया है।\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 4123.31,
+    "retrieval_latency_ms": 45.78,
+    "generation_latency_ms": 3888.86,
+    "total_latency_ms": 8058.23
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

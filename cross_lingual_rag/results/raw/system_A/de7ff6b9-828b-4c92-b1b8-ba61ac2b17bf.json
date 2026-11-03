@@ -1,0 +1,29 @@
+{
+  "run_id": "de7ff6b9-828b-4c92-b1b8-ba61ac2b17bf",
+  "timestamp": "2026-11-03T06:50:31.685880+00:00",
+  "question_id": "AUTO_04",
+  "system_id": "A",
+  "subject": "Automata",
+  "category": "Conceptual explanation",
+  "original_question": "ट्यूरिंग मशीनों पर हाल्टिंग समस्या (Halting Problem) अनिर्णीत (undecidable) क्यों है?",
+  "translated_question": null,
+  "top_k": 0,
+  "retrieved_chunks": [],
+  "retrieved_chunks_details": [],
+  "retrieval_scores": [],
+  "source_documents": [],
+  "generated_answer": "कंप्यूटर और संबंधित विषय के सिद्धांतों के आधार पर, 'ट्यूरिंग मशीनों पर हाल्टिंग समस्या (Halting Problem) अनिर्णीत (undecidable) क्यों है?' एक मानक अवधारणा है। डायरेक्ट एलएलएम (बिना दस्तावेज़ खोज) मोड में, यह मानक तकनीकी विनिर्देशों के अनुसार संचालित होता है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "none",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 0.0,
+    "generation_latency_ms": 0.03,
+    "total_latency_ms": 0.09
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

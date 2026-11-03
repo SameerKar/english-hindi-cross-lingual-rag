@@ -1,0 +1,128 @@
+{
+  "run_id": "7616867e-d288-4530-b21f-41e80ab057e6",
+  "timestamp": "2026-11-03T06:50:10.993793+00:00",
+  "question_id": "AUTO_01",
+  "system_id": "D",
+  "subject": "Automata",
+  "category": "Factual/definition",
+  "original_question": "एक नियतात्मक परिमित ऑटोमेटन (DFA) की औपचारिक परिभाषा में पांच घटक कौन से हैं?",
+  "translated_question": null,
+  "top_k": 5,
+  "retrieved_chunks": [
+    "automata_automata_theory_p1_c0",
+    "automata_automata_theory_p2_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p14_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p302_c0",
+    "automata_automata_theory_p3_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "automata_automata_theory_p1_c0",
+      "doc_id": "automata_automata_theory",
+      "subject": "automata",
+      "page": 1,
+      "score": 0.7018,
+      "relevance_pct": "70.2%",
+      "text": "Theory of Computation: Finite Automata and Regular Languages A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. A Non-Deterministic Finite Automaton (NFA) differs in its transition function, which maps Q x (Sigma union {epsilon}) to the power set 2^Q, allowing state transitions on empty strings (epsilon transitions) or multiple possible subsequent states for a single symbol. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.",
+      "token_count": 196
+    },
+    {
+      "chunk_id": "automata_automata_theory_p2_c0",
+      "doc_id": "automata_automata_theory",
+      "subject": "automata",
+      "page": 2,
+      "score": 0.4423,
+      "relevance_pct": "44.2%",
+      "text": "Context-Free Grammars and Pushdown Automata Context-Free Grammars (CFGs) generate the class of context-free languages, which strictly subsume regular languages. A CFG is a 4-tuple (V, Sigma, R, S), where V is a finite set of non-terminal variables, Sigma is the terminal alphabet, R is a finite set of production rules of the form A -> alpha with A in V and alpha in (V union Sigma)*, and S is the start symbol. A Pushdown Automaton (PDA) is the mechanical equivalent of a CFG. It extends a finite state machine with an unbounded Last-In-First-Out (LIFO) stack storage. Deterministic Pushdown Automata (DPDAs) recognize deterministic context-free languages, which form a strict subset of context-free languages recognized by non-deterministic PDAs (e.g., the language of palindromes {w w^R}).",
+      "token_count": 159
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p14_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 14,
+      "score": 0.3534,
+      "relevance_pct": "35.3%",
+      "text": "ptg999 xiiiCONTENTS Create Basic Templates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 209 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 211 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 211 Exercise 51 Getting Input from a Browser . . . . . . . . . . . . . . . . . . . . . . 214 How the Web Works . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 214 How Forms Work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 216 Creating HTML Forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 218 Creating a Layout Template . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 220 Writing Automated Tests for Forms . . . . . . . . . . . . . . . . . . . . . . . . . 221 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 223 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 224 Exercise 52 The Start of Your Web Game . . . . . . . . . . . . . . . . . . . . . . . 226 Refactoring the Exercise 43 Game . . . . . . . . . . . . . . . . . . . . . . . . . . . 226 Sessions and Tracking Users . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 231 Creating an Engine . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 232 Your Final Exam . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 235 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 236 Next Steps . . . . . . . . . . . . . . . .",
+      "token_count": 880
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p302_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 302,
+      "score": 0.3467,
+      "relevance_pct": "34.7%",
+      "text": "ptg999 285INDEX analysis and design, 154– 168 as “functional programming,” 130 inheritance in, 170, 177 top- down vs. bottom- up design processes, 161– 162 objects, 138– 143, 144– 145 classes and, 144– 145, 150– 153, 178 creating, 140 errors involving, 29 as “mini- imports,” 140– 141 object maps, 156, 158– 159 rendering, 211 self and, 144 open() function, 54, 56, 60, 64 operators, 22, 98, 125– 126 “increment by,” 101 order of operations, 22 space around, 26 P packages import command, 46– 47, 56 installing, 9– 10, 184– 185, 206 lpthw.web. See lpthw.web nose. See nose package pip, 184, 188, 193, 206, 212 sys package, 56. See also argv virtualenv, 184 Panda3D, 237 Pandas, 237 parameters, 46– 48, 148, 211– 212 argv, 67 classes and, 144– 145 errors involving, 47– 48 ﬁ le handling and, 58– 59 passing information as, 218– 219, 222– 223 raw_input(), 54– 55, 118 syntax, 204 parent/child classes, 154, 156, 170– 173. See also inheritance passing information using parameters, 218– 219, 222– 223 variables, 46– 48 peek() function, 200– 202 pickle library, 231– 232 pip package, 184, 188, 193, 206, 212 pop() function, 86, 89, 181 popd command, 246– 247, 262– 265 POST method, 218– 223 pound sign (#). See # (octothorpe) PowerShell errors involving, 8, 16, 56, 264 references for, 277 setting up, 6, 7– 9, 13, 245– 246 print function, 24, 28– 29, 32– 37 commas in, 42, 76, 195 common questions about, 33– 36 study drills for, 32– 34, 36 programmers %r string format, 29– 31, 34– 35, 37, 40– 44 advice from a veteran, 241– 242 ignoring other, 10, 115, 180, 182, 207, 243, 246 resources for, 237– 238 speciﬁ c use of numbers, 114– 115 programming “functional,” 130. See also object- oriented (OOP) programming other languages, 238– 239. See also C (programming language); Django; JavaScript; Ruby project design, 120– 122. See also game design common questions about, 189 creating a skeleton project directory, 185– 188 installing packages, 184– 185 object- oriented programming (OOP) analysis and, 154– 168 testing your setup, 187– 188 top- down vs. bottom- up, 161– 162 From the Library of Zed Shaw",
+      "token_count": 460
+    },
+    {
+      "chunk_id": "automata_automata_theory_p3_c0",
+      "doc_id": "automata_automata_theory",
+      "subject": "automata",
+      "page": 3,
+      "score": 0.336,
+      "relevance_pct": "33.6%",
+      "text": "Turing Machines and the Halting Problem A Turing Machine (TM) is a formal model of computation introduced by Alan Turing in 1936. It consists of an infinite memory tape divided into cells and a read/write tape head. The transition function delta maps Q x Gamma to Q x Gamma x {L, R}, where Gamma is the tape alphabet. The Church-Turing thesis states that any algorithm or effectively calculable function can be simulated by a Turing machine. The Halting Problem asks whether a given Turing machine M will halt on a specific input string w. Turing proved that the language A_TM = {<M, w> | M is a Turing Machine and M halts on input w} is undecidable using a diagonal argument. If a decider H for the halting problem existed, one could construct an adversarial machine D that reverses H's decision on its own description, yielding an insurmountable logical contradiction (D halts if and only if D does not halt).",
+      "token_count": 208
+    }
+  ],
+  "retrieval_scores": [
+    0.7017968893051147,
+    0.4423283338546753,
+    0.35343778133392334,
+    0.3466588854789734,
+    0.3360379636287689
+  ],
+  "source_documents": [
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 1,
+      "chunk_id": "automata_automata_theory_p1_c0",
+      "subject": "automata",
+      "rank": 1
+    },
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 2,
+      "chunk_id": "automata_automata_theory_p2_c0",
+      "subject": "automata",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 14,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p14_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 302,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p302_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "automata_automata_theory",
+      "page": 3,
+      "chunk_id": "automata_automata_theory_p3_c0",
+      "subject": "automata",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Automata' (पृष्ठ 1, खंड: `automata_automata_theory_p1_c0`) के अनुसार:\n\nTheory of Computation: Finite Automata and Regular Languages A Deterministic Finite Automaton (DFA) is formally defined as a 5-tuple (Q, Sigma, delta, q_0, F), where Q is a finite set of states, Sigma is a finite alphabet of input symbols, delta is the transition function mapping Q x Sigma to Q, q_0 in Q is the initial start state, and F subset of Q is the set of accept (or final) states. DFAs recognize the class of regular languages. Despite this flexibility, the subset construction algorithm proves that NFAs and DFAs have equivalent computational power: any NFA with n states can be converted to an equivalent DFA with at most 2^n states.\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "translation_model": "none",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 0.0,
+    "retrieval_latency_ms": 23.31,
+    "generation_latency_ms": 1513.84,
+    "total_latency_ms": 1537.34
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

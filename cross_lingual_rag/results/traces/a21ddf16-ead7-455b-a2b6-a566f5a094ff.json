@@ -1,0 +1,98 @@
+{
+  "trace_id": "a21ddf16-ead7-455b-a2b6-a566f5a094ff",
+  "run_id": "a21ddf16-ead7-455b-a2b6-a566f5a094ff",
+  "question_id": "NET_03",
+  "system_id": "C",
+  "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "start_time": "2026-11-03T06:52:12.491191+00:00",
+  "end_time": "2026-11-03T06:52:20.406251+00:00",
+  "total_latency_ms": 7914.8,
+  "spans": [
+    {
+      "span_id": "62be3701-af04-4632-9a18-9525164de08c",
+      "trace_id": "a21ddf16-ead7-455b-a2b6-a566f5a094ff",
+      "name": "machine_translation",
+      "span_type": "tool",
+      "start_time": "2026-11-03T06:52:12.491191+00:00",
+      "end_time": "2026-11-03T06:52:16.452108+00:00",
+      "latency_ms": 3960.77,
+      "inputs": {
+        "source_query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+        "from": "hi",
+        "to": "en"
+      },
+      "outputs": {
+        "translated_query": "How many layers does the OSI model have compared to the TCP/IP model?"
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "858b0ac7-8678-44ac-8d8a-302121a0f21d",
+      "trace_id": "a21ddf16-ead7-455b-a2b6-a566f5a094ff",
+      "name": "english_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:52:16.452108+00:00",
+      "end_time": "2026-11-03T06:52:16.499153+00:00",
+      "latency_ms": 47.07,
+      "inputs": {
+        "query": "How many layers does the OSI model have compared to the TCP/IP model?",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "computer_networks_computer_networks_p3_c0",
+          "computer_networks_computer_networks_p1_c0",
+          "computer_networks_computer_networks_p2_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p307_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p302_c0"
+        ],
+        "scores": [
+          0.7690037488937378,
+          0.40134966373443604,
+          0.28689542412757874,
+          0.2460559606552124,
+          0.233123779296875
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "228b1c7e-80fd-4fc5-a030-98f5966d5177",
+      "trace_id": "a21ddf16-ead7-455b-a2b6-a566f5a094ff",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:52:16.499153+00:00",
+      "end_time": "2026-11-03T06:52:20.406251+00:00",
+      "latency_ms": 3906.96,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n--- [Document Passage 2 | ID: computer_networks_computer_networks_p1_c0 | Page: 1 | Subject: computer_networks] ---\nComputer Networks: Transport Layer Protocols and TCP 3-Way Handshake The Transmission Control Protocol (TCP) is a connection-oriented, reliable, byte-stream transport layer protocol defined in RFC 793. Unlike UDP, which is connectionless and best-effort, TCP provides guaranteed in-order delivery, flow control, and congestion control. Before data transfer begins, TCP establishes a virtual connection between client and server using a Three-Way Handshake: 1. SYN: The active client generates a randomly chosen Initial Sequence Number (ISN_client = x) and sends a TCP segment with the SYN control flag set to 1. 2. SYN-ACK: The passive server receives the SYN segment, allocates connection buffers and state variables, generates its own Initial Sequence Number (ISN_server = y), and transmits a segment with SYN=1 and ACK=1, where the acknowledgment number is set to x + 1. 3. ACK: The client receives the SYN-ACK, transitions to the ESTABLISHED state, and transmits an ACK segment with ACK=1 and acknowledgment number set to y + 1. Data payloads can accompany this third packet.\n\n--- [Document Passage 3 | ID: computer_networks_computer_networks_p2_c0 | Page: 2 | Subject: computer_networks] ---\nTCP Flow Control vs Congestion Control It is vital to distinguish between flow control and congestion control in computer networks: - Flow Control is a speed-matching service that prevents a fast sender from overwhelming a slow receiver's buffer space. TCP implements flow control using a receive window (`rwnd`) field in the TCP header. The receiver explicitly informs the sender of how many spare bytes of buffer space are currently available (`rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]`). The sender ensures that the unacknowledged data never exceeds `rwnd`. - Congestion Control prevents senders from injecting too much traffic into the network subnet, avoiding packet loss and queue collapse in intermediate routers. TCP maintains a congestion window (`cwnd`). The effective transmission window is $\\min(\\text{cwnd}, \\text{rwnd})$. TCP congestion control algorithms (such as TCP Reno and Tahoe) employ four phases: Slow Start (exponential window growth), Congestion Avoidance (additive increase / multiplicative decrease, AIMD), Fast Retransmit, and Fast Recovery.\n\n--- [Document Passage 4 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p307_c0 | Page: 307 | Subject: uploaded_docs] ---\nptg999 InformIT is a brand of Pearson and the online presence for the world’s leading technology publishers. It’s your source for reliable and qualified content and knowledge, providing access to the top brands, authors, and contributors from the tech community. inform IT.com THE TRUSTED TECHNOLOGY LEARNING SOURCE Learn IT at Inform IT Looking for a book, eBook, or training video on a new technology? Seeking timely and relevant information and tutorials? Looking for expert opinions, advice, and tips? InformIT has the solution. • Learn about new releases and special promotions by subscribing to a wide variety of newsletters. Visit informit.com/newsletters . • Access FREE podcasts from experts at informit.com/podcasts . • Read the latest author articles and sample chapters at informit.com/articles . • Access thousands of books and videos in the Safari Books Online digital library at safari.informit.com . • Get tips from expert blogs at informit.com/blogs . Visit informit.com/learn to discover all the ways you can access the hottest technology content. informIT.com THE TRUSTED TECHNOLOGY LEARNING SOURCE Are You Part of the IT Crowd? Connect with Pearson authors and editors via RSS feeds, Facebook, Twitter, YouTube, and more! Visit informit.com/socialconnect . From the Library of Zed Shaw\n\n--- [Document Passage 5 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p302_c0 | Page: 302 | Subject: uploaded_docs] ---\nptg999 285INDEX analysis and design, 154– 168 as “functional programming,” 130 inheritance in, 170, 177 top- down vs. bottom- up design processes, 161– 162 objects, 138– 143, 144– 145 classes and, 144– 145, 150– 153, 178 creating, 140 errors involving, 29 as “mini- imports,” 140– 141 object maps, 156, 158– 159 rendering, 211 self and, 144 open() function, 54, 56, 60, 64 operators, 22, 98, 125– 126 “increment by,” 101 order of operations, 22 space around, 26 P packages import command, 46– 47, 56 installing, 9– 10, 184– 185, 206 lpthw.web. See lpthw.web nose. See nose package pip, 184, 188, 193, 206, 212 sys package, 56. See also argv virtualenv, 184 Panda3D, 237 Pandas, 237 parameters, 46– 48, 148, 211– 212 argv, 67 classes and, 144– 145 errors involving, 47– 48 ﬁ le handling and, 58– 59 passing information as, 218– 219, 222– 223 raw_input(), 54– 55, 118 syntax, 204 parent/child classes, 154, 156, 170– 173. See also inheritance passing information using parameters, 218– 219, 222– 223 variables, 46– 48 peek() function, 200– 202 pickle library, 231– 232 pip package, 184, 188, 193, 206, 212 pop() function, 86, 89, 181 popd command, 246– 247, 262– 265 POST method, 218– 223 pound sign (#). See # (octothorpe) PowerShell errors involving, 8, 16, 56, 264 references for, 277 setting up, 6, 7– 9, 13, 245– 246 print function, 24, 28– 29, 32– 37 commas in, 42, 76, 195 common questions about, 33– 36 study drills for, 32– 34, 36 programmers %r string format, 29– 31, 34– 35, 37, 40– 44 advice from a veteran, 241– 242 ignoring other, 10, 115, 180, 182, 207, 243, 246 resources for, 237– 238 speciﬁ c use of numbers, 114– 115 programming “functional,” 130. See also object- oriented (OOP) programming other languages, 238– 239. See also C (programming language); Django; JavaScript; Ruby project design, 120– 122. See also game design common questions about, 189 creating a skeleton project directory, 185– 188 installing packages, 184– 185 object- oriented programming (OOP) analysis and, 154– 168 testing your setup, 187– 188 top- down vs. bottom- up, 161– 162 From the Library of Zed Shaw\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 3, खंड: `computer_networks_computer_networks_p3_c0`) के अनुसार:\n\nOSI संदर्भ मॉडल बनाम TCP/IP प्रोटोकॉल स्टैक अंतर्राष्ट्रीय मानकीकरण संगठन (ISO) द्वारा विकसित ओपन सिस्टम इंटरकनेक्शन (OSI) संदर्भ मॉडल, सात अलग - अलग वास्तुशिल्प परतों के साथ एक वैचारिक ढांचा है: 1. भौतिक परत: भौतिक मीडिया पर कच्चे असंरचित बिट स्ट्रीम का संचरण और स्वागत। डेटा लिंक लेयर: नोड - टू - नोड फ़्रेम ट्रांसफ़र, मीडिया एक्सेस कंट्रोल (MAC), और एरर डिटेक्शन (CRC)।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 1180,
+          "completion_tokens": 88,
+          "total_tokens": 1268
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 3, खंड: `computer_networks_computer_networks_p3_c0`) के अनुसार:\n\nOSI संदर्भ मॉडल बनाम TCP/IP प्रोटोकॉल स्टैक अंतर्राष्ट्रीय मानकीकरण संगठन (ISO) द्वारा विकसित ओपन सिस्टम इंटरकनेक्शन (OSI) संदर्भ मॉडल, सात अलग - अलग वास्तुशिल्प परतों के साथ एक वैचारिक ढांचा है: 1. भौतिक परत: भौतिक मीडिया पर कच्चे असंरचित बिट स्ट्रीम का संचरण और स्वागत। डेटा लिंक लेयर: नोड - टू - नोड फ़्रेम ट्रांसफ़र, मीडिया एक्सेस कंट्रोल (MAC), और एरर डिटेक्शन (CRC)।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

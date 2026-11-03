@@ -1,0 +1,128 @@
+{
+  "run_id": "1a54a3a0-de34-4219-a92c-7d5779525757",
+  "timestamp": "2026-11-03T06:52:39.756222+00:00",
+  "question_id": "LIVE_Q",
+  "system_id": "C",
+  "subject": "custom",
+  "category": "general",
+  "original_question": "डाइक्स्ट्रा का एल्गोरिदम ऋणात्मक किनारों वाले ग्राफ पर क्यों विफल हो जाता है?",
+  "translated_question": "Why does Diextra's algorithm fail on a graph with negative edges?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "algorithms_algorithms_fundamentals_p2_c0",
+    "algorithms_algorithms_fundamentals_p1_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p43_c0",
+    "algorithms_algorithms_fundamentals_p3_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p247_c0"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 2,
+      "score": 0.5359,
+      "relevance_pct": "53.6%",
+      "text": "Limitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.",
+      "token_count": 196
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 1,
+      "score": 0.4108,
+      "relevance_pct": "41.1%",
+      "text": "Algorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).",
+      "token_count": 215
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p43_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 43,
+      "score": 0.1975,
+      "relevance_pct": "19.7%",
+      "text": "ptg999 26 LEARN PYTHON THE HARD WAY Can we write x=100 instead of x = 100? You can, but it’s bad form. You should add space around operators like this so that it’s easier to read. How can I print without spaces between words in print? You do it like this: print \"Hey %s there.\" % \"you\". You will do more of this soon. What do you mean by “read the ﬁ le backward”? Very simple. Imagine you have a ﬁ le with 16 lines of code in it. Start at line 16, and compare it to my ﬁ le at line 16. Then do it again for 15, and so on, until you’ve read the whole ﬁ le backward. Why did you use 4.0 for space? It is mostly so you can then ﬁ nd out what a ﬂ oating point number is and ask this question. See the Study Drills. From the Library of Zed Shaw",
+      "token_count": 205
+    },
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 3,
+      "score": 0.1952,
+      "relevance_pct": "19.5%",
+      "text": "Dynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.",
+      "token_count": 201
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p247_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 247,
+      "score": 0.171,
+      "relevance_pct": "17.1%",
+      "text": "ptg999 230 LEARN PYTHON THE HARD WAY map_tests.py 1 from nose.tools import * 2 from gothonweb.map import * 3 4 def test_room(): 5 gold = Room(\"GoldRoom\", 6 \"\"\"This room has gold in it you can grab. There's a 7 door to the north.\"\"\") 8 assert_equal(gold.name, \"GoldRoom\") 9 assert_equal(gold.paths, []) 10 11 def test_room_paths(): 12 center = Room(\"Center\", \"Test room in the center.\") 13 north = Room(\"North\", \"Test room in the north.\") 14 south = Room(\"South\", \"Test room in the south.\") 15 16 center.add_paths(['north': north, 'south': south]) 17 assert_equal(center.go('north'), north) 18 assert_equal(center.go('south'), south) 19 20 def test_map(): 21 start = Room(\"Start\", \"You can go west and down a hole.\") 22 west = Room(\"Trees\", \"There are trees here, you can go east.\") 23 down = Room(\"Dungeon\", \"It's dark down here, you can go up.\") 24 25 start.add_paths(['west': west, 'down': down]) 26 west.add_paths(['east': start]) 27 down.add_paths(['up': start]) 28 29 assert_equal(start .go('west'), west) 30 assert_equal(start.go('west').go('east'), start) 31 assert_equal(start.go('down').go('up'), start) 32 33 def test_gothon_game_map(): 34 assert_equal(START.go('shoot!'), generic_death) 35 assert_equal(START.go('dodge!'), generic_death) 36 37 room = START.go('tell a joke') 38 assert_equal(room, laser_weapon_armory) Your task in this part of the exercise is to complete the map, and make the automated test completely validate the whole map. This includes ﬁ xing all the generic_death objects to be real endings. Make sure this works really well and that your test is as complete as possible, because we’ll be changing this map later and you’ll use the tests to make sure it keeps working. From the Library of Zed Shaw",
+      "token_count": 323
+    }
+  ],
+  "retrieval_scores": [
+    0.5358551740646362,
+    0.41078031063079834,
+    0.19745181500911713,
+    0.1951923966407776,
+    0.17103394865989685
+  ],
+  "source_documents": [
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 2,
+      "chunk_id": "algorithms_algorithms_fundamentals_p2_c0",
+      "subject": "algorithms",
+      "rank": 1
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 1,
+      "chunk_id": "algorithms_algorithms_fundamentals_p1_c0",
+      "subject": "algorithms",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 43,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p43_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 3,
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "subject": "algorithms",
+      "rank": 4
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 247,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p247_c0",
+      "subject": "uploaded_docs",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Algorithms' (पृष्ठ 2, खंड: `algorithms_algorithms_fundamentals_p2_c0`) के अनुसार:\n\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant.\n\nयह विवरण पृष्ठ 2 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 3822.25,
+    "retrieval_latency_ms": 109.12,
+    "generation_latency_ms": 1601.33,
+    "total_latency_ms": 5533.24
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

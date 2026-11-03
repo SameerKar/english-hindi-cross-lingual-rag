@@ -1,13 +1,13 @@
 {
-  "timestamp_utc": "2026-11-01T21:08:09.277903+00:00",
+  "timestamp_utc": "2026-11-03T06:52:24.492087+00:00",
   "pytest_verification": {
     "passed": true,
     "return_code": 0,
-    "duration_sec": 44.51,
-    "stdout_summary": "============================= 7 passed in 41.79s =============================="
+    "duration_sec": 41.56,
+    "stdout_summary": "============================= 7 passed in 37.92s =============================="
   },
   "total_benchmark_questions": 17,
-  "total_pipeline_runs": 70,
+  "total_pipeline_runs": 68,
   "system_metrics_summary": {
     "A": {
       "num_questions": 17,
@@ -18,8 +18,8 @@
       "ndcg_at_5": null,
       "mean_translation_latency_ms": 0.0,
       "mean_retrieval_latency_ms": 0.0,
-      "mean_generation_latency_ms": 0.06,
-      "mean_total_latency_ms": 0.12,
+      "mean_generation_latency_ms": 0.07,
+      "mean_total_latency_ms": 0.13,
       "error_counts": {
         "E1_translation_drift": 0,
         "E2_retrieval_failure": 0,
@@ -36,9 +36,9 @@
       "mrr": 1.0,
       "ndcg_at_5": 1.0,
       "mean_translation_latency_ms": 0.0,
-      "mean_retrieval_latency_ms": 40.37,
-      "mean_generation_latency_ms": 0.18,
-      "mean_total_latency_ms": 40.69,
+      "mean_retrieval_latency_ms": 152.71,
+      "mean_generation_latency_ms": 102.71,
+      "mean_total_latency_ms": 255.58,
       "error_counts": {
         "E1_translation_drift": 0,
         "E2_retrieval_failure": 0,
@@ -48,41 +48,41 @@
       }
     },
     "C": {
-      "num_questions": 18,
-      "recall_at_1": 0.9444,
-      "recall_at_3": 0.9444,
-      "recall_at_5": 0.9444,
-      "mrr": 0.9444,
-      "ndcg_at_5": 0.9444,
-      "mean_translation_latency_ms": 10409.33,
-      "mean_retrieval_latency_ms": 36.11,
-      "mean_generation_latency_ms": 0.2,
-      "mean_total_latency_ms": 10445.86,
+      "num_questions": 17,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "mean_translation_latency_ms": 3820.36,
+      "mean_retrieval_latency_ms": 45.24,
+      "mean_generation_latency_ms": 3310.86,
+      "mean_total_latency_ms": 7176.73,
       "error_counts": {
         "E1_translation_drift": 0,
         "E2_retrieval_failure": 0,
         "E3_generation_failure": 0,
         "E4_language_failure": 0,
-        "clean_success": 18
+        "clean_success": 17
       }
     },
     "D": {
-      "num_questions": 18,
-      "recall_at_1": 0.6667,
-      "recall_at_3": 0.7778,
-      "recall_at_5": 0.8889,
-      "mrr": 0.7472,
-      "ndcg_at_5": 0.7822,
+      "num_questions": 17,
+      "recall_at_1": 0.6471,
+      "recall_at_3": 0.7647,
+      "recall_at_5": 0.7647,
+      "mrr": 0.7059,
+      "ndcg_at_5": 0.7213,
       "mean_translation_latency_ms": 0.0,
-      "mean_retrieval_latency_ms": 19.33,
-      "mean_generation_latency_ms": 0.18,
-      "mean_total_latency_ms": 19.64,
+      "mean_retrieval_latency_ms": 25.85,
+      "mean_generation_latency_ms": 3085.32,
+      "mean_total_latency_ms": 3111.37,
       "error_counts": {
         "E1_translation_drift": 0,
-        "E2_retrieval_failure": 1,
+        "E2_retrieval_failure": 4,
         "E3_generation_failure": 0,
         "E4_language_failure": 0,
-        "clean_success": 17
+        "clean_success": 13
       }
     }
   },
@@ -90,7 +90,7 @@
     "Algorithms": {
       "B": 1.0,
       "C": 1.0,
-      "D": 0.6875
+      "D": 0.625
     },
     "Automata": {
       "B": 1.0,
@@ -105,17 +105,12 @@
     "DBMS": {
       "B": 1.0,
       "C": 1.0,
-      "D": 1.0
+      "D": 0.8333
     },
     "Operating Systems": {
       "B": 1.0,
       "C": 1.0,
-      "D": 0.5667
-    },
-    "custom_kb": {
-      "B": NaN,
-      "C": 0.0,
-      "D": 0.0
+      "D": 0.3333
     }
   }
 }

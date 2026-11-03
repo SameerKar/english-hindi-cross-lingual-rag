@@ -1,0 +1,128 @@
+{
+  "run_id": "a0ff0e5d-aac3-43f3-a171-5633a3ab28f1",
+  "timestamp": "2026-11-03T06:50:01.683652+00:00",
+  "question_id": "ALGO_04",
+  "system_id": "C",
+  "subject": "Algorithms",
+  "category": "Conceptual explanation",
+  "original_question": "डायनामिक प्रोग्रामिंग को लागू करने के लिए आवश्यक दो मुख्य गुण कौन से हैं?",
+  "translated_question": "What are the two main qualities required to implement dynamic programming?",
+  "top_k": 5,
+  "retrieved_chunks": [
+    "algorithms_algorithms_fundamentals_p3_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p3_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p12_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p19_c0",
+    "uploaded_docs_learn_python_the_hard_way_a_very_p10_c1"
+  ],
+  "retrieved_chunks_details": [
+    {
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "subject": "algorithms",
+      "page": 3,
+      "score": 0.4551,
+      "relevance_pct": "45.5%",
+      "text": "Dynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W. The objective is to select a subset of items to maximize total value without exceeding capacity W. Because each item can either be taken (1) or left behind (0), a simple greedy strategy based on value-to-weight ratio fails. The recurrence relation is defined over a 2D table DP[i][w]: if w_i <= w, DP[i][w] = max(DP[i-1][w], DP[i-1][w - w_i] + v_i); otherwise DP[i][w] = DP[i-1][w]. The time complexity is O(n * W), which is pseudo-polynomial in nature.",
+      "token_count": 201
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p3_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 3,
+      "score": 0.3498,
+      "relevance_pct": "35.0%",
+      "text": "ptg999 Z ed Shaw’s Hard Way Series emphasizes instruction and making things as the best way to get started in many computer science topics. Each book in the series is designed around short, understandable exercises that take you through a course of instruction that creates working software. All exercises are thoroughly tested to verify they work with real students, thus increasing your chance of success. The accompanying video walks you through the code in each exercise. Zed adds a bit of humor and inside jokes to make you laugh while you’re learning. Visit informit.com/hardway for a complete list of available publications. Make sure to connect with us! informit.com/socialconnect Zed Shaw’s Hard Way Series From the Library of Zed Shaw",
+      "token_count": 154
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p12_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 12,
+      "score": 0.3421,
+      "relevance_pct": "34.2%",
+      "text": "ptg999 xiCONTENTS Exercise 43 Basic Object- Oriented Analysis and Design . . . . . . . . . . . . 156 The Analysis of a Simple Game Engine . . . . . . . . . . . . . . . . . . . . . . . 157 Write or Draw about the Problem . . . . . . . . . . . . . . . . . . . . . . . . 157 Extract Key Concepts and Research Them . . . . . . . . . . . . . . . . . . 158 Create a Class Hierarchy and Object Map for the Concepts . . . . 158 Code the Classes and a Test to Run Them . . . . . . . . . . . . . . . . . . 159 Repeat and Reﬁ ne . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 161 Top Down vs. Bottom Up . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 161 The Code for “Gothons from Planet Percal #25” . . . . . . . . . . . . . . . 162 What You Should See . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168 Exercise 44 Inheritance vs. Composition . . . . . . . . . . . . . . . . . . . . . . . . 170 What is Inheritance? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 170 Implicit Inheritance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 171 Override Explicitly . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 172 Alter Before or After . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 172 All Three Combined . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 174 The Reason for super() . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 175 Using super() with __init__ . . . . . . . . .",
+      "token_count": 869
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p19_c0",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 19,
+      "score": 0.3363,
+      "relevance_pct": "33.6%",
+      "text": "ptg999 2 LEARN PYTHON THE HARD WAY book. You might not really learn “programming” from this book, but you will learn the foundation skills you need to start learning the language. This book’s job is to teach you the three most essential skills that a beginning programmer needs to know: reading and writing, attention to detail, and spotting differences. Reading and Writing It seems stupidly obvious, but if you have a problem typing, you will have a problem learning to code. Especially if you have a problem typing the fairly odd characters in source code. Without this simple skill, you will be unable to learn even the most basic things about how software works. Typing the code samples and getting them to run will help you learn the names of the symbols, get you familiar with typing them, and get you reading the language. Attention to Detail The one skill that separates bad programmers from good programmers is attention to detail. In fact, it’s what separates the good from the bad in any profession. Without paying attention to the tiniest details of your work, you will miss key elements of what you create. In programming, this is how you end up with bugs and difﬁ cult- to- use systems. By going through this book and copying each example exactly, you will be training your brain to focus on the details of what you are doing, as you are doing it. Spotting Differences A very important skill—which most programmers develop over time— is the ability to visually notice differences between things. An experienced programmer can take two pieces of code that are slightly different and immediately start pointing out the differences. Programmers have invented tools to make this even easier, but we won’t be using any of these. You ﬁ rst have to train your brain the hard way—then you can use the tools. While you do these exercises, typing each one in, you will make mistakes. It’s inevitable; even seasoned programmers make a few. Your job is to compare what you have written to what’s required and ﬁ x all the differences. By doing so, you will train yourself to notice mistakes, bugs, and other problems. Do Not Copy- Paste You must type each of these exercises in, manually. If you copy and paste, you might as well just not even do them. The point of these exercises is to train your hands, your brain, and your mind From the Library of Zed Shaw",
+      "token_count": 538
+    },
+    {
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p10_c1",
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "subject": "uploaded_docs",
+      "page": 10,
+      "score": 0.3349,
+      "relevance_pct": "33.5%",
+      "text": ". . . . . . . . . . . . 111 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 112 Exercise 34 Accessing Elements of Lists . . . . . . . . . . . . . . . . . . . . . . . . . 114 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115 Exercise 35 Branches and Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116 What You Should See . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 118 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 118 Exercise 36 Designing and Debugging . . . . . . . . . . . . . . . . . . . . . . . . . 120 Rules for If- Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 120 Rules for Loops . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 120 Tips for Debugging . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121 Homework . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121 Exercise 37 Symbol Review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 122 Keywords . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 122 Data Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123 String Escape Sequences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "token_count": 868
+    }
+  ],
+  "retrieval_scores": [
+    0.45514726638793945,
+    0.3498117923736572,
+    0.34211263060569763,
+    0.3363381624221802,
+    0.3348782956600189
+  ],
+  "source_documents": [
+    {
+      "doc_id": "algorithms_algorithms_fundamentals",
+      "page": 3,
+      "chunk_id": "algorithms_algorithms_fundamentals_p3_c0",
+      "subject": "algorithms",
+      "rank": 1
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 3,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p3_c0",
+      "subject": "uploaded_docs",
+      "rank": 2
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 12,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p12_c0",
+      "subject": "uploaded_docs",
+      "rank": 3
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 19,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p19_c0",
+      "subject": "uploaded_docs",
+      "rank": 4
+    },
+    {
+      "doc_id": "uploaded_docs_learn_python_the_hard_way_a_very",
+      "page": 10,
+      "chunk_id": "uploaded_docs_learn_python_the_hard_way_a_very_p10_c1",
+      "subject": "uploaded_docs",
+      "rank": 5
+    }
+  ],
+  "generated_answer": "पुनर्प्राप्त दस्तावेज़ 'Algorithms' (पृष्ठ 3, खंड: `algorithms_algorithms_fundamentals_p3_c0`) के अनुसार:\n\nDynamic Programming and the 0/1 Knapsack Problem Dynamic programming is an algorithmic design paradigm based on the principle of optimality, where an optimal solution to an instance of a problem contains within it optimal solutions to subproblems. The two canonical properties required for dynamic programming to apply are optimal substructure and overlapping subproblems. In the 0/1 Knapsack Problem, we are given n items, each with a positive weight w_i and value v_i, and a knapsack of maximum capacity W.\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+  "intermediate_answer_en": null,
+  "model_name": "gpt-4o-mini",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "translation_model": "deep-translator",
+  "temperature": 0.0,
+  "latencies": {
+    "translation_latency_ms": 4340.92,
+    "retrieval_latency_ms": 40.48,
+    "generation_latency_ms": 1465.58,
+    "total_latency_ms": 5847.28
+  },
+  "error_status": "SUCCESS",
+  "error_message": null
+}

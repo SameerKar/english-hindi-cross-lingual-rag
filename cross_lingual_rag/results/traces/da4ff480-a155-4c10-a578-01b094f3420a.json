@@ -1,0 +1,78 @@
+{
+  "trace_id": "da4ff480-a155-4c10-a578-01b094f3420a",
+  "run_id": "da4ff480-a155-4c10-a578-01b094f3420a",
+  "question_id": "NET_01",
+  "system_id": "D",
+  "query": "टीसीपी 3-वे हैंडशेक (TCP 3-Way Handshake) के तीन चरण क्या हैं?",
+  "start_time": "2026-11-03T06:51:56.323257+00:00",
+  "end_time": "2026-11-03T06:52:00.285976+00:00",
+  "total_latency_ms": 3962.0,
+  "spans": [
+    {
+      "span_id": "50f17b5d-ad82-4609-86e1-2cccb853c445",
+      "trace_id": "da4ff480-a155-4c10-a578-01b094f3420a",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:51:56.323257+00:00",
+      "end_time": "2026-11-03T06:51:56.347289+00:00",
+      "latency_ms": 24.29,
+      "inputs": {
+        "query": "टीसीपी 3-वे हैंडशेक (TCP 3-Way Handshake) के तीन चरण क्या हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "computer_networks_computer_networks_p1_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p262_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p232_c0",
+          "computer_networks_computer_networks_p2_c0",
+          "computer_networks_computer_networks_p3_c0"
+        ],
+        "scores": [
+          0.7465515732765198,
+          0.3886411190032959,
+          0.34472018480300903,
+          0.33969971537590027,
+          0.332755982875824
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "50a2d90f-53f9-47ab-b719-75d049c27566",
+      "trace_id": "da4ff480-a155-4c10-a578-01b094f3420a",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:51:56.348285+00:00",
+      "end_time": "2026-11-03T06:52:00.285976+00:00",
+      "latency_ms": 3937.71,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: टीसीपी 3-वे हैंडशेक (TCP 3-Way Handshake) के तीन चरण क्या हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: computer_networks_computer_networks_p1_c0 | Page: 1 | Subject: computer_networks] ---\nComputer Networks: Transport Layer Protocols and TCP 3-Way Handshake The Transmission Control Protocol (TCP) is a connection-oriented, reliable, byte-stream transport layer protocol defined in RFC 793. Unlike UDP, which is connectionless and best-effort, TCP provides guaranteed in-order delivery, flow control, and congestion control. Before data transfer begins, TCP establishes a virtual connection between client and server using a Three-Way Handshake: 1. SYN: The active client generates a randomly chosen Initial Sequence Number (ISN_client = x) and sends a TCP segment with the SYN control flag set to 1. 2. SYN-ACK: The passive server receives the SYN segment, allocates connection buffers and state variables, generates its own Initial Sequence Number (ISN_server = y), and transmits a segment with SYN=1 and ACK=1, where the acknowledgment number is set to x + 1. 3. ACK: The client receives the SYN-ACK, transitions to the ESTABLISHED state, and transmits an ACK segment with ACK=1 and acknowledgment number set to y + 1. Data payloads can accompany this third packet.\n\n--- [Document Passage 2 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p262_c0 | Page: 262 | Subject: uploaded_docs] ---\nptg999 245COMMAND LINE CRASH COURSE Exercise 1: The Setup In this appendix, you will be instructed to do three things: • Do some things in your shell (command line, Terminal, PowerShell). • Learn about what you just did. • Do more on your own. For this ﬁ rst exercise, you’ll be expected to get your Terminal open and working so that you can do the rest of the appendix. Do This Get your Terminal, shell, or PowerShell working so you can access it quickly and know that it works. Mac OSX For Mac OSX, you’ll need to do this: • Hold down the command key and hit the spacebar. • In the top right the blue “search bar” will pop up. • Type “terminal.“ • Click on the Terminal application that looks kind of like a black box. • This will open Terminal. • You can now go to your dock and CTRL- click to pull up the menu, then select Options- >Keep in dock. Now you have your Terminal open, and it’s in your dock so you can get to it. Linux I’m assuming that if you have Linux, then you already know how to get at your Terminal. Look through the menu for your window manager for anything named “Shell” or “Terminal.” Windows On Windows we’re going to use PowerShell. People used to work with a program called cmd.exe, but it’s not nearly as usable as PowerShell. If you have Windows 7 or later, do this: • Click Start. • In “Search programs and ﬁ les,\" type “powershell.” • Hit Enter. From the Library of Zed Shaw\n\n--- [Document Passage 3 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p232_c0 | Page: 232 | Subject: uploaded_docs] ---\nptg999 215GETTING INPUT FROM A BROWSER 5. The server running this site takes the response off line (D) then sends it back over the internet on line (C). 6. The response from the server then comes off the internet on line (B), and your computer’s network interface hands it to your browser on line (A). 7. Finally, your browser then displays the response. In this description, there are a few terms you should know so that you have a common vocabulary to work with when talking about your web application: Browser The software that you’re probably using every day. Most people don’t know what a browser really does. They just call browsers “the internet.” Its job is to take addresses (like http://learnpythonthehardway.org) you type into the URL bar, then use that information to make requests to the server at that address. Address This is normally a URL (uniform resource locator) like http://learnpythonthehardway .org and indicates where a browser should go. The ﬁ rst part (http) indicates the protocol you want to use—in this case, “hyper-text transport protocol.” You can also try ftp://ibiblio .org to see how “File Transport Protocol” works. The second part (learnpythonthehardway .org) is the “hostname,” or a human readable address you can remember and that maps to a number called an IP address, similar to a telephone number for a computer on the internet. Finally, URLs can have a trailing path like the “/ book” part of http:// learnpythonthehardway.org/book, which indicates a ﬁ le or some resource on the server to retrieve with a request. There are many other parts, but those are the main ones. Connection Once a browser knows what protocol you want to use (http), what server you want to talk to (learnpythonthehardway.org), and what resource on that server to get, it must make a connection. The browser simply asks your operating system (OS) to open a “port” to the computer—usually port 80. When it works, the OS hands back to your program something that works like a ﬁ le but is actually sending and receiving bytes over the network wires between your computer and the other computer at “learnpythonthehardway .org.” This is also the same thing that happens with http://localhost:8080, but in this case you’re telling the browser to connect to your own computer (localhost) and use port 8080 rather than the default of 80. You could also do http://learnpythonthehardway .org:80 and get the same result, except you’re explicitly saying to use port 80 instead of letting it be that by default. Request Your browser is connected using the address you gave. Now it needs to ask for the resource it wants (or you want) on the remote server. If you gave ”/book” at the end of the URL, then you want the ﬁ le (resource) at ”/book”; most servers will use the real ﬁ le / book/index.html, but pretend it doesn’t exist. What the browser does to get this resource is send a request to the server. I won’t get into exactly how it does this, but just understand that it has to send something to query the server for the request. The interesting thing is that these “resources” don’t have to be ﬁ les. For instance, when the browser in From the Library of Zed Shaw\n\n--- [Document Passage 4 | ID: computer_networks_computer_networks_p2_c0 | Page: 2 | Subject: computer_networks] ---\nTCP Flow Control vs Congestion Control It is vital to distinguish between flow control and congestion control in computer networks: - Flow Control is a speed-matching service that prevents a fast sender from overwhelming a slow receiver's buffer space. TCP implements flow control using a receive window (`rwnd`) field in the TCP header. The receiver explicitly informs the sender of how many spare bytes of buffer space are currently available (`rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]`). The sender ensures that the unacknowledged data never exceeds `rwnd`. - Congestion Control prevents senders from injecting too much traffic into the network subnet, avoiding packet loss and queue collapse in intermediate routers. TCP maintains a congestion window (`cwnd`). The effective transmission window is $\\min(\\text{cwnd}, \\text{rwnd})$. TCP congestion control algorithms (such as TCP Reno and Tahoe) employ four phases: Slow Start (exponential window growth), Congestion Avoidance (additive increase / multiplicative decrease, AIMD), Fast Retransmit, and Fast Recovery.\n\n--- [Document Passage 5 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 1, खंड: `computer_networks_computer_networks_p1_c0`) के अनुसार:\n\nकंप्यूटर नेटवर्क: ट्रांसपोर्ट लेयर प्रोटोकॉल और टीसीपी 3 - वे हैंडशेक ट्रांसमिशन कंट्रोल प्रोटोकॉल (टीसीपी) आरएफसी 793 में परिभाषित एक कनेक्शन - उन्मुख, विश्वसनीय, बाइट - स्ट्रीम ट्रांसपोर्ट लेयर प्रोटोकॉल है। डेटा ट्रांसफ़र शुरू होने से पहले, TCP तीन - तरफ़ा हैंडशेक का उपयोग करके क्लाइंट और सर्वर के बीच एक वर्चुअल कनेक्शन स्थापित करता है: 1. UDP के विपरीत, जो कनेक्शन रहित और सर्वोत्तम प्रयास है, TCP गारंटीड इन - ऑर्डर डिलीवरी, फ़्लो कंट्रोल और कंजेशन कंट्रोल प्रदान करता है।\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 1441,
+          "completion_tokens": 106,
+          "total_tokens": 1547
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Procedure/algorithmic",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 1, खंड: `computer_networks_computer_networks_p1_c0`) के अनुसार:\n\nकंप्यूटर नेटवर्क: ट्रांसपोर्ट लेयर प्रोटोकॉल और टीसीपी 3 - वे हैंडशेक ट्रांसमिशन कंट्रोल प्रोटोकॉल (टीसीपी) आरएफसी 793 में परिभाषित एक कनेक्शन - उन्मुख, विश्वसनीय, बाइट - स्ट्रीम ट्रांसपोर्ट लेयर प्रोटोकॉल है। डेटा ट्रांसफ़र शुरू होने से पहले, TCP तीन - तरफ़ा हैंडशेक का उपयोग करके क्लाइंट और सर्वर के बीच एक वर्चुअल कनेक्शन स्थापित करता है: 1. UDP के विपरीत, जो कनेक्शन रहित और सर्वोत्तम प्रयास है, TCP गारंटीड इन - ऑर्डर डिलीवरी, फ़्लो कंट्रोल और कंजेशन कंट्रोल प्रदान करता है।\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

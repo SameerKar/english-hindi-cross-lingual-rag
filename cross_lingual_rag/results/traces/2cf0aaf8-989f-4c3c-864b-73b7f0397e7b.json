@@ -1,0 +1,78 @@
+{
+  "trace_id": "2cf0aaf8-989f-4c3c-864b-73b7f0397e7b",
+  "run_id": "2cf0aaf8-989f-4c3c-864b-73b7f0397e7b",
+  "question_id": "ALGO_02",
+  "system_id": "D",
+  "query": "ऋणात्मक भार वाले ग्राफ में सिंगल-सोर्स सबसे छोटा रास्ता खोजने के लिए किस एल्गोरिदम का उपयोग किया जाना चाहिए?",
+  "start_time": "2026-11-03T06:49:44.245917+00:00",
+  "end_time": "2026-11-03T06:49:45.873690+00:00",
+  "total_latency_ms": 1627.5,
+  "spans": [
+    {
+      "span_id": "51073706-499b-4492-a9db-92b63e932fb4",
+      "trace_id": "2cf0aaf8-989f-4c3c-864b-73b7f0397e7b",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:49:44.245917+00:00",
+      "end_time": "2026-11-03T06:49:44.271201+00:00",
+      "latency_ms": 25.15,
+      "inputs": {
+        "query": "ऋणात्मक भार वाले ग्राफ में सिंगल-सोर्स सबसे छोटा रास्ता खोजने के लिए किस एल्गोरिदम का उपयोग किया जाना चाहिए?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "algorithms_algorithms_fundamentals_p1_c0",
+          "algorithms_algorithms_fundamentals_p2_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p179_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p16_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p97_c0"
+        ],
+        "scores": [
+          0.7018200755119324,
+          0.6910256147384644,
+          0.3998190760612488,
+          0.3954257369041443,
+          0.377860426902771
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "d1d31bdb-39e1-44fc-927d-60e99b8d3b56",
+      "trace_id": "2cf0aaf8-989f-4c3c-864b-73b7f0397e7b",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:49:44.271201+00:00",
+      "end_time": "2026-11-03T06:49:45.873690+00:00",
+      "latency_ms": 1602.35,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: ऋणात्मक भार वाले ग्राफ में सिंगल-सोर्स सबसे छोटा रास्ता खोजने के लिए किस एल्गोरिदम का उपयोग किया जाना चाहिए?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: algorithms_algorithms_fundamentals_p1_c0 | Page: 1 | Subject: algorithms] ---\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges. The relaxation step for an edge (u, v) with weight w(u, v) checks whether the current distance to v satisfies: if dist[v] > dist[u] + w(u, v), then dist[v] is updated to dist[u] + w(u, v). The time complexity of Dijkstra's algorithm implemented with a binary min-heap is O((V + E) log V), where V is the number of vertices and E is the number of edges. If implemented with a Fibonacci heap, the running time improves to O(E + V log V).\n\n--- [Document Passage 2 | ID: algorithms_algorithms_fundamentals_p2_c0 | Page: 2 | Subject: algorithms] ---\nLimitations with Negative Edge Weights and Bellman-Ford Dijkstra's algorithm strictly fails when a graph contains negative edge weights. The core greedy invariant assumes that once a vertex is extracted from the priority queue, its shortest path distance is permanently finalized and cannot be decreased by any subsequent paths. When negative edge weights exist, a longer path with a negative edge could yield a smaller total path weight after the vertex has already been settled, violating the optimality invariant. To solve the single-source shortest path problem on graphs with negative edge weights, the Bellman-Ford algorithm must be used instead. The Bellman-Ford algorithm runs in O(V * E) time and operates by relaxing all edges in the graph V - 1 times. Furthermore, Bellman-Ford can detect the presence of negative-weight cycles reachable from the source: if an additional relaxation step in the V-th iteration still decreases any vertex distance, a negative-weight cycle exists.\n\n--- [Document Passage 3 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p179_c0 | Page: 179 | Subject: uploaded_docs] ---\nptg999 162 LEARN PYTHON THE HARD WAY This process I ﬁ nd is better once you’re more solid at programming and are naturally thinking in code about problems. This process is very good when you know small pieces of the overall puzzle but maybe don’t have enough information yet about the overall concept. Breaking it down in little pieces and exploring with code then helps you slowly grind away at the problem until you’ve solved it. However, remember that your solution will probably be meandering and weird, so that’s why my version of this process involves going back and ﬁ nding research then cleaning things up based on what you’ve learned. The Code for “Gothons from Planet Percal #25” Stop! I’m going to show you my ﬁ nal solution to the above problem but I don’t want you to just jump in and type this up. I want you to take the rough skeleton code I did above and then try to make it work based on the description. Once you have your solution, then you can come back and see how I did it. I’m going to break this ﬁ nal ﬁ le ex43.py down into sections and explain each one rather than dump all the code at once. ex43.py 1 from sys import exit 2 from random import randint This is just our basic imports for the game, nothing fancy really. ex43.py 1 class Scene(object): 2 3 def enter(self): 4 print \"This scene is not yet configured. Subclass it and implement enter().\" 5 exit(1) As you saw in the skeleton code, I have a base class for Scene that will have the common things that all scenes do. In this simple program, they don’t do much, so this is more a demonstration of what you would do to make a base class. ex43.py 1 class Engine(object): 2 3 def __init__(self, scene_map): 4 self.scene_map = scene_map 5 6 def play(self): 7 current_scene = self.scene_map.opening_scene() 8 9 while True: From the Library of Zed Shaw\n\n--- [Document Passage 4 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p16_c0 | Page: 16 | Subject: uploaded_docs] ---\nptg999 xvCONTENTS Exercise 12: View a File (less, MORE) . . . . . . . . . . . . . . . . . . . . . . . . . 271 Do This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 271 You Learned This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272 Do More . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272 Exercise 13: Stream a File (cat) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272 Do This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272 You Learned This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 273 Do More . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 273 Exercise 14: Remove a File (rm) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 273 Do This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 273 You Learned This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 275 Do More . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 275 Exercise 15: Exit Your Terminal (exit) . . . . . . . . . . . . . . . . . . . . . . . . . 275 Do This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 275 You Learned This . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 276 Do More . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n--- [Document Passage 5 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p97_c0 | Page: 97 | Subject: uploaded_docs] ---\nptg999 80 LEARN PYTHON THE HARD WAY 3. Once you have the formula worked out for the puzzle, get in there and see what happens when you modify the parts of the functions. Try to change it on purpose to make another value. 4. Finally, do the inverse. Write out a simple formula and use the functions in the same way to calculate it. This exercise might really whack your brain out, but take it slow and easy and treat it like a little game. Figuring out puzzles like this is what makes programming fun, so I’ll be giving you more little problems like this as we go. Common Student Questions Why does Python print the formula or the functions “backward”? It’s not really backward; it’s “inside out.” When you start breaking down the function into separate formulas and function calls, you’ll see how it works. Try to understand what I mean by “inside out” rather than “backward.” How can I use raw_input() to enter my own values? Remember int(raw_input())? The problem with that is then you can’t enter ﬂ oating point, so also try using float(raw_input()) instead. What do you mean by “write out a formula”? Try 24 + 34 / 100 - 1023 as a start. Convert that to use the functions. Now come up with your own similar math equation and use variables so it’s more like a formula. From the Library of Zed Shaw\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Algorithms' (पृष्ठ 1, खंड: `algorithms_algorithms_fundamentals_p1_c0`) के अनुसार:\n\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges.\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 1741,
+          "completion_tokens": 107,
+          "total_tokens": 1848
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Algorithms",
+    "category": "Procedure/algorithmic",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Algorithms' (पृष्ठ 1, खंड: `algorithms_algorithms_fundamentals_p1_c0`) के अनुसार:\n\nAlgorithms and Data Structures: Graph Traversal and Shortest Paths Dijkstra's Algorithm is a fundamental single-source shortest path algorithm designed for weighted directed or undirected graphs with non-negative edge weights. The algorithm operates by maintaining a set of vertices whose final shortest-path weights from the source have already been determined. At each step, Dijkstra's algorithm greedily selects the vertex with the minimum tentative distance from the priority queue (commonly implemented using a Fibonacci heap or binary min-heap) and relaxes all of its outgoing edges.\n\nयह विवरण पृष्ठ 1 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}

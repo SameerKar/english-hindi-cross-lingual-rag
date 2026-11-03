@@ -1,0 +1,78 @@
+{
+  "trace_id": "dead23a0-e159-4b8b-bbc8-5da7bfa59976",
+  "run_id": "dead23a0-e159-4b8b-bbc8-5da7bfa59976",
+  "question_id": "NET_03",
+  "system_id": "D",
+  "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+  "start_time": "2026-11-03T06:52:20.408252+00:00",
+  "end_time": "2026-11-03T06:52:23.807347+00:00",
+  "total_latency_ms": 3399.71,
+  "spans": [
+    {
+      "span_id": "27eac083-56f4-4758-8338-6da99ced529e",
+      "trace_id": "dead23a0-e159-4b8b-bbc8-5da7bfa59976",
+      "name": "multilingual_cross_lingual_retrieval",
+      "span_type": "retriever",
+      "start_time": "2026-11-03T06:52:20.408252+00:00",
+      "end_time": "2026-11-03T06:52:20.429423+00:00",
+      "latency_ms": 22.14,
+      "inputs": {
+        "query": "ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?",
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "top_k": 5
+      },
+      "outputs": {
+        "retrieved_chunks": [
+          "computer_networks_computer_networks_p3_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p13_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p11_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p14_c0",
+          "uploaded_docs_learn_python_the_hard_way_a_very_p8_c2"
+        ],
+        "scores": [
+          0.5655050277709961,
+          0.45811691880226135,
+          0.40704619884490967,
+          0.39751189947128296,
+          0.36352935433387756
+        ]
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    },
+    {
+      "span_id": "3df966ea-af2b-421f-a91b-4d517e3976a1",
+      "trace_id": "dead23a0-e159-4b8b-bbc8-5da7bfa59976",
+      "name": "llm_generation",
+      "span_type": "llm",
+      "start_time": "2026-11-03T06:52:20.429423+00:00",
+      "end_time": "2026-11-03T06:52:23.807347+00:00",
+      "latency_ms": 3377.57,
+      "inputs": {
+        "prompt": "You are an academic question-answering assistant.\nUse only the supplied retrieved academic context to answer the question.\nFormulate your complete answer in clear, technically sound Hindi (Devanagari script), retaining established standard Computer Science terms (e.g., Deadlock, Semaphore, B+ Tree, Paging) in English or transliterated with English in parentheses.\nIf the context is insufficient, state clearly in Hindi that the supplied context does not contain enough information, rather than inventing an answer.\n\nQuestion: ओएसआई मॉडल में टीसीपी/आईपी मॉडल की तुलना में कितनी परतें होती हैं?\n\nRetrieved academic context:\n--- [Document Passage 1 | ID: computer_networks_computer_networks_p3_c0 | Page: 3 | Subject: computer_networks] ---\nOSI Reference Model vs TCP/IP Protocol Stack The Open Systems Interconnection (OSI) reference model, developed by the International Organization for Standardization (ISO), is a conceptual framework with seven distinct architectural layers: 1. Physical Layer: Transmission and reception of raw unstructured bit streams over physical media. 2. Data Link Layer: Node-to-node frame transfer, media access control (MAC), and error detection (CRC). 3. Network Layer: Multi-hop routing, packet forwarding, and logical addressing (IPv4, IPv6). 4. Transport Layer: End-to-end process-to-process communication, multiplexing (TCP, UDP). 5. Session Layer: Dialog control, token management, and synchronization checkpoints. 6. Presentation Layer: Syntax translation, character encoding, data compression, and encryption/SSL. 7. Application Layer: High-level network application services (HTTP, DNS, SMTP, FTP). In contrast, the practical TCP/IP Internet model consolidates the top three layers into a single Application Layer, resulting in a streamlined four-layer stack: Network Interface (Link), Internet (IP), Transport (TCP/UDP), and Application.\n\n--- [Document Passage 2 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p13_c0 | Page: 13 | Subject: uploaded_docs] ---\nptg999 xii CONTENTS Final Directory Structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 186 Testing Your Setup . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187 Using the Skeleton . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188 Required Quiz . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 189 Exercise 47 Automated Testing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190 Writing a Test Case . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190 Testing Guidelines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 192 What You Should See . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 192 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 193 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 193 Exercise 48 Advanced User Input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 194 Our Game Lexicon . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 194 Breaking Up a Sentence . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 195 Lexicon Tuples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 195 Scanning Input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 195 Exceptions and Numbers . . . . . . . . . . . . . . . . . . . . . .\n\n--- [Document Passage 3 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p11_c0 | Page: 11 | Subject: uploaded_docs] ---\nptg999 x CONTENTS Reading Code . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 126 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 127 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 127 Exercise 38 Doing Things to Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 128 What You Should See . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 129 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130 Exercise 39 Dictionaries, Oh Lovely Dictionaries . . . . . . . . . . . . . . . . . . 132 What You Should See . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 134 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135 Exercise 40 Modules, Classes, and Objects . . . . . . . . . . . . . . . . . . . . . . 138 Modules Are Like Dictionaries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 138 Classes Are Like Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 139 Objects Are Like Mini- Imports . . . . . . . . . . . . . . . . . . . . . . . . . . . 140 Getting Things from Things . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 141 A First-Class Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 141 What You Should See . . . . . . . . . . . . . . . . . . . . . . . .\n\n--- [Document Passage 4 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p14_c0 | Page: 14 | Subject: uploaded_docs] ---\nptg999 xiiiCONTENTS Create Basic Templates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 209 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 211 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 211 Exercise 51 Getting Input from a Browser . . . . . . . . . . . . . . . . . . . . . . 214 How the Web Works . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 214 How Forms Work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 216 Creating HTML Forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 218 Creating a Layout Template . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 220 Writing Automated Tests for Forms . . . . . . . . . . . . . . . . . . . . . . . . . 221 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 223 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 224 Exercise 52 The Start of Your Web Game . . . . . . . . . . . . . . . . . . . . . . . 226 Refactoring the Exercise 43 Game . . . . . . . . . . . . . . . . . . . . . . . . . . . 226 Sessions and Tracking Users . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 231 Creating an Engine . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 232 Your Final Exam . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 235 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 236 Next Steps . . . . . . . . . . . . . . . .\n\n--- [Document Passage 5 | ID: uploaded_docs_learn_python_the_hard_way_a_very_p8_c2 | Page: 8 | Subject: uploaded_docs] ---\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71 Study Drills . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71 Common Student Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71 From the Library of Zed Shaw\n\n\nGive a concise, technically accurate answer in Hindi.\n",
+        "model": "gpt-4o-mini"
+      },
+      "outputs": {
+        "answer": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 3, खंड: `computer_networks_computer_networks_p3_c0`) के अनुसार:\n\nOSI संदर्भ मॉडल बनाम TCP/IP प्रोटोकॉल स्टैक अंतर्राष्ट्रीय मानकीकरण संगठन (ISO) द्वारा विकसित ओपन सिस्टम इंटरकनेक्शन (OSI) संदर्भ मॉडल, सात अलग - अलग वास्तुशिल्प परतों के साथ एक वैचारिक ढांचा है: 1. भौतिक परत: भौतिक मीडिया पर कच्चे असंरचित बिट स्ट्रीम का संचरण और स्वागत। डेटा लिंक लेयर: नोड - टू - नोड फ़्रेम ट्रांसफ़र, मीडिया एक्सेस कंट्रोल (MAC), और एरर डिटेक्शन (CRC)।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।",
+        "tokens": {
+          "prompt_tokens": 2467,
+          "completion_tokens": 88,
+          "total_tokens": 2555
+        }
+      },
+      "metadata": {},
+      "status": "SUCCESS",
+      "error": null,
+      "parent_span_id": null
+    }
+  ],
+  "metadata": {
+    "subject": "Computer Networks",
+    "category": "Factual/definition",
+    "final_output": "पुनर्प्राप्त दस्तावेज़ 'Computer Networks' (पृष्ठ 3, खंड: `computer_networks_computer_networks_p3_c0`) के अनुसार:\n\nOSI संदर्भ मॉडल बनाम TCP/IP प्रोटोकॉल स्टैक अंतर्राष्ट्रीय मानकीकरण संगठन (ISO) द्वारा विकसित ओपन सिस्टम इंटरकनेक्शन (OSI) संदर्भ मॉडल, सात अलग - अलग वास्तुशिल्प परतों के साथ एक वैचारिक ढांचा है: 1. भौतिक परत: भौतिक मीडिया पर कच्चे असंरचित बिट स्ट्रीम का संचरण और स्वागत। डेटा लिंक लेयर: नोड - टू - नोड फ़्रेम ट्रांसफ़र, मीडिया एक्सेस कंट्रोल (MAC), और एरर डिटेक्शन (CRC)।\n\nयह विवरण पृष्ठ 3 पर उल्लिखित प्राथमिक तकनीकी सिद्धांतों और विशिष्टताओं से सीधे समर्थित है।"
+  },
+  "status": "SUCCESS",
+  "error": null
+}
