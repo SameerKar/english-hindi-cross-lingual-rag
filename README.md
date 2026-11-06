@@ -681,12 +681,32 @@ The platform is designed with zero lock-in. You can run completely offline witho
 ## 8. Step-by-Step Verification, Testing & Operational Runbook
 
 ### Quickstart: One-Click Launchers
-The platform includes self-contained, automated startup scripts for Windows, macOS, and Linux that verify Python 3.10+, create and activate a virtual environment, install missing requirements, initialize `.env` safely, launch the FastAPI server, and open the interactive web studio in your default browser.
 
-#### Windows (Command Prompt or File Explorer)
-Double-click `start_windows.bat` or run:
+The platform includes automated startup scripts for Windows, macOS, and Linux that detect Python 3.10+, check dependencies, initialize `.env` safely, launch the FastAPI server, and open the interactive web studio in your default browser.
+
+#### Windows Options (Double-Click or Command Line)
+
+**Option 1: One-Click Launcher (Recommended)**
+Double-click **`run_app.bat`** (or `start_windows.bat`) in the project root.
+- Automatically detects `python`, `py -3`, `py`, or `python3`.
+- Auto-verifies installed packages; only sets up `.venv` if dependencies are missing.
+- Opens your browser automatically to `http://127.0.0.1:8000`.
+- Keeps the terminal window open if an error occurs so you can easily inspect diagnostic logs.
+
+**Option 2: Direct Command Line (Instant)**
+Open Command Prompt (`cmd`) or PowerShell and run:
 ```cmd
-start_windows.bat
+cd cross_lingual_rag
+python server.py
+```
+*(If `python` is not in your PATH, use `py server.py` or `py -3 server.py`)*
+
+Then open **`http://127.0.0.1:8000`** in your web browser.
+
+**Option 3: PowerShell Script**
+Right-click **`run_app.ps1`** and choose **"Run with PowerShell"**, or from a PowerShell prompt:
+```powershell
+.\run_app.ps1
 ```
 
 #### macOS / Linux (Terminal)
@@ -694,6 +714,20 @@ start_windows.bat
 chmod +x start_macos_linux.sh
 ./start_macos_linux.sh
 ```
+
+---
+
+### Windows Troubleshooting Guide
+
+If double-clicking `run_app.bat` does not start the program, check these 3 common Windows settings:
+
+1. **Python not added to PATH**:
+   - Re-run the Python installer from [python.org](https://www.python.org/downloads/) and ensure you check the box: **`[X] Add python.exe to PATH`**.
+2. **Windows App Execution Aliases redirecting to Microsoft Store**:
+   - Open **Windows Settings** $\to$ **Apps** $\to$ **Advanced app settings** $\to$ **App execution aliases**.
+   - Turn **OFF** both **`App Installer (python.exe)`** and **`App Installer (python3.exe)`**.
+3. **Running directly inside an unextracted ZIP**:
+   - Make sure you right-click the downloaded `.zip` file from GitHub and click **"Extract All..."** before running any script. Running directly inside Windows Explorer's compressed zip preview will prevent virtual environment creation.
 
 ---
 
