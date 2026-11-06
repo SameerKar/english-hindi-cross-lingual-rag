@@ -20,6 +20,7 @@ import os
 import sys
 import time
 import json
+import shutil
 import argparse
 import subprocess
 from pathlib import Path
@@ -83,31 +84,94 @@ def run_pytest_suite() -> dict:
     }
 
 
-def clean_stale_logs_and_traces(raw_dir: Path, traces_dir: Path):
-    """Archives / cleans stale logs so current benchmark runs are isolated."""
+def update_history_manifest(archive_base: Path, root: Path):
+    """Scans results/archive/runs/ and writes history_manifest.json with all historical runs."""
+    runs = []
+    for p in sorted(archive_base.iterdir(), reverse=True):
+        if p.is_dir() and p.name.startswith("run_"):
+            rep = p / "evaluation_report.md"
+            csv = p / "benchmark_results.csv"
+            obs = p / "complete_project_observations.json"
+            obs_data = {}
+            if obs.exists():
+                try:
+                    with open(obs, "r", encoding="utf-8") as f:
+                        obs_data = json.load(f)
+                except Exception:
+                    pass
+
+            time_label = p.name.replace("run_", "").replace("_", " ").title()
+
+            runs.append({
+                "run_id": p.name,
+                "name": f"Run {time_label}",
+                "path": str(p.relative_to(root)).replace("\\", "/"),
+                "has_markdown": rep.exists(),
+                "has_csv": csv.exists(),
+                "has_observations": obs.exists(),
+                "total_runs": obs_data.get("total_pipeline_runs", 0),
+                "timestamp": obs_data.get("timestamp_utc", datetime.fromtimestamp(p.stat().st_mtime).isoformat()),
+                "metrics": obs_data.get("system_metrics_summary", {})
+            })
+
+    manifest_file = archive_base / "history_manifest.json"
+    with open(manifest_file, "w", encoding="utf-8") as f:
+        json.dump(runs, f, indent=2, ensure_ascii=False)
+    return runs
+
+
+def archive_previous_run_logs(raw_dir: Path, traces_dir: Path, root: Path, config: dict):
+    """Archives previous run logs and reports into results/archive/runs/run_YYYYMMDD_HHMMSS before starting a new isolated run."""
     print("\n" + "=" * 80)
-    print("[Step 2] Cleaning Stale JSON Logs & Traces...")
+    print("[Step 2] Archiving Previous Run Logs & Traces to History...")
     print("=" * 80)
 
-    raw_count = 0
-    if raw_dir.exists():
-        for f in raw_dir.rglob("*.json"):
-            try:
-                f.unlink()
-                raw_count += 1
-            except Exception as e:
-                print(f"[Warning] Could not delete {f}: {e}")
-    print(f"  -> Cleaned {raw_count} old raw JSON logs from {raw_dir}")
+    archive_base = root / "results" / "archive" / "runs"
+    ensure_directory(str(archive_base))
 
-    traces_count = 0
-    if traces_dir.exists():
-        for f in traces_dir.rglob("*.json"):
+    # Check if there are active logs or reports from a previous run
+    has_logs = raw_dir.exists() and any(raw_dir.rglob("*.json"))
+    if has_logs:
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archive_dir = archive_base / f"run_{ts}_archived"
+        ensure_directory(str(archive_dir / "raw"))
+        ensure_directory(str(archive_dir / "traces"))
+
+        summary_dir = root / Path(config["paths"].get("results_summary_dir", "results/benchmark/summaries"))
+        csv_dir = root / Path(config["paths"].get("results_csv_dir", "results/benchmark/csv"))
+        if (summary_dir / "evaluation_report.md").exists():
+            shutil.copy2(summary_dir / "evaluation_report.md", archive_dir / "evaluation_report.md")
+        if (summary_dir / "complete_project_observations.json").exists():
+            shutil.copy2(summary_dir / "complete_project_observations.json", archive_dir / "complete_project_observations.json")
+        if (csv_dir / "benchmark_results.csv").exists():
+            shutil.copy2(csv_dir / "benchmark_results.csv", archive_dir / "benchmark_results.csv")
+
+        moved_raw = 0
+        for f in list(raw_dir.rglob("*.json")):
             try:
-                f.unlink()
-                traces_count += 1
+                rel = f.relative_to(raw_dir)
+                target = archive_dir / "raw" / rel
+                ensure_directory(str(target.parent))
+                shutil.move(str(f), str(target))
+                moved_raw += 1
             except Exception as e:
-                print(f"[Warning] Could not delete {f}: {e}")
-    print(f"  -> Cleaned {traces_count} old trace files from {traces_dir}")
+                print(f"[Notice] Could not move {f}: {e}")
+
+        moved_traces = 0
+        if traces_dir.exists():
+            for f in list(traces_dir.rglob("*.json")):
+                try:
+                    target = archive_dir / "traces" / f.name
+                    shutil.move(str(f), str(target))
+                    moved_traces += 1
+                except Exception as e:
+                    print(f"[Notice] Could not move trace {f}: {e}")
+
+        print(f"  -> Preserved and archived previous run to: {archive_dir}")
+        print(f"     ({moved_raw} raw JSON logs and {moved_traces} traces preserved in history)")
+        update_history_manifest(archive_base, root)
+    else:
+        print("  -> No pending previous logs to archive. Ready for fresh run.")
 
 
 def verify_corpus_and_indexes(config: dict):
@@ -142,13 +206,21 @@ def verify_corpus_and_indexes(config: dict):
 def main():
     parser = argparse.ArgumentParser(description="Cross-Lingual RAG Experiment Runner")
     parser.add_argument("--smoke", action="store_true", help="Run quick 5-question smoke test")
+    parser.add_argument("--dry-run", "--scenarios", dest="dry_run", action="store_true", help="Run 5-scenario cross-subject dry run (1 question per subject)")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of questions to evaluate")
     parser.add_argument("--strict", action="store_true", help="Enforce strict benchmark mode (no local LLM fallback)")
     parser.add_argument("--skip-pytest", action="store_true", help="Skip running pytest suite")
     args = parser.parse_args()
 
-    max_q = 5 if args.smoke else args.limit
-    run_type = "smoke" if args.smoke else "benchmark"
+    if args.dry_run:
+        run_type = "dry_run"
+        max_q = 5
+    elif args.smoke:
+        run_type = "smoke"
+        max_q = 5
+    else:
+        run_type = "benchmark"
+        max_q = args.limit
 
     print("=" * 80)
     print(f"[RESEARCH BENCHMARK] ENGLISH-HINDI CROSS-LINGUAL ACADEMIC RAG: {run_type.upper()} SUITE")
@@ -163,23 +235,28 @@ def main():
     if not args.skip_pytest:
         pytest_status = run_pytest_suite()
 
-    # 2. Clean stale logs and traces
+    # 2. Archive previous run logs and traces to history
     raw_dir = root / Path(config["paths"].get("results_raw_dir", "results/benchmark/raw"))
     traces_dir = root / "results" / "traces"
-    clean_stale_logs_and_traces(raw_dir, traces_dir)
+    archive_previous_run_logs(raw_dir, traces_dir, root, config)
 
     # 3. Verify Reference Corpus & FAISS Stores
     verify_corpus_and_indexes(config)
 
     # 4. Initialize Orchestrator and Execute Benchmark Questions
     print("\n" + "=" * 80)
-    print(f"[Step 4] Initializing Pipeline Orchestrator & Executing Runs (Limit: {max_q or 'ALL'})...")
+    print(f"[Step 4] Initializing Pipeline Orchestrator & Executing Runs (Mode: {run_type})...")
     print("=" * 80)
     orchestrator = PipelineOrchestrator(config)
 
     bench_csv = root / Path(config["paths"].get("benchmark_file", "data/benchmark/questions.csv"))
     df_bench = pd.read_csv(bench_csv)
-    if max_q:
+    if args.dry_run:
+        # Sample 1 representative scenario from each subject (Algorithms, Automata, DBMS, Operating Systems, Computer Networks)
+        df_bench = df_bench.groupby("subject", as_index=False, sort=False).first()
+        if max_q:
+            df_bench = df_bench.head(max_q)
+    elif max_q:
         df_bench = df_bench.head(max_q)
     total_q = len(df_bench)
     print(f"Loaded {total_q} paired benchmark questions from {bench_csv}")
@@ -220,11 +297,11 @@ def main():
     print("[Step 5] Running Scientific Evaluation Harness & Generating Reports...")
     print("=" * 80)
     evaluator = EvaluationHarness(config)
-    df_eval, report_md = evaluator.run_evaluation(exclude_smoke=False if args.smoke else True)
+    df_eval, report_md = evaluator.run_evaluation(exclude_smoke=False if (args.smoke or args.dry_run) else True)
 
     # 6. Save Complete Structured Observations JSON
     summary_dir = root / Path(config["paths"].get("results_summary_dir", "results/benchmark/summaries"))
-    obs_path = summary_dir / "complete_project_observations.json"
+    obs_path = summary_dir / ("dry_run_observations.json" if args.dry_run else "complete_project_observations.json")
 
     sys_summary = {}
     for s_id in ["A", "B", "C", "D"]:
@@ -261,12 +338,47 @@ def main():
     with open(obs_path, "w", encoding="utf-8") as f:
         json.dump(observations_payload, f, indent=2, ensure_ascii=False)
 
+    if args.dry_run:
+        # Also save dedicated dry_run files for immediate tester review
+        dry_run_csv = evaluator.csv_dir / "dry_run_results.csv"
+        dry_run_md = evaluator.summary_dir / "dry_run_evaluation_report.md"
+        df_eval.to_csv(dry_run_csv, index=False)
+        with open(dry_run_md, "w", encoding="utf-8") as f:
+            f.write(report_md)
+
+    # 7. Persist this completed run into historical archive
+    archive_base = root / "results" / "archive" / "runs"
+    ensure_directory(str(archive_base))
+    run_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_archive_dir = archive_base / f"run_{run_ts}_{run_type}"
+    ensure_directory(str(run_archive_dir / "raw"))
+
+    if (evaluator.summary_dir / "evaluation_report.md").exists():
+        shutil.copy2(evaluator.summary_dir / "evaluation_report.md", run_archive_dir / "evaluation_report.md")
+    if obs_path.exists():
+        shutil.copy2(obs_path, run_archive_dir / "complete_project_observations.json")
+    if (evaluator.csv_dir / "benchmark_results.csv").exists():
+        shutil.copy2(evaluator.csv_dir / "benchmark_results.csv", run_archive_dir / "benchmark_results.csv")
+
+    for f in raw_dir.rglob("*.json"):
+        rel = f.relative_to(raw_dir)
+        target = run_archive_dir / "raw" / rel
+        ensure_directory(str(target.parent))
+        shutil.copy2(str(f), str(target))
+
+    update_history_manifest(archive_base, root)
+
     print("\n" + "=" * 80)
     print("[OK] EXPERIMENT & OBSERVATION RECORDING FULLY COMPLETE!")
     print("=" * 80)
     print(f"1. Consolidated CSV Table : {evaluator.csv_dir}/benchmark_results.csv")
+    if args.dry_run:
+        print(f"   Dedicated Dry-Run CSV  : {evaluator.csv_dir}/dry_run_results.csv")
     print(f"2. Markdown Evaluation    : {evaluator.summary_dir}/evaluation_report.md")
+    if args.dry_run:
+        print(f"   Dedicated Dry-Run MD   : {evaluator.summary_dir}/dry_run_evaluation_report.md")
     print(f"3. JSON Observations Log  : {obs_path}")
+    print(f"4. Historical Run Archive : {run_archive_dir}")
     print("\nFinal Summary Preview:\n")
     print(report_md)
 

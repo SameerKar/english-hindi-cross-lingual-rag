@@ -1,0 +1,2515 @@
+INFLIBNET Centre Operating System (e-PG Pathshala)
+License: CC BY-NC 4.0
+
+
+
+=== MODULE: chapter-1 ===
+
+1
+Operating System : Introduction
+1.  Introduction to Operating Systems
+This module discusses about what an operating system is, the different definitions of operating systems and the features of different operating systems that evolved over time.
+1.1  What is an operating system?
+An operating system is a program that acts as an intermediary between a user of a computer and the computer hardware.
+It is a software. It acts as an interface between the user who is using the computer and the hardware that is present in the computer. So for users to easily use the computer, the operating system plays a role. Users may not know what’s happening inside a computer and how the hardware is actually working. So we have the operating system that sits between the user and hardware and does the interfacing work.
+An  operating  system  manages  a  computer’s  resources  for  users  and applications.
+There are a number of resources in the computer like the CPU, I/O devices, memory etc. These resources have to be utilized properly by the different applications of different/same users/user that are running in the computer. There can be many applications running in the computer and each application may have to use different resources of the computer. Hence the resources have to be managed properly by allocating them properly to different applications.
+An operating system is a control program
+An operating system acts like a control program that controls the execution of user programs and operations of I/O devices.
+An operating system is one program that is running at all times in the computer.
+1.2
+Goals of an operating system:
+Execute user programs and make solving user problems easier.
+Convenience
+Efficiency
+One of the goals of an operating system is to execute the users’ programs in an easier way. Convenience is another criterion that has been looked at for the design of the operating system. For example, the Windows operating system was designed in a way that it is easier for the users to use. But in the earlier UNIX systems, efficiency was the main concern while designing the operating system. But these days, UNIX systems have a user interface which is easier and convenient for people to use. So, depending on the kind of application for which the system is used for, convenience or efficiency can be taken as the criterion during the design of the operating system.
+1.3  Evolution of operating systems
+Different operating systems have evolved over time. Right from when operating systems came into existence, different functionalities have been gradually added to operating systems.
+1.3.1  Mainframe Systems
+Initially, computers were mainframe systems. The computers were very large, sometimes occupying one full floor in a building. The computers were very expensive and could be used only by a single person. Users had to take their programs in cards and handover to the person who is in-charge of the computer. The users could then collect the results the next day. So, users had to wait one after the other to submit the input and wait till the next day to collect the results.
+Fig 1.1 Mainframe Systems (Source: Ref. [1])
+Hence the operating system in this case had to just transfer control from one job
+to another in a sequential manner. This sequential execution causes unnecessary time consumption. The operating system can reduce set up time by matching similar jobs together. It is seen that the operating system in this type of systems has very limited functionalities. As seen in Figure 1.1, there is a resident monitor/operating system that resides in the system. Initially the control will be with the monitor. Then the control is transferred to a job. After completion of the job, control is transferred to the monitor. So, there is a possibility for the CPU to remain idle for a lot of time.
+When disk technology was introduced, jobs could be put into a disk and could be read from the disk rather than being read from the input card reader. Hence, it was possible to place multiple jobs into the disk at the same. Thus, the multi-programmed batch systems came into existence.
+1.3.2  Multi-programmed batch systems
+Fig 1.2 Multiprogrammed batch systems (Source: Ref. [1])
+In a multiprogrammed batch system, multiple programs can be brought into the main memory from the disk simultaneously at a particular time as shown in Figure 1.2. One of the jobs in the main memory will be given the CPU. The operating system now has additional functionalities of selecting jobs from the disk to be brought into the main memory and selecting one of the jobs in the main memory to be given to the CPU. If there are 10 jobs in the disk and there is space in the main memory for only 3, 3 out of the 10 jobs must be chosen to be brought into the main memory. This is done by the job scheduler. As only one job can be given to the CPU at a particular time, choosing one of the different jobs present in the main memory to be given to the CPU is done by the CPU scheduler. When the 3 jobs are placed in the main memory, decision has to be made as to where to place the jobs in the main memory. Hence memory management was added as a functionality of the operating system. I/O devices also have to be allocated to processes. Hence I/O management was included as a functionality to the operating system.
+In  these  systems,  multiple  programs  can  be  kept  in  the  memory.  But  a one-to-one interaction between the user and computer was missing. Hence, a new
+system was developed called the time-sharing systems. These time-sharing systems are basically an extension of multiprogramming systems and are called multitasking systems.
+1.3.3  Time Sharing / Multitasking Systems
+The operating systems like Windows, MacOS and Linux that we see today are all time sharing systems. A time sharing system is a logical extension of multiprogramming systems. In these systems, the CPU is multiplexed among several jobs that are kept in memory and on disk and hence job scheduling and CPU scheduling are included in the functions of the operating system. Here, a direct communication between the user and the system is provided. It is possible for many users to use the system at a particular time. Since the speed of users is much less than the speed of the CPU, CPU time can be shared among the different users’ programs. Since many jobs can be brought into the main memory, memory management is needed.
+It may be necessary for some process to wait for I/O to happen (say read an input from the user). Then this process may be moved/swapped from the main memory to the disk. Another partially executed process which was moved to the disk earlier can be brought into the main memory. Thus partially executed jobs can be moved in and out of memory to the disk. Hence the concept of virtual memory is introduced. Virtual memory also allows programs to be larger than the physical memory.
+Since many users are using the computer, each user will have his/her own files and these files have to be placed in the secondary storage device / disks. When there are many files, the files have to be arranged in a logical manner. Hence, file systems were included as a part of operating systems. Since files are present in disks, disk management was also needed.
+It is possible to have many processes of a particular user or different users to run concurrently. At a particular time, only one process can use the CPU. When one process is waiting for I/O, another process may use the CPU and vice versa. This may not be felt by the users using the computer. Thus concurrent execution of processes is possible.
+When many processes execute concurrently, they may have to communicate among themselves or may have to share common variables or data structures. Hence job synchronization and communication are needed. Similarly, when processes execute concurrently and share resources of the computer, it is possible that deadlocks may occur. Hence the operating system must have the capability to handle deadlocks.
+1.3.4  Desktop Systems
+Initially, the CPUs in PCs lacked the features needed to protect an operating system from user programs. PC operating systems therefore were neither multiuser nor multitasking. The goals of these operating systems have changed with time; instead of maximizing CPU and peripheral utilization, the systems opt for maximizing user convenience and responsiveness. Initially, file protection was not needed in a personal machine. But since computers are connected to other networks these days, other computers and other users can access the files on a PC and hence file protection again
+has become a necessary feature of the operating system. The lack of such protection has made it easy for malicious programs to destroy data on systems such as MS-DOS and the Macintosh operating system. These programs may be self-replicating, and may spread rapidly via worm or virus mechanisms and disrupt entire companies or even worldwide networks.
+1.3.5  Multiprocessor Systems / Parallel Systems
+The systems discussed in the earlier sections had only one CPU. But multiprocessor systems have more than one processor in close communication, sharing the computer bus, the clock, and sometimes memory and peripheral devices. These systems are also called as tightly coupled systems.
+The advantages of multiprocessor systems are increased throughput, economy of scale and increased reliability. When there are more number of processors, more work is done in less time. Multiprocessor systems can save more money than multiple single-processor systems, because they can share peripherals, storage and power supplies. If several programs operate on the same set of data, it is cheaper to store those data on one disk and to have all the processors share them, than to have many computers with local disks and many copies of the data. If functions can be distributed properly among several processors, then the failure of one processor will not halt the system, only slow it down. Hence the system becomes more reliable.
+There are two types of multiprocessing systems: symmetric and asymmetric multiprocessing. In symmetric multiprocessing (SMP), each processor runs an identical copy of the operating system, and these copies communicate with one another as needed. In asymmetric multiprocessing, each processor is assigned a specific task. Each processor can have different capabilities as well. A master processor controls the system; the other processors either look to the master for instructions or have predefined tasks. This scheme defines a master-slave relationship. The master processor schedules and allocates work to the slave processors.
+1.3.6  Distributed Systems
+Distributed systems depend on networking for their functionality. Distributed systems communicate among themselves using high–speed communication lines. Hence they are able to share computational tasks and provide a lot of features for the users. These systems do not share memory or a clock. Instead, each processor has its own local memory. Hence these systems are usually referred to as loosely coupled systems (or distributed systems).
+Client-Server Systems:Earlier, terminals which were connected to a centralized system provided the user interface for the user. Now, personal computers (PCs) have replaced the terminals. In client-server systems, multiple clients connect to a server and the server provides the necessary service for the clients. Client-server systems can be either compute-server systems or file-server systems. In compute-server systems, the server provides computational services to the user. In file-server systems, a file-system interface is provided where clients can create, update, read, and delete files.
+Peer-to-peer Systems:In this type of systems, all computers are peers. Each computer can communicate with the other computers using communication lines or a network. Different  processes  on  different  computers  can  exchange  messages.  A  network operating system which is an operating system that provides features such as file sharing across the network and communication, can help in this kind of communication. A computer  running a network operating system acts autonomously from all other computers on the network, although it is aware of the network and is able to communicate with other networked computers. The different operating systems present in different computers communicate closely enough to provide the illusion that only a single operating system controls the network.
+1.3.7  Real-time operating systems
+A real-time system is used when rigid time requirements have been placed on the operation of a processor or the flow of data; thus, it is often used as a control device in a dedicated application. A real-time system has well-defined, fixed time constraints. Processing must be done within the defined constraints, or the system will fail. For instance, it would not do for a robot arm to be instructed to halt after it had smashed into the car it was building. A real-time system functions correctly only if it returns the correct result within its time constraints. There are two types of real-time systems: hard real-time systems and soft real-time systems.
+In hard real-time systems, the time constraint is very rigid. All delays in the system must be bounded, from the retrieval of stored data to the time that it takes the operating system to finish any request made of it. Because of this, facilities that are available in hard real-time systems are less. Secondary storage of any sort is usually limited or missing, with data instead being stored in short-term memory or in read-only memory (ROM). Most advanced operating-system features are also absent, since they tend to separate the user from the hardware, and that separation results in uncertainty about the amount of time an operation will take. For instance, virtual memory is almost never found on real-time systems.
+In soft real-time systems, the restrictions are less. A real-time processes get a higher priority over the other processes. Hence, other non-critical processes can also run in the computer. The real-time processes are not made to wait for a long amount of time. These systems need advanced operating-system features that cannot be supported by hard real-time systems.
+1.3.8  Handheld Systems
+Handheld systems include PDAs, cellular phones etc. The main issues with these systems are that they have a small size, small amount of memory, include slow processors, and feature small display screens. Examples of handheld operating systems are Android, iOS, Symbian etc.
+As the size of memory is small, the operating system and applications must manage memory efficiently. This includes returning all allocated memory back to the memory manager once the memory is no longer being used.
+Processors for most handheld devices often run at a fraction of the speed of a processor in a PC. Faster processors require more power. To include a faster processor in a handheld device would require a larger battery that would have to be replaced (or recharged) more frequently. To minimize the size of most handheld devices, smaller, slower processors which consume less power are typically used. Therefore, the operating system and applications must be designed not to tax the processor.
+As the size of the display is small, familiar tasks, such as reading e-mail or browsing web pages, must be condensed onto smaller displays. One approach for displaying the content in web pages is web clipping, where only a small subset of a web page is delivered and displayed on the handheld device.
+Since it is possible to access the internet using handheld devices, security is also an issue that has to be considered by the operating systems of handheld devices.
+1.3.9  Embedded Systems
+A number of machines are being used these days like the microwave oven, washing machine, set-top boxes, cars, medical devices etc. These machines need customized operating systems developed specifically for those particular machines. These operating systems must be developed very cautiously such that they do not lead to failure of the task-specific application that is running, because software errors can have devastating effects.
+1.4  Future of operating systems
+The future of operating systems also depends of the future of hardware. In the future, there will be very large scale data centers coordinating thousands of computers to  support  some  essential  service,  very  large scale  multicore  systems  –  many processors  per  machine,  ubiquitous  portable  devices,  heterogeneous systems  and supercomputers to refrigerators to light switches. Operating systems may have to be designed looking into all these developments.
+References
+Abraham Silberschatz,  Peter  B.  Galvin,  Greg  Gagne,  “Operating  System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+Thomas Anderson,   Michael   Dahlin,   “Operating    Systems:    Principles   and Practice”, Recursive Books, 2012.
+
+
+=== MODULE: system-calls-and-os-structures ===
+
+2
+System Calls and OS Structures
+3.1 Introduction
+In the previous modules we learnt about the definition of an operating system, the evolution of operating systems, the different components of an operating system and the functions of the different components of an operating system. Now, there should be some way in which users can make use of the functionalities of the operating system without knowing the inner details of the operating system. This is made possible using system calls. This module describes what system calls are, explains about the different types of system calls and briefs about the different types of operating system structures.
+3.2 System calls
+System calls provide the interface between a running program and the operating system. This helps the user by not wanting them to know the intricacies of the operating system. System calls may be available as assembly language instructions or even as high-level language calls in some systems. They resemble pre-defined function calls. In UNIX, system calls can be invoked directly from a C or C++ program. The system calls for Windows platforms are part of the Win32 API.
+3.2.1  Example of System Calls
+The use of system calls can be understood using the example shown in Figure 3.1. The example shows the sequence of system calls that will be invoked when the contents of one file is copied to another. Prompting to the screen and asking the user to enter the name of a file is a system call. Getting the name of a source file as input is a system call. Again, asking the user for the name of the destination file, reading as input the destination file name, opening the source file, creating the destination file, reading from the source file, writing to the destination file etc. are all system calls. So, any program written by any user will have a number of system calls in it. However, most users never see this level of detail.
+Fig 3.1 System call sequence to copy the contents of one file to another
+3.3 System Call Implementation
+Typically, a system call number is associated with each system call. A system-call interface maintains a table indexed according to these numbers. This system call table has the address of the routine where the system call is implemented in the operating system kernel. The system call interface invokes the intended system call in the OS kernel and returns the status of the system call and any return values. The caller/user need not know anything about how the system call is implemented. The user just needs to obey the Application Program Interface (API) and understand what the OS will do as a result of the call. Most details of the system call are hidden from the programmer by the API. The system calls are managed by a run-time support library (set of functions built into libraries included with compiler)
+3.3.1  API – System Call – OS Relationship
+Figure 3.2 shows a user application using the open () call to open a file. The open () call invokes the system call interface. There is a system call number corresponding to the open () call. The system call interface uses this number as an index into the system call table to find the address of the open () routine in the kernel. Using this address, the open () routine in the kernel is now invoked. The open routine in the kernel does whatever is necessary for opening a file and returns a file handle. The file handle (return value) is returned to the user.
+Fig 3.2 Relationship between API, system call and OS
+Standard C Library Example
+Figure 3.3 shows an example of a C program in which the printf statement is invoked, which is a C library call. This library function in turn calls the
+write
+system call. The write system call is executed and the result is returned to the user program.
+Fig. 3.3 Example of system calls being used in C library
+3.4
+System Call Parameter Passing
+Each system call is like a function call and may or may not need parameters to be passed to them. In the example seen in the previous section, a parameter “Greetings” is passed to the printf statement. This parameter should be passed to the system call write () which is a kernel routine.
+There are three general methods used to pass parameters to the OS. The simplest is to pass the parameters in registers
+.
+This is fine when there is less number of parameters. In some cases, there may be more parameters than registers. Then the parameters can either be stored in a block or table, in memory, and the address of the block can be passed as a parameter in a register. This approach is taken by Linux and Solaris. Another way of passing parameters is to place or push the parameters onto the stack by the program and the operating system can pop off the parameters from the stack. Both these block and stack methods do not limit the number or length of parameters being passed.
+Figure 3.4 shows the passing of parameters of a system call using a table. X is the address in memory where the table with the parameters is stored. The address X is stored in a register. The operating system gets the address X from the register, accesses the memory location X to get the table with the parameters. The system call number of the system call is 13.
+Fig. 3.4 Parameters to system call passed using a table
+3.5
+Types of System Calls
+There are a number of system calls available for process control, file management, device management, information maintenance, communications etc.
+3.5.1  Process Control
+Any process in a system is created by another process except for the first process in the system. The process which creates the new process is called the parent process and the newly created process is called the child process. Each newly created process is identified by a unique process id in the system. There is a system call for creating a process. Similarly when a process exits naturally or is forced to exit, a system call for termination is called. There are system calls for a program to end normally (end) or abnormally (abort). A process while executing may want to create another new process (create), load a program to the newly created process (load) and execute (execute) that process. There are a number of attributes for a process like the id of the process, state of the process etc. There are system calls available to get the values of these attributes and to set the values. There are system calls available to allocate memory for a process in the main memory as well as swap space. Memory space is freed when the process exits. Processes may have to wait for some amount of time or wait for some event to happen before continuing execution. All these functions have corresponding system calls.
+•  Create, terminate
+•  Load, execute
+•  End, abort
+•  Get process attributes, set process attributes
+•  Allocate and free memory
+•  Wait for time, event
+3.5.2  File management
+Creation and deletion of files are possible in any system. The system call used to create files needs the name of the file and other attributes. The system call for deletion needs the name of the file as a parameter. Once a file is created, the user may have to open the file, read from the file, write into the file, reposition the file pointer and close the file. All these have corresponding system calls. A file also can have a number of attributes such as the name of the file, size of the file, owner of the file etc. There are system calls to get and set the attributes of a file respectively.
+•  Create file, delete file
+•  Open, close
+•  Read, write, reposition
+•  Get file attributes, set file attributes
+3.5.3  Device management
+There are many devices connected to a system like the printer, mouse, keyboard, hard disk, network interface etc. System calls are needed for requesting a device, reading from a device, writing to the device, reposition the location from where the current read or write can take place and finally releasing the device. Similar to
+getting and setting file attributes, there needs to be system calls for getting and setting device attributes. System calls are also needed for mounting and unmounting external devices to the system.
+•  Request device, release device
+•  Read, write, reposition
+•  Get device attributes, set device attributes
+•  Logically attach or detach devices
+3.4.4  Information maintenance
+There are system calls to get or set the time or date of a system, get or set system data, get or set process, file or device attributes.
+•  Get time or date, set time or date
+•  Get system data, set system data
+•  Get process, file or device attributes
+•  Set process, file or device attributes
+3.4.5 Communications
+There are system calls for creating a communication connection with a remote machine and to delete or terminate the connection. There are system calls for sending and receiving messages over a communication connection.
+•  Create, delete communication connection
+•  Send, receive messages
+3.4.6 Protection
+There are system calls to change the owner of a file, change the group that can access a file, change the access permissions of a file (read permissions, write permissions etc.).
+3.4.7 Examples of Windows and UNIX System Calls
+Table 3.5  shows some of the system  calls used in Windows and UNIX for different purposes. For example, for creating a new process, CreateProcess() is the system call used in Windows and fork() is the system call used in UNIX.
+Table 3.5 Windows and UNIX system calls
+3.5
+System Structure
+A system as large and complex as a modern operating system must be engineered carefully if it is to function properly and be modified easily. A common approach is to partition the task into small components, rather than have one monolithic system. Each of these modules should be a well-defined portion of the system, with carefully defined inputs, outputs and function. In this section, the way in which the components of an operating system are interconnected and melded into a kernel is discussed.
+3.5.1  MS-DOS System Structure
+MS-DOS was the operating system written to provide the most functionality in the least space. The operating system was not divided into modules. The kernel provides it support functions called as system functions to application programs in a hardware-independent manner and, in turn, is isolated from the hardware characteristics by relying on the driver routines in the MS-DOS BIOS to perform physical input and output operations. Although MS-DOS has some structure, its interfaces and levels of functionality are not well separated. It is possible to access the device drivers directly even from the application program. This allows malicious users to change the device drivers and cause havoc. Figure 3.6 shows the MS-DOS layer structure.
+Fig 3.6 MS-DOS Layer Structure
+3.5.2
+UNIX System Structure
+UNIX is an operating system that was initially limited by hardware functionality. It consists of two separable parts: the kernel and the system programs. The kernel is further separated into a series of interfaces and device drivers, which were added and expanded over the years as UNIX evolved. The structure of the UNIX operating system is shown in Figure 3.7. Everything below the system-call interface and above the hardware interface is the kernel. The kernel provides the file system, CPU scheduling, memory management, and other operating-system functions through system calls. Thus, a lot of functionality has been combined into one level. This makes UNIX difficult to enhance, as changes in one section could adversely affect other areas.
+System calls define the API to UNIX; the set of system programs commonly available defines the user interface. New versions of UNIX are designed to use more advanced hardware. Given proper hardware support, operating systems may be broken into pieces that are smaller and more appropriate than are those allowed by the original MS-DOS or UNIX systems. The operating system can then retain much greater control over the computer and over the applications that make use of that computer. Implementers have more freedom to make changes to the inner workings of the system and in the creation of modular operating systems.
+Fig 3.7 UNIX system structure
+3.5.3
+Layered Approach
+One way of modularization is the layered approach in which the operating system is divided into a number of layers (levels), each built on top of lower layers. The bottom layer (layer 0), is the hardware; the highest (layer N) is the user interface.
+A typical operating-system layer, say layer M, is depicted in Figure 3.8. It consists of data structures and a set of routines that can be invoked by higher-level layers. Layer M, in turn, can invoke operations on lower-level layers. The advantage of having a layered approach is modularity. Layers are selected such that each layer uses the functions (operations) and services of only lower-level layers. This makes the system easy to debug. The first layer can be debugged without any concern for the rest of the system, because, by definition, it uses only the basic hardware (which is assumed to be correct) to implement its functions. Once the first layer is debugged, its correct functioning can be assumed while the second layer is debugged, and so on. If an error is found during the debugging of a particular layer, the error must be on that layer, because the layers below it are already debugged. Thus, the design and implementation of the system are simplified when the system is broken down into layers.
+Thus, each layer is implemented only by the operations provided by the lower layers. So a layer need not know how these operations are implemented; it needs to know only what these operations do. Hence, each layer hides the existence of certain
+data structures, operations and higher-level layers. The difficulty in a layered approach is the need of the careful definition of the layers. This is because a layer can use only those layers below it. For example, the device driver for the disk space used by virtual-memory algorithms must be at a level lower than that of the memory-management routines, because memory management requires the ability to use the disk space.
+Fig. 3.8 An Operating System Layer
+The layered approach was also found to be less efficient than the other types of structures. For instance, when a user program executes an I/O operation, it executes a system call that is trapped to the I/O layer, which calls the memory-management layer, which in turn calls the CPU-scheduling layer, which is then passed to the hardware. At each layer, the parameters may be modified; data may need to be passed, and so on. Each layer adds overhead to the system call; the net result is a system call that takes longer than does one on a non-layered system.
+Hence systems were designed with less number of layers. Thus the concept of modularity was brought in with less problems of layer interaction. OS/2 Layer Structure is an example of a layered operating system. Figure 3.9 shows the layer structure of OS/2. OS/2 is a descendant of MSDOS that adds multitasking and dual-mode operation, as well as other new features. Because of this added complexity and the more powerful hardware for which OS/2 was designed, the system was implemented in a more layered fashion.
+Fig. 3.9 OS/2 Layer Structure
+6
+Summary
+Thus, in this module we learnt the need for system calls, the way in which system calls are called and the details of different types of system calls. We also learnt the different operating system structures.
+References
+Abraham Silberschatz,  Peter  B.  Galvin,  Greg  Gagne,  “Operating  System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+Thomas Anderson,   Michael   Dahlin,   “Operating    Systems:    Principles   and Practice”, Recursive Books, 2012.
+
+
+=== MODULE: process-concepts ===
+
+3
+Process Concepts
+Mary Anitha Rajam
+4.1
+I
+ntroduction
+A process is the unit of work in modern time-sharing systems. A system has a collection of processes – user processes as well as system processes. All these processes can execute concurrently with the CPU multiplexed among them. This module describes what processes are, gives an introduction to process scheduling and explains the various operations that can be done on processes.
+4.2  Processes
+A process is a program in execution. The execution of a process progresses in a sequential fashion. A program is a passive entity while a process is an active entity. A process includes much more than just the program code. A process includes the text section, stack, data section, program counter, register contents and so on. The text section consists of the set of instructions to be executed for the process. The data section contains the values of initialized and uninitialized global variables in the program. The stack is used whenever there is a function call in the program. A layer is pushed into the stack when a function is called. The arguments to the function and the local variables used in the function are put into the layer of the stack. Once the function call returns to the calling program, the layer of the stack is popped. The text, data and stack sections comprise the address space of the process. The program counter has the address of the next instruction to be executed in the process.
+It is possible to have two processes associated with the same program. For example, consider an editor program, say Microsoft Word. The program has the same text section. But, the data section will be different for each file that is opened in Microsoft Word, that is, each file has a different data section.
+4.3  Process States
+As a process executes, it changes state. The state of a process refers to what the process currently does. A process can be in one of the following states during its lifetime:
+–  new:   The process is being created.
+–  running:   Instructions are being executed.
+–  waiting:   The process is waiting for some event to occur.
+–  ready:   The process is waiting to be assigned to a processor.
+–  terminated:   The process has finished execution.
+Figure 4.1 shows the state transition diagram of a process. The process is in the new state when it is being created. Then the process is moved to the ready state, where it waits till it is taken for execution. There can be many such processes in the ready state. One of these processes will be selected and will be given the processor, and the selected process moves to the running state. A process, while running, may have to wait for I/O or wait for any other event to take place. That process is now moved to the waiting state. After the event for which the
+process was waiting gets completed, the process is moved back to the ready state. Similarly, if the time-slice of a process ends while still running, the process is moved back to the ready state. Once the process completes execution, it moves to the terminated state.
+Fig. 4.1 Process state transition diagram (Source: [2])
+4.4
+P
+rocess Control Block (PCB)
+The information about each process is maintained in the operating system in a process control block, which is also called a task control block. Figure 4.2 shows a PCB. The PCB contains extensive information about the process. The information present in the PCB includes the following:
+–  Process state – Current state of the process
+–  Program counter – Address of the next instruction to be executed
+–  CPU registers
+o Accumulators, index registers, stack pointer, general purpose registers
+–  CPU scheduling information
+o Process priority, scheduling parameters
+–  Memory-management information
+o Value of base and limit registers
+–  Accounting information
+o Amount of CPU used, time limits, process numbers
+–  I/O status information
+o List of I/O devices allocated to the process, list of open files and so on.
+Fig. 4.2 Process control block (PCB) (Source: [2])
+Figure 4.3 shows how the contents of the PCB of a process are used when the CPU switches from one process to another process. Process
+P
+0 is executing first, and there is an interrupt. Process
+P
+0 should now release the CPU and the CPU should be assigned to the next process
+P
+1. Before the CPU is assigned to the next process
+P
+1, the state of the process currently using the CPU,
+P
+0, is saved in its PCB. The state of the next process
+P
+1 is then loaded from the PCB of
+P
+1. When there needs to be a switch from
+P
+1 to
+P
+0, the state of
+P
+1 is saved and the state of
+P
+0 is loaded.
+Fig. 4.3 CPU switch from process to process (Source: [2])
+4.5
+P
+rocess Scheduling
+In multi-programmed systems, some process must run at all times, to increase CPU utilization. In time-sharing systems, processes must be switched to increase interaction between the user and the system. If there are many processes, only one can use the CPU at a particular time and the remaining must wait during that time. When the CPU becomes free, the next process can be scheduled.
+4.5.1   Process Scheduling Queues
+When processes enter the system, they are put into a job queue. This job queue is the set of all processes in the system. The set of all processes residing in main memory, ready and waiting to execute is kept in a ready queue. The ready queue is maintained as a linked list. A ready-queue header contains pointers to the first and final PCBs in the list.
+In addition to the ready queue, there are other queues in the system in which a process may be kept during its lifetime. When a process has to wait for I/O, the PCB of the process is removed from the ready queue and is placed in a device queue. The device queue corresponds to the I/O device from/to which the process is waiting for I/O. Hence, there are a number of device queues in the system corresponding to the devices present in the system.
+Figure 4.4 shows the ready queue and the various device queues in the system. Any process during its lifetime will migrate between the various queues.
+Fig. 4.4 Ready queue and various I/O device queues (Source: [2])
+Figure 4.5 shows a common representation of process scheduling using a queuing diagram. The rectangular boxes represent the various queues. The circles denote the resources that serve the queues and the arrows show the flow of processes in the system.
+Fig. 4.5 Queuing diagram representation of process scheduling (Source: [1])
+A new process is initially placed in the ready queue. When the process is given the CPU and is running one of the following may occur:
+The process may request for I/O and may be placed in an I/O queue. After I/O gets completed, the process is moved back to the ready queue.
+The time slice allotted to the process may get over. The process is now forcibly removed from the CPU and is placed back in the ready queue.
+The process may create (fork) a new process and may wait for the created child process to finish completion. Once the child completes execution, the process moves back to the ready queue.
+While the process executes, an interrupt may occur. The process is now removed from the CPU, the process waits till the interrupt is serviced and is then moved to the ready state.
+4.5.2  Schedulers
+A process moves between different queues during its lifetime. The OS should select the process that should move to the next queue and the queue to which the selected process should move, in some fashion. This selection is done by schedulers. The different schedulers available are long-term scheduler, short-term scheduler and medium-term scheduler.
+In batch systems, more processes are submitted than those that can be executed. These processes are placed in a job pool. The long-term scheduler (or job scheduler) selects those processes that should be brought into the ready queue from the job pool, and brings them from the job pool to main memory. The short-term scheduler (or CPU scheduler), selects the process that be executed next and allocates the CPU.
+The main difference between the job scheduler and the CPU scheduler is the f requency of execution. The long-term scheduler controls the degree of multiprogramming (number of
+processes in memory). It is invoked only when a process leaves the system. The short-term scheduler is invoked whenever the CPU switches from one process to another. Hence, the short-term scheduler is run more frequently than the long-term scheduler.
+As the long-term scheduler controls the degree of multiprogramming, it should select a good mix of I/O-bound and CPU-bound processes and bring them into the main memory. An I/O-bound process spends most of its time performing I/O than computation. A CPU-bound process spends most of its time performing computations than I/O. If all processes are I/O-bound, then the CPU will be under-utilized. If all processes are CPU-bound, the I/O devices will not be used fully. Hence, proper selection of jobs by the job scheduler will ensure that the system is stable.
+Fig. 4.6 Medium-term scheduling (Source: [2])
+Some operating systems, like the time-sharing systems introduce an additional, intermediate level of scheduling, called medium-term scheduling. Any process that is in the running state has to be kept in the main memory. Such a process may not be in the run ning state throughout its life time till its termination. It may be moving to the waiting state or to the ready queue and then may move back to the running state and so on. Moreover, when one process moves to the waiting state or to the ready queue, another process moves to the running state. The process that is currently in the running state should be kept in the main memory. If there are many processes are in the waiting state or in the ready queue and if all the processes are still kept in the main memory, the main memory may not be enough to accommodate the currently running process. When there is no enough space in the main memory, the medium-term scheduler removes these partially executed processes from the main memory and moves to the swap space in the secondary storage device. Later, when there is space in the main memory, the processes can be brought into the memory and will continue where they left off. This process is also known as swapping. Figure 4.6 shows how a medium-term scheduler works.
+4.5.3 Context of a Process
+The context of a process is represented in the PCB of the process. It includes the values in CPU registers, process state, memory management information, open files for the process and so on. When the CPU switches from one process to another process, it is said that a context switch occurs. During a context switch, the system must save the context of the old process and load the saved context for the new process. Context-switch time is overhead,
+because the system does no useful work while switching.
+Context-switch time depends on the memory speed, number of registers to be copied and the existence of special instructions. It is also dependent on hardware support. For example, some processors provide multiple sets of registers. Then, the context for each process can be stored in each set of registers. In this case, context switch will only be moving a pointer from one register set to another.
+4.6  Operations on Processes
+The operating system must provide support for creation and termination of processes.
+4.6.1 Process Creation
+Any process can create other processes. The process that creates is called the parent process. The parent process creates children processes, which, in turn create other processes, forming a tree of processes. Each process is identified by a process identifier (pid). In UNIX systems, the ps command is used to list all processes in the system along with their pids.
+Any process will need resources such as CPU time, memory and other resources to complete its task. When a parent process creates children processes, the children may obtain resources from the system or may share the resources with the parent. Thus, in some operating systems, the parent and children share all resources. In some other operating systems, the children share a subset of the parent’s resources and in some others, the parent and child share no resources.
+Once a child process is created, the parent and child execute concurrently. In some cases, the parent does not wait for the child to terminate. In some others, the parent waits until some or all the children terminate. There are again two possibilities about the address space (text, data and stack) of the newly created process. The address space of the child process may be the duplicate of that of the parent process. Instead, the child may have another program loaded into it.
+4.6.2. Process creation in UNIX
+The fork system call is used to create a new process in UNIX. The address space of the child process is a copy of the address space of the parent process. If the child has to execute some program other than the program that the parent executes, the exec system call is used. The exec system call, when used after a fork, replaces the child process’ memory space with a new program. Figure 4.7 shows the flow of the parent and the child processes after a fork is being called by the parent. The parent after creating the child may even wait for the child to exit using the wait system call. In UNIX, the parent can even choose to exit without waiting for the child to exit.
+Fig. 4.7 Process creation in UNIX
+4
+.
+7  Summary
+A process is an active entity while a program is a passive entity. A process can be in different states during its lifetime. The context of a process is represented by a process control block. Appropriate schedulers move processes between different states. Operations like creation and termination can be performed on a process.
+References
+[1]
+http:/
+/www.wiley.com/college/silberschatz6e/0471417432/slides/slides.htm
+l
+[2] Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”, Sixth Edition, John Wiley & Sons Inc., 2003.
+
+
+=== MODULE: cpu-scheduling-i ===
+
+4
+CPU Scheduling – I
+Mary Anitha Rajam
+7.1 Introduction
+CPU scheduling is used in operating systems to make use of the processor time to the maximum and to provide multiple users with a feel that they are the sole users of the system. This module explains the basic concepts of CPU scheduling and the different criteria needed for evaluating CPU scheduling algorithms and the working of the First Come First Served (FCFS) and non-preemptive Shortest Job First (SJF) CPU scheduling algorithms.
+7.2 Basic Concepts
+In a multiprogramming system, many processes are kept in memory at a particular time. Any process, during execution may have to wait for the completion of some I/O request. During this time, the CPU will remain idle. But, the objective of multiprogramming is to have some program running always and hence maximize CPU utilization. Hence, when a process waits for I/O, the operating system takes away t he CPU from the process and assigns the CPU to another process. But, of the many processes residing in the memory, which is the next process to which the CPU is assigned? This selection is done by the CPU scheduler.
+The success of CPU scheduling depends on the following property of processes: Process execution comprises a cycle of CPU execution (CPU burst) and I/O wait (I/O burst). Any process alternates between these two states. Process execution begins with a CPU burst. This CPU burst is followed by an I/O burst, then a CPU burst, then an I/O burst and so on. Figure 7.1 shows an example of how a process alternates between CPU and I/O bursts, during its execution.
+Consider the followi ng program in C to find the sum of two numbers:
+int main(void)
+{
+int a,b, sum;
+/*I/O burst*/
+printf(“Enter the two numbers to be added\n”);
+scanf(“%d %d”,&a,&b);
+/*CPU burst */
+sum = a+b;
+/*I/O burst*/
+printf(“ The sum of %d and %d is %d \n”, a,b,sum);
+return 0;
+}
+It can be seen that the first two statements are I/O bound, the third statement is CPU-bound and the next statement is I/O bound. Thus any program will  have alternating CPU-bound and I/O bound i nstructions.
+Fig. 7.1 Alternating sequence of CPU and I/O bursts (Source: [1])
+If a program has few and very long CPU bursts , it is a CPU-bound program. An I/O-bound program has many very short CPU bursts . The duration of CPU bursts vary from process to process and from computer to computer. Still, the CPU bursts tend to have a frequency curve similar to that shown i n Figure 7.2. It is seen from Figure 7.2 that very short CPU bursts are more frequent than long CPU bursts. Whenever a CPU burst ends, there is an I/O burst. When there is an I/O burst, the process has to wait for I/O to get completed and is moved to the waiting state. Now, the CPU scheduler has to run to select the next process that should be assigned the CPU. Since the CPU bursts are frequent, the CPU scheduler has to run frequently.
+Fig. 7.2 Histogram of CPU-burst times (Source: [1])
+7.3
+C
+P
+U Scheduler
+Whenever the CPU becomes idle, the operating system should select one of the processes in the ready queue and that process is assigned the CPU. This selection is done by the CPU scheduler. The CPU scheduler is also called the s hort-term scheduler. The CPU scheduler selects from among the processes in memory that are ready to execute, and allocates the CPU to one of them. The ready queue from which the processes are selected need not be a first i n, first out queue, always. The ready queue may even be a priority queue, a tree or an unordered linked list.
+Figure 7.3 shows the change i n states during the lifetime of a process. CPU scheduling decisions may take place when a process:
+1.  Switches from running to waiting state (I/O, wait system call)
+2.  Switches from running to ready state (timer i nterrupt)
+3.  Switches from waiti ng to ready (completion of I/O)
+4.  Termi nates
+Fig. 7.3 Process state transition diagram
+When the process switches from the running state to the waiting state or when the process terminates, the process relinquishes the CPU on its own. It is not forced to relinquish the CPU. When scheduling takes place in these circumstances, it is called non-preemptive CPU scheduling. When the process moves from the waiting state to the ready state or when the process moves from the running state to the ready state, the CPU is forcibly removed from the process. The scheduling that happens in these circumstances is called preemptive scheduling.
+7.4  Dispatcher
+Only the selection of which process will use the CPU next is done by the CPU scheduler. The dispatcher module is the one that gives control of the CPU to the process selected by the short-term scheduler. The dispatcher takes care of the following:
+1. Switching context
+2. Switching to user mode
+3. Jumping to the proper location in the user program to restart that program Thus, it takes some  time for the dispatcher to stop one process and start another process. This time is called dispatch latency. The dispatch latency should be as less as possible because the CPU does not do any useful work during this period.
+7.5 Scheduling Criteria
+Many CPU scheduling algorithms have been proposed. To select the best CPU scheduling algorithm, various criteria can be considered. The following are some of the criteria that are used to analyze the performance of any CPU scheduling algorithm:
+1. CPU utilization – Keep the CPU as busy as possible. Hence, CPU utilization should be maximum.
+2. Throughput – Number of processes that complete their execution per time unit.
+Throughput should be maximum.
+3. Turnaround time – amount of time to execute a particular process. This should be as minimum as possible.
+4. Waiting time – amount of time a process has been waiting in the ready queue.
+This should be as minimum as possible.
+5. Response time – amount of time it takes from when a request was submitted
+until the first response is produced, not output (for time-sharing environment). Response time should be as minimum as possible.
+7.6 Scheduling algorithms
+In this section, we will learn two CPU scheduling algorithms, First Come First Served (FCFS) scheduling and Shortest Job First (SJF) scheduling algorithms.
+7.6.1 First-Come, First-Served (FCFS) Scheduling
+In FCFS, the process that arrived first and requests the CPU first is assigned the CPU first. In FCFS, the ready queue can be maintained as a FIFO queue. When processes arrive they are added to the tail of the queue. When the CPU becomes free, the process in the head of the queue is taken for execution. This is a non-preemptive algorithm. Once a process is assigned the CPU, the process continues to use the CPU till its CPU burst time is completed. When its CPU burst gets over, the process by itself relinquishes the CPU. FCFS is explained with an example given below:
+Consider three processes
+P
+1
+, P
+2 and
+P
+3 with CPU-burst times 24 milliseconds (ms), 3 ms and 3 ms respectively. All three processes arrive at the same time i n the order
+P
+1,
+P
+2,
+P
+3.
+The Gantt chart that shows the order i n which processes are assigned the CPU is shown below. Since process
+P
+1 is the first process in the queue,
+P
+1  is assigned the CPU first.
+P
+1 has a CPU-burst length of 24 ms.
+P
+1 uses the CPU for 24 ms and then relinquishes the CPU as shown in Figure 7.4.
+Fig. 7.4 Process
+P
+1 using the CPU
+The next process i n the queue is
+P
+2.
+P
+2 is scheduled next.
+P
+2 has a CPU-burst time of 3 ms and uses the CPU till 27 ms as shown in Figure 7.5.
+Fig. 7.5 Process
+P
+2 using the CPU
+After
+P
+2,
+P
+3 is the only process in the queue and it is assigned the CPU.
+P
+3 uses the CPU for a time duration of 3 ms and then relinquishes the CPU as shown i n Figure 7.6.
+Fig. 7.4 Process
+P
+3 using the CPU
+The waiting time for each process and hence the average waiting time can be calculated. Since all the three processes arrive at the same time, the arrival time of the processes is taken as 0. Process
+P
+1 arrived at time 0 and was assigned the CPU immediately. Hence, the waiting time for
+P
+1 = 0. Process
+P
+2 arrived at time 0 and was assigned the CPU at time 24. Hence, the waiting time for
+P
+2 = 24. Process P3 arrived at time 0 and was assigned the CPU at time 27. Hence, the waiting time for
+P
+3 = 27. Hence, the average waiting time is (0 + 24 + 27) / 3 = 17.
+Similarly, the turnaround time for each process and hence the average turnaround time can be calculated. Process
+P
+1 arrived at time 0 and completed its CPU burst at time 24. Hence, the turnaround time for
+P
+1 = 24. Process
+P
+2 arrived at time 0 and completed its CPU burst at time 27. Hence, the turnaround time for
+P
+2 = 27. Process
+P
+3 arrived at time 0 and completed its CPU burst at time 30. Hence, the turnaround time for
+P
+3 = 30.The average turnaround time is (24 + 27 + 30) / 3 = 27.
+Suppose if the three processes arrive in the order
+P
+2,
+P
+3,
+P
+1. The Gantt chart for the schedule is as shown in Figure 7.5.
+Fig. 7.5 Gantt chart with the order of the processes changed
+The waiting time of the processes can be calculated as follows: The arrival time for all the processes is the same and is taken as 0. Therefore, the waiting time for
+P
+1
+=
+6
+, P
+2 = 0 and
+P
+3
+=
+3. The average waiting time is (6 + 0 + 3)/3 = 3. The turnaround time for
+P
+1
+=
+30
+, P
+2 = 3 and
+P
+3
+=
+6. Therefore, the average turnaround time is (3 + 6 + 30)/3 = 13. It is seen that the average waiting time and the average turnaround time have improved when the order of the processes is changed. In the earlier case, process
+P
+1 had a long
+CPU burst and the other processes had to wait for
+P
+1 to complete its CPU burst. This increased the average waiting time and the average turnaround time.
+7.6.2  Shortest-Job-First (SJF) Scheduling
+The SJF CPU scheduling algorithm associates with each process the length of its next CPU burst. These lengths are used to schedule the process with the shortest time. When the CPU becomes available, the process with the shortest next CPU burst is assigned the CPU. There are two schemes i n SJF. One is non-preemptive in which once CPU is assigned to a process, it cannot be preempted until it completes its CPU burst. The other is preemptive in which if a new process arrives with CPU burst length less than the remaining time of the currently executing process, the currently executing process is preempted. This scheme is known as the Shortest-Remaining-Time-First (SRTF). In this module, we will learn how scheduling is done i n non-preemptive SJF.
+Consider four processes
+P
+1
+, P
+2
+, P
+3  and
+P
+4
+.
+The arri val times and the CPU-burst times of the four processes are gi ven below:
+Process
+Arriva l Time
+Burst Time
+P
+1
+0.0
+7
+P
+2
+2.0
+4
+P
+3
+4.0
+1
+P
+4
+5.0
+4
+At time 0.0,
+P
+1 is the only process that has arrived. Hence ,
+P
+1 is assigned the CPU first. Since it is non-preemptive SJF scheduling,
+P
+1 continues to use the CPU till its CPU-burst gets over as shown in Figure 7.6
+Fig. 7.6 Process
+P
+1 using the CPU
+After
+P
+1 finishes its CPU-burst, the processes remaining i n the ready queue are
+P
+2,
+P
+3 and
+P
+4. The processes
+P
+2,
+P
+3  and
+P
+4 have now arrived. Of these three processes,
+P
+3 has the shortest CPU burst. Hence,
+P
+3 is assigned the CPU.
+P
+3 makes use of the CPU for a time duration that is equal to its CPU burst (1 ms) and then relinquishes the CPU as in Figure 7.7.
+Fig. 7.7 Process
+P
+3usingtheCPU
+P
+2 and
+P
+4 are the remaining processes. Both the processes have the same CPU burst time. Any one of these can be assigned the CPU. So, the tie is now broken using FCFS. Of the two processes,
+P
+2 arrived earlier. Hence,
+P
+2 is assigned the CPU and
+P
+2 executes till its CPU burst is completed as i n Figure 7.8.
+Fig. 7.8
+P
+2 using the CPU
+After
+P
+2 finishes execution, the only process waiting is
+P
+4.
+P
+4 is now assigned the CPU. After
+P
+4 runs for its CPU-burst time, it relinquishes the CPU as shown i n Figure 7.9.
+Fig. 7.9
+P
+4 using the CPU
+The average waiting time and the average turnaround time can be calculated as follows. The waiting time for process
+P
+1 is 0.
+P
+1 arrived at time 0 and was assigned the CPU immediately.
+P
+1 did not wait.
+P
+2 arrived at time 2.0 and was assigned the CPU at time 8.0. Hence, the waiting time for process
+P
+2 is 8 – 2 = 6.
+P
+3 arrived at time 4.0 and was assigned the CPU at time 7.0. Hence, the waiting time for process
+P
+2 is 7 – 4 = 3. Process
+P
+4 arrived at time 5.0 and was assigned the CPU at time 12.0. Hence the waiting time of process
+P
+2 is 12 – 5 = 7. Hence, the average waiting time = (0 + (8 – 2) + (7 – 4) + (12 – 5)) / 4 = 4.
+P
+1 arrived at time 0 and completed execution at 7. The turnaround time of process
+P
+1 is 7.
+P
+2 arrived at time 2.0 and completed execution at time 12.0. Hence, the turnaround time for process
+P
+2 is 12 – 2 = 10.
+P
+3 arrived at time 4.0 and completed execution at time 8.0. Hence , the waiting time for process
+P
+2 is 8 – 4 = 4. Process
+P
+4 arrived at time 5.0 and completed execution at time 16.0. Hence , the turnaround time of process
+P
+2 is 16 – 5 = 11. Hence the a verage waiting time = (0 + (8 – 2) + (7 – 4) + (12 – 5)) / 4 = 4. Hence, the average turnaround time = ((7 – 0) + (12 – 2) + (8 – 4) + (16 – 5)) /  4 = 32 / 4 =8.
+7.7  Summary
+In this module, we learnt what CPU scheduling is. Multiprogramming maximizes CPU utilization. The CPU scheduler selects the next process that should be assigned the  CPU.  Many CPU scheduling algorithms  have  been proposed. CPU scheduling
+algorithms can be preemptive or non-preemptive. In this module, we learnt how First Come First Served (FCFS) and non-preemptive Shortest Job First (SJF) CPU scheduling algorithms work. We saw that SJF has less waiting time and less turnaround time when compared to FCFS.
+References
+Abraham Silberschatz,  Peter  B.  Galvin,  Greg  Gagne,  “Operating  System Concepts”, Sixth Edition, John Wiley & Sons Inc., 2003.
+
+
+=== MODULE: process-synchronization ===
+
+7
+Process Synchronization
+Mary Anitha Rajam
+10.1  Introduction
+Cooperating processes share data either directly or through files. When two or more processes access shared data concurrently, data inconsistency may result. Maintaining data consistency requires mechanisms that will ensure the orderly execution of cooperating processes. The section of code in each process in which the process accesses shared data is called the critical-section of the process. During the execution of a process, the process may access many such shared data or the same shared data a number of times. Thus, a process may execute critical-sections of code multiple times during its execution.  This module introduces the critical-section problem and discusses solutions to the critical-section problem.
+10.2  Bounded-buffer problem
+To understand the critical-section problem, we will revisit the bounded-buffer problem we learnt in an earlier module. The shared-memory solution to the bounded-buffer problem, discussed in the earlier module, allows at most N – 1 items in the buffer at the same time. The solution is as follows:
+Shared data:
+#define BUFFER_SIZE 10
+typedef struct {
+. . .
+} item;
+item buffer[BUFFER_SIZE];
+int in = 0;
+int out = 0;
+There is a buffer of size BUFFER_SIZE (10), which is used by the producer and the consumer processes to place and remove items respectively. There are two variables
+in
+and
+out
+, which point to the locations  in the buffer where the producer places  items and the consumer consumes items respectively. Initially,
+in
+and
+out
+point to the same location in the buffer.
+C
+od
+e for producer process:
+item next Produced;
+while (1) {
+while (((in + 1) % BUFFER_SIZE) == out) ; /* do nothing */
+buffer[in] = nextProduced;
+in = (in + 1) % BUFFER_SIZE;
+}
+When (
+in
++ 1) % BUFFER_SIZE ==
+out
+, buffer is full. The producer waits if the buffer is full. Else, the producer places the item in the location pointed to by the
+in
+variable and increments the
+in
+variable.
+Code for consumer process:Item nextConsumed;
+while (1) {
+while (in == out); /* do nothing */
+nextConsumed = buffer[out];
+out = (out + 1) % BUFFER_SIZE;
+}
+The buffer is empty when
+in
+==
+out
+. The consumer waits when the buffer is empty. If the buffer is not empty, the consumer consumes the item pointed to by the
+out
+variable and increments the
+out
+variable.
+Suppose the consumer had not consumed any data. Then, the initial location will be pointed to by the
+out
+pointer. When the
+in
+pointer is pointing to the N – 1th location, the condition “(
+in
++ 1) % BUFFER_SIZE ==
+out
+” will be true and the producer will wait. Thus, this solution uses only N – 1 locations of the buffer.
+A solution, where all N buffers are used is not simple. A solution is possible when we modify the producer-consumer code by adding a variable
+counter
+, initialized to 0 and incrementing it each time a new item is added to the buffer. The code for the solution to the bounded buffer problem using the
+counter
+variable is given below:
+#define BUFFER_SIZE 10
+typedef struct {                         . . .
+} item;
+item buffer[BUFFER_SIZE];
+int in = 0;
+int out = 0;
+int counter = 0;
+/*Producer process
+item nextProduced;
+while (1) {
+while (counter == BUFFER_SIZE);  /* do nothing */
+buffer[in] = nextProduced;
+in = (in + 1) % BUFFER_SIZE;
+counter++;
+}
+/*Consumer process
+item nextConsumed; while (1) {
+while (counter == 0);  /* do nothing */
+nextConsumed = buffer[out];
+out = (out + 1) % BUFFER_SIZE;
+counter–;
+}
+In this solution, the variable
+counter is
+shared between the producer and the consumer. Whenever the producer places an item in the buffer, it increases the value of the variable. When the consumer consumes an item from the buffer, it decreases the value of the
+counter
+variable. Thus, the value of the variable
+counter
+maintains the count of the items present in the buffer. Now, we will see how the increment and decrement operations performed on the variable
+counter
+can lead to inconsistencies.
+The statements “
+counter++;”
+and
+“counter–;”
+must be performed
+atomically
+. Atomic operation means an operation that completes in its entirety without interruption. The reason for this is explained below:
+The statement “
+counter++
+” may be implemented in machine language as:
+register1 = counter
+register1 = register1 + 1
+counter = register1
+Thus, it is seen that the single statement
+counter++
+in the producer’s code is not executed as a single instruction. Rather, it is executed in three different instructions. Similarly, the single statement
+counter–
+in the consumer’s code is implemented in three different instructions.
+The statement “
+counter–
+” may be implemented as:
+register2 = counter
+register2 = register2 – 1
+counter = register2
+If both the producer and consumer attempt to update the buffer concurrently, the assembly language statements may get interleaved. Interleaving depends upon how  the producer and consumer processes are scheduled.
+Assume
+counter
+is initially 5.
+One such interleaving of statements is:
+producer:
+register1 = counter
+(
+register1 = 5
+)
+producer:
+register1 = register1 + 1
+(
+register1 = 6
+)
+consumer:
+register2 = counter
+(
+register2 = 5
+)
+consumer:
+register2 = register2 – 1
+(
+register2 = 4
+)
+producer:
+counter = register1
+(
+counter = 6
+)
+consumer:
+counter = register2
+(
+counter = 4
+)
+Thus, the value of
+counter
+may be either 4 or 6, where the correct result should be 5.
+This situation is called a race condition, that is, the situation where several processes access and manipulate shared data concurrently. The final value of the shared data depends upon which process finishes last. To prevent race conditions, concurrent processes must be synchronized. Thus, by understanding the above-mentioned race condition, the critical- section problem can be understood.
+10.3  The Critical-Section Problem
+There are
+n
+processes that compete to use some shared data. Each process has a code segment, called
+critical-section
+, in which the shared data is accessed. Hence, the problem is to ensure that, when one process is executing in its critical-section, no other process is allowed to execute in its critical-section. In the above example, the critical-section of code for the producer is
+counter++
+and the critical-section of code for the consumer is
+counter–
+. It should be ensured that when the producer is executing
+counter
+++, the consumer should not be allowed to access
+counter
+–.
+10.3.1  Solution to the Critical-Section Problem
+Any solution to the critical-section problem should satisfy the following conditions:
+Mutual Exclusion
+: If process
+P
+i
+is executing in its critical-section, then no other processes can be executing in their critical-sections.
+Progress
+: If no process is executing in its critical-section and there exist some processes that wish to enter their critical-section, then the selection of the processes that will enter the critical-section next cannot be postponed indefinitely.
+Bounded Waiting
+: After a process has made a request to enter its critical-section and before that request is granted, a bound must exist on the number of times that  other processes are allowed to enter their critical-sections.
+Many algorithms were designed by researchers to solve the critical-section problem. The initial attempt to solve the critical-section problem provided a two-process solution.
+The general structure of any process
+P
+i (the other process being
+P
+j) is given below:
+d
+o
+{
+en
+t
+ry section
+critical-section
+e
+x
+i
+t section
+remainder section
+}
+while (1)
+;
+Before entering the critical-section, each process executes a piece of code called the
+entry section
+and after coming out of the critical-section, the process executes a piece of code called the
+exit section
+. The entry and the exit sections of code help in providing synchronization between the two processes. In the solutions provided, the processes share some common variables to synchronize their actions. One of the solutions to the critical- section problem, providing a two-process solution is given in Algorithm 1. The two processes are
+P
+0 and
+P
+1.
+10.3.2  Algorithm 1
+•  Shared variables:
+–
+in
+t turn
+; (initially
+turn = 0)
+–
+turn – i
+Þ
+P
+i
+can enter its critical-section
+•  Process
+P
+i
+do { while (turn != i) ;
+critical-section
+turn = j;
+remainder section
+}
+while (1)
+;
+The variable
+turn
+is common between the two processes. The value of the variable
+turn
+can be initialized to either 0 or 1. In this example, the value of
+turn
+is initialised to 0.
+In this algorithm, the entry section is  the code “
+while (turn != i)
+;”. Any process before entering the critical-section, executes the entry section. The process checks the value of
+turn
+. If
+P
+0 finds that the value of
+turn
+is 0, it enters critical-section. If
+P
+0 finds that the value of
+turn
+is 1, it waits till the value of
+turn
+becomes 1. Similar is the case with process
+P
+1. Here, we need to note the semicolon (;) at the end of the while statement.
+“while (turn != i) ;”
+is the same as
+while(turn!=i)
+{
+}
+As long as the condition (turn !=i) in the while loop is true, the process continues to loop in while. Only when the condition becomes false, the process comes out of the while loop.
+Therefore, when
+P
+0 executes the entry section, if the value of
+turn
+is 0, the condition t
+u
+rn!=0
+becomes false and therefore,
+P
+0 comes out of the while loop and enters critical section. If the value of
+turn
+is 1, the condition t
+urn!=0
+is true and therefore,
+P
+0 continues to execute in the while loop till the value of
+turn
+is changed to 0.
+When a process comes out of the critical-section, it executes the exit section. In this algorithm, the exit section is the code “
+turn = j
+;”. The process changes the value of
+turn
+. That is, when process
+P
+0 is in the critical-section, the value of
+turn
+would have been 0. When it comes out of the critical-section, it changes the value of
+turn
+to 1. Similarly, when process
+P
+1 comes out of the critical-section, it changes the value of
+turn
+to 0.
+This   algorithm   satisfies   the  mutual  exclusion  condition,  but  not  the  progress condition. This is explained below:
+Algorithm 1 – Mutual Exclusion
+P
+0                                        turn
+P
+1
+0
+Checks turn                                                        Checks turn
+Enters CS                                                                  waits
+Exits CS
+Changes turn                        1                             Enters CS
+Checks turn
+Waits …                                                                 …
+According to the mutual exclusion condition, when process
+P
+0 is in its critical-section, process
+P
+1 should wait and vice versa. Here, the value of
+turn
+is initialized to 0.  Both processes
+P
+0 and
+P
+1  want to enter critical-section. Hence, they are in the entry sections of
+their respective codes. Both the processes check the value of
+turn
+. Since the value of
+turn
+is 0,
+P
+0 comes of the loop (the condition
+turn!=i
+becomes false).
+P
+0 enters its critical-section. At the same time, process
+P
+1 finds the value of
+turn
+to be 0 and waits (
+turn != i
+is true for
+P
+1). When process
+P
+0 comes out of its critical-section, it changes the value of
+turn
+to 1 (
+turn = j
+). Now process
+P
+1 comes out of the while loop and enters its critical-section. Thus, it seen that, when process
+P
+0 is in its critical-section, process
+P
+1 waits, and when process
+P
+1 is in its critical-section, process
+P
+0  waits. Thus, mutual exclusion is satisfied.
+Algorithm 1 – Progress
+P
+0                                                                turn
+P
+1
+0
+Checks turn
+Enters CS
+Exits CS
+Changes turn                                                1
+P0 wants to enter CS
+Checks turn
+Waits …
+According to the progress requirement, if there is no process executing in its critical- section and if there are some processes that are wanting to enter their critical-sections, then the selection of the process that will enter the critical-section next cannot be postponed indefinitely. In the example shown above, process
+P
+0 comes out of its critical-section and changes the value of
+turn
+to 1. Process
+P
+1 does not want to enter its critical-section. Now, process
+P
+0 wants to enter its critical-section again. But
+P
+0 cannot enter its critical-section because the value of
+turn
+is  1. Unless  process
+P
+1 enters its critical-section and exits its critical-section and then changes the value of turn to 0,
+P
+0 cannot enter its critical-section. Thus, it is seen that there needs to be a strict alternation between the processes
+P
+0 and
+P
+1. After
+P
+0 comes out of its critical-section,
+P
+1 should enter its critical-section. Only after that,
+P
+0 can enter its critical-section the second time. Thus, it is seen that the progress requirement is not satisfied by this algorithm. Since this algorithm does not satisfy all the requirements for a solution to the critical-section problem, it is not a proper solution.
+10.4  Summary
+This module discussed the need for process synchronization when cooperating processes share data. The portion of code in each process that  involves the access of shared data is called the critical-section of code. The access of the critical-section of each process should be synchronized. Any solution to this critical-section problem should satisfy the mutual exclusion, progress and the bounded waiting requirements. This module discussed one such solution to the critical-section problem where only two processes are involved. We saw that this solution satisfies the mutual exclusion requirement but not the progress requirement.
+References
+1.  Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”,
+Ninth Edition, John Wiley & Sons Inc., 2012.
+William Stallings,  “Operating  Systems:  Internals  and  Design  Principles”,  Seventh Edition, Pearson, 2012.
+
+
+=== MODULE: deadlocks-introduction ===
+
+13
+Deadlocks – Introduction
+Mary Anitha Rajam
+16.1  Introduction
+Any system has many processes and a number of different resources. In such a system, processes request for resources, use them and then release them. If a process requests for resources and the resources are not available, the process waits. If the requested resources are held by other waiting processes, the requesting process continues to wait forever. This situation is called a deadlock.
+This module explains what is meant by a deadlock, the methods for handling deadlocks, what a resource-allocation graph is and how a resource-allocation graph can be used to handle deadlocks.
+16.2  ridge Crossing Example
+Fig. 16.1 Bridge crossing – deadlock
+Consider vehicles crossing a bridge as shown in Figure 16.1. Vehicles can cross the bridge only in one direction at a particular time. If two vehicles that are moving in opposite directions try to cross the bridge at the same time, both get into a deadlocked situation. The deadlock can be resolved only if one vehicle backs up. To back up one vehicle, several other vehicles may also have to be backed up if a deadlock occurs.
+16.3 Deadlock Problem in a System
+A situation similar to that of crossing a bridge can happen in a system as well. Suppose there is a set of blocked processes, each holding a resource and waiting to acquire a resource held by another process in the set. All the processes will be waiting for each other to release resources. Then, the system will be in a deadlocked state.
+Consider the following example: A system has 2 tape drives. There are two processes
+P
+1 and
+P
+2. Each process holds one tape drive and needs another one. Since there are only two tape drives in the system, each of the two processes is waiting for the tape drive held by the other waiting process. Now, both the processes are unable to proceed and are deadlocked.
+Let us see another example. Though this example was explained in an earlier module, it is given here for better clarity. There are two semaphores,
+A
+and
+B
+, initialized to 1. Since the initial value is 1, each of the semaphores
+A
+and
+B
+is guarding resources that can be accessed only by one process at a time. Let
+P
+0 and
+P
+1 be two processes that are executing the following sequence of statements respectively.
+P
+0
+P
+1
+wait (A);                       wait(B);
+wait (B);                       wait(A);
+Suppose
+P
+0 executes wait(
+A
+) first. This operation decrements the value of semaphore
+A
+from 1 to 0. Suppose there is a context switch and
+P
+1 executes wait(
+B
+). This will decrement the value of semaphore
+B
+from 1 to 0. Next,
+P
+1 continues to execute wait(
+A
+). Since the value of semaphore
+A
+is 0, process
+P
+1 waits. There is a context switch now and process
+P
+0 executes wait(
+B
+). Since the value of semaphore
+B
+is 0, process
+P
+0 waits. Here, we see that process
+P
+0 is waiting for semaphore
+B
+held by process
+P
+1 and process
+P
+1 is waiting for semaphore
+A
+held by process
+P
+0. Thus, both the processes are in a deadlocked state.
+16.4 System Model
+Any system has a finite number of resources, distributed among a number of competing processes. The resources are categorized into several resource types
+R
+1,
+R
+2, …,
+R
+m . The resource types in a system may be CPU cycles, memory space, I/O devices and so on. Each resource type
+R
+i has
+W
+i instances. For example, if there are 5 printers, then there are 5 instances of the resource type printer.
+Each process utilizes resources as follows: Each process requests for resources, uses the resources and releases the resources after using the resources. A process may request as many resources as it requires to carry out its designated task. The number of resources requested by the process cannot exceed the total number of resources available in the system. That is, if there are five printers, the process cannot request for six.
+There are system calls available for the request and release of resources like the
+request
+and
+release device
+,
+open
+and
+close file
+,
+allocate
+and
+free memory
+. Request and release of resources can be accomplished through the wait and the signal operations on semaphores.
+A table is maintained in the system that records whether each resource is free or allocated. If a resource is allocated, information is maintained as to which process the resource is allocated. If a process requests a resource currently allocated to another process, the process is added to a queue of processes waiting for that resource.
+16.5 Deadlock Characterization
+In a deadlocked system, processes never finish executing and system resources are tied up, preventing other jobs from starting. We shall now understand the features that characterize deadlocks.
+16.5.1 Necessary conditions
+Deadlocks can arise if the following four conditions hold simultaneously in a system:
+Mutual exclusion: If there is a non-shareable resource, only one process can use a resource at a time.
+Hold and  wait:  A process holding at least one resource is waiting to acquire additional resources held by other waiting processes.
+No preemption: A resource can be released only voluntarily by the process that is holding it after the process has completed its task. It is not possible to preempt a resource forcibly from a process.
+Circular wait: If there exists a set {
+P
+0,
+P
+1, …,
+P
+0} of waiting processes such that
+P
+0 is waiting for a resource that is held by
+P
+1,
+P
+1 is waiting for a resource that is held by
+P
+2, …,
+P
+n
+–1 is waiting for a resource that is held by
+P
+n, and
+P
+n is waiting for a resource that is held by
+P
+0.
+16.5.2 Resource-Allocation Graph
+Any system can be described by means of a directed graph called a system resource-allocation graph. The graph consists of a set of vertices
+V
+and a set of edges
+E
+. The set of vertices V is partitioned into two types,
+P
+= {
+P
+1,
+P
+2, …,
+P
+n
+}, the set consisting of all the processes in the system and
+R
+= {
+R
+1,
+R
+2, …,
+R
+m
+}, the set consisting of all the resource types in the system. A directed edge from
+P
+i to
+R
+j is denoted as
+P
+i ®
+R
+j and is called a request edge. A directed edge from
+R
+j to
+P
+i is denoted as
+R
+j
+®
+P
+i
+and is called an assignment edge.
+Pictorially, a process is denoted using a circle as shown below:
+A resource type is denoted using a square. The instances of a resource type are shown using dots inside the square. A resource type with 4 instances is denoted pictorially as shown below:
+When
+P
+i requests an instance of
+R
+j, it is denoted as an edge from
+P
+i to
+R
+j in the resource-allocation graph.
+When
+P
+i is holding an instance of
+R
+j, it is shown as an edge from a dot in
+R
+j to
+P
+i
+in the resource-allocation graph.
+Figure 16.2 shows an example of a resource-allocation graph.
+P
+1,
+P
+2 and
+P
+3 are the three processes in the system. There are four resource types,
+R
+1,
+R
+2,
+R
+3 and
+R
+4. There is one instance of
+R
+1, two instances of
+R
+2, one instance of
+R
+3 and three instances of
+R
+4.
+P
+1 is holding one instance of
+R
+2 and is requesting for one instance of
+R
+1.
+P
+2 is holding one instance of
+R
+1 and one instance of
+R
+2 and is requesting for one instance of
+R
+3.
+P
+3 is holding one instance of
+R
+3.
+Fig. 16.2 Resource-allocation graph (Source: [1])
+Deadlocks can be detected from a resource-allocation graph. If the resource-allocation graph contains no cycles, no process is deadlocked. If the resource-allocation graph contains cycles, deadlocks may exist. If there is only one instance of each resource type and there is a cycle in the graph, there is a deadlock in the system.
+16.5.3  Resource-Allocation Graph With a Deadlock
+Figure 16.3 shows a resource-allocation graph with a deadlock. In this figure, process
+P
+1 is waiting for an instance of resource type
+R
+1. There is only one instance of
+R
+1 which is held by process
+P
+2.
+P
+2 is waiting for an instance of resource
+R
+3. There is only one instance of
+R
+3, which is held by process
+P
+3. Process
+P
+3 is waiting for an instance of
+R
+2. There are two instances of
+R
+2, each of which is held by
+P
+1  and
+P
+2 respectively. Thus,
+P
+1,
+P
+2 and
+P
+3 are waiting for resources held by other waiting processes.
+It is seen that there is a cycle
+P
+1 ®
+R
+1 ®
+P
+2 ®
+R
+3 ®
+P
+3 ®
+R
+2 ®
+P
+1. All the processes that are part of the cycle are waiting and there is no free instance  of resource. Therefore, all the processes in the cycle are deadlocked. None of the processes is able to proceed further.
+Fig. 16.3 Resource-allocation graph with a deadlock (Source: [1])
+16.5.4
+Resource Allocation Graph With A Cycle But No Deadlock
+Fig. 16.4 Resource allocation graph with a cycle but no deadlock (Source: [1])
+It is always not necessary to have a deadlock if there is a cycle. We now look at
+an example scenario where there is a cycle in the resource-allocation graph, but there is no deadlock. Figure 16.4 shows a resource-allocation graph with a cycle
+P
+1 ®
+R
+1 ®
+P
+3
+®
+R
+2 ®
+P
+1. But, in this scenario, an instance of
+R
+1 is held by process
+P
+2, which is not a waiting process. Once
+P
+2 finishes using the resource, it will release the resource.
+R
+1 will now be available for process
+P
+3. Similarly, an instance of
+R
+2 is held by process
+P
+4 and
+P
+4 is not waiting for any other resource. Therefore,
+P
+4 releases the resource
+R
+2 after using the resource. Now,
+R
+2 is available for process
+P
+1.
+Thus, from the examples given above, it is seen that
+– If a resource-allocation graph contains no cycles Þ no deadlock.
+– If there are several instances per resource type and there is a cycle in the resource-allocation graph, there is a possibility of deadlock.
+– If a resource-allocation graph contains a cycle Þ  if there is only one instance per resource type, then there is deadlock.
+16.6 Methods for Handling Deadlocks
+We can deal with the deadlock problem in one of three ways:
+1. We can use a protocol to prevent or avoid deadlocks, ensuring that the system will never enter a deadlock state.
+2. We can allow the system to enter a deadlock state, detect it, and recover.
+3. We can ignore the problem altogether, and pretend that deadlocks never occur in the system.
+To ensure that deadlocks never occur in a system, deadlock prevention or deadlock avoidance scheme can be used. Deadlock prevention is a set of methods for ensuring that at least one of the necessary conditions (Mutual exclusion, Hold and wait, No preemption, Circular wait) does not hold. These methods prevent deadlocks by constraining how requests for resources can be made.
+Deadlock avoidance requires that the operating system should be given additional information about which resources a process will request and use during its life time. With this information, whenever a request for a resource comes from a process, the system can decide whether the request can be granted immediately or not. The system simulates and finds out if the system will go to a deadlocked state if the request is granted. Based on that, the system decides if the request can be granted or not.
+If there is no mechanism employed in the system for deadlock prevention and avoidance, then deadlocks can occur. In this case, the system must employ algorithms for deadlock detection and recovery.
+If the system does not employ algorithms even for deadlock detection and recovery, that is, if the problem is ignored altogether, then the system may be in a deadlock state and may not recognize what has happened. In this case, the system performance deteriorates and the system should be restarted manually. Although this method does not seem to be a viable approach, it is used in some operating systems.
+16.7  Summary
+Deadlocks may occur in a system that has shared resources. A system in which processes use resources can be depicted using a resource-allocation graph. A cycle in a resource-allocation graph may or may not indicate a deadlock.
+References
+Abraham Silberschatz,  Peter  B.  Galvin,  Greg  Gagne,  “Operating  System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+
+
+=== MODULE: deadlocks-avoidance ===
+
+15
+Deadlocks – Avoidance
+Mary Anitha Rajam
+18.1 Introduction
+In a
+multi-programming
+environment, many processes compete for a finite number of resources. If the resources requested by a process are not available, the process waits. If the resources requested by this process are held by other waiting processes, the situation may lead to a deadlock. The different ways to handle deadlocks are deadlock prevention, deadlock avoidance, deadlock detection and recovery. In the previous module, we learnt different ways to prevent deadlocks. In this module, we shall see how deadlocks are avoided.
+In the previous module, we learnt that a system with resources can be depicted using a resource-allocation graph. In a resource-allocation graph, processes are denoted using circles and resource types are denoted using rectangles. The different instances of each resource type are shown as dots within the rectangles. Processes and resource types are the nodes of the resource-allocation graph. The edges show the dependency between the processes and the resources. If there is an edge from a process to a resource, it means that the process is requesting for an instance of the resource (request edge). If there is an edge from a resource to a process, it means that an instance of the resource is assigned to the process (assignment edge).
+18.2. Resource-Allocation Graph Algorithm for Deadlock Avoidance
+Fig. 18.1 Resource-Allocation Graph for Deadlock Avoidance (Source: [1])
+A variant of the resource-allocation graph is used to avoid deadlocks when the
+system has only one instance of a resource type. In this graph, a new type of edge is added called the claim edge. A claim edge is represented by a dashed line as shown in Figure 18.1. A claim edge
+P
+i ®
+R
+j indicates that process
+P
+j will request resource
+R
+j. All claim edges must appear in the graph, initially. Resources must be claimed
+a priori
+in the system. That is, at the beginning, the system should know the future requests of all the processes. These requests that would be made in future are depicted using claim edges.
+A claim edge
+P
+i ®
+R
+j is converted to a request edge when process
+P
+i actually requests for resource
+R
+j. When resource
+R
+j is released by process
+P
+i, the assignment edge
+R
+i ®
+P
+i reconverts to a claim edge
+P
+i
+®
+R
+j
+.
+We will now learn how deadlocks can be avoided using this type of resource-allocation graphs. Suppose
+P
+i requests
+R
+j. The resource-allocation graph would have had a claim edge from
+P
+i to
+R
+j. The claim edge is now converted to a request edge
+P
+i ®
+R
+j. The request edge
+P
+i ®
+R
+j is converted to an assignment edge
+R
+j ®
+P
+i. The resource-allocation graph now depicts how the state of the system would have been after the resource
+R
+j is allocated to
+P
+i. The resource-allocation graph is now checked for cycles using the cycle-detection algorithm. If there is no cycle, the system is in a safe state and the resource can be allocated to
+P
+i. If there is a cycle, process
+P
+i has to wait.
+P
+i is not allocated the resource
+R
+j immediately.
+Thus, the resource-allocation graph alone is modified and the system is checked for safe state. The actual allocation of resource is not done immediately. Only if the allocation would result in a safe state, the actual allocation of resources is done.
+Fig. 18.2 Unsafe State In Resource-Allocation Graph (Source: [1])
+Consider the resource-allocation graph in Figure 18.2.
+P
+2 requests for resource
+R
+2 as shown using the claim edge from
+P
+2 to
+R
+2 in Figure 18.1. This is converted to an assignment edge in the resource-allocation graph as shown in Figure 18.2. The graph is now checked for cycles. Since there is a cycle, the system understands that allocating
+R
+2 to
+P
+2 will lead to a deadlock. The only instance of
+R
+1 is assigned to
+P
+1 and the only instance of
+R
+2 is assigned to
+P
+2.
+P
+2 has requested for
+R
+1. It is known from the claim edge that process
+P
+1 may request for
+R
+2. If
+P
+1 requests for
+R
+2 (before releasing
+R
+1, then both the processes
+P
+1 and
+P
+2 will wait for a resource held by the other process. The system will go to a deadlocked state. Therefore,
+R
+2 is not allocated to
+P
+2. Thus, deadlocks are avoided.
+This method can be used to avoid deadlocks only if there is a single instance of each resource type. If there are more instances of each resource type, Banker’s algorithm is used for deadlock avoidance.
+18.3  Banker’s Algorithm
+In the Banker’s algorithm, each process must a priori declare its maximum use. This should be done for any deadlock avoidance algorithm. The maximum resource need of each process must not exceed the total number of resources in the system. When a user requests for resources, the system checks whether the allocation of the request will result in a safe state. If, after the allocation, the system will be in a safe state, resources are allocated. Else, the process waits. When a process gets all its resources it must return them in a finite amount of time.
+18.3.1  Data Structures for the Banker’s Algorithm
+Let
+n
+denote the number of processes and
+m
+denote the number of resource types.
+•
+Available:
+Vector of length
+m
+. If Available[
+j
+] =
+k
+, there are
+k
+instances  of resource type
+R
+j
+available.
+A B C
+3 3 2
+In the example shown above, there are three resource types A, B and C. The number of available instances of resource types A, B and C are 3, 3 and 2 respectively.
+•
+Max: n x m
+matrix. The
+n
+rows correspond to
+n
+processes and the
+m
+columns correspond to the
+m
+resource types. If Max[
+i, j
+] =
+k
+, then process
+P
+i
+may request at most
+k
+instances of resource type
+R
+j
+A B C
+P
+0
+7 5 3
+P
+1
+3 2 2
+P
+2
+9 0 2
+P
+3
+2 2 2
+In the example shown above, there are three resource types A, B and C and four processes
+P
+0,
+P
+1,
+P
+2 and
+P
+3. The maximum need of process
+P
+0 can  be 7 instances of resource type A, 5 instances of resource type B and 3 instances of
+resource type C. Similarly, the maximum need of the other processes
+P
+1,
+P
+2 and
+P
+3 are also shown.
+•
+Allocation: n
+x
+m
+matrix. The
+n
+rows correspond to
+n
+processes and the
+m
+columns correspond to the
+m
+resource types. If Allocation[
+i,j
+] =
+k
+then process
+P
+i
+is currently allocated
+k
+instances of
+R
+j.
+A B C
+P
+0
+0 1 0
+P
+1
+2 0 0
+P
+2
+3 0 2
+P
+3
+2 1 1
+In the example shown above, there are three resource types A, B and C and four processes
+P
+0,
+P
+1,
+P
+2 and
+P
+3. The number of instances of resource type currently allocated to each process is shown. Process
+P
+0 is currently allocated 0 instances of resource type A, 1 instance of resource type B and 0 instances of resource type C. Similarly, the current allocation of the other processes
+P
+1,
+P
+2 and
+P
+3 are also shown.
+•
+Need: n
+x
+m
+matrix. The
+n
+rows correspond to
+n
+processes and the
+m
+columns correspond to the
+m
+resource types. This matrix shows the future need of each process. If
+Need
+[
+i, j
+] =
+k
+, then
+P
+i
+may need
+k
+more instances of
+R
+j
+to complete its task.
+Need
+[
+i, j]
+=
+Max
+[
+i, j
+] –
+Allocation
+[
+i, j
+]
+That is, future need is a process’s maximum need minus the resources currently allocated.
+18.3.2  Notations Used:
+If
+X
+and
+Y
+are vectors of length
+n
+X
+≤
+Y
+iff
+X
+[
+i
+] ≤
+Y
+[
+i
+] for all
+i
+= 1,2,…,
+n
+That is, the ith element of vector X is less than or equal to the ith element of vector Y, for all i.
+Consider the following vectors X and Y
+If
+X
+= (1,7,3,2),
+Y
+= (0,3,2,1)
+In the above
+Y
+≤
+X
+, because each element of vector Y is less than or equal to the corresponding element of vector X. That is, the first element of Y is less than the first element of X and so on.
+Y <    X,
+if
+Y
+≤
+X
+and
+Y
+≠
+X
+Each row in the matrices Allocation and Need is treated as a vector. For example, the
+i
+th  row of matrix Allocation and Need are  referred to as Allocation
+i
+and Need
+i
+respectively.
+The Banker’s algorithm comprises a safety algorithm and a resource-allocation algorithm. For a given state of the system, the safety algorithm checks if the system is in a safe state. The safety algorithm is given below:
+18.3.3  Safety Algorithm
+1.  Let
+Work
+and
+Finish
+be vectors of length
+m
+and
+n
+respectively.   Initialize:
+Work
+=
+Available
+Finish
+[
+i
+] =
+false
+for
+i
+= 1,2, …,
+n
+2.  Find an
+i
+such that both:
+(a)
+Finish
+[
+i
+] =
+false
+(b)
+Need
+i
+£
+Work
+If no such
+i
+exists, go to step 4.
+3.  W
+ork
+=
+Work
++
+Allocation
+i
+Finish
+[
+i
+] =
+true
+go to step 2.
+4.  If
+Finish
+[
+i
+] == true for all
+i
+, then the system is in a safe state.
+Whenever a request for resources comes from a process, the system runs the resource-request algorithm and modifies the state of the system in the simulation as if the resource is allocated. The actual state of the system is not modified; the data structures in the algorithm alone are modified. The safety algorithm is run to check if the system still remains in a safe state. The resource-request algorithm for process
+P
+i is given below:
+18.3.4  Resource-Request Algorithm for Process
+P
+i
+Request
+i
+= request vector for process
+P
+i
+. If
+Request
+i
+[
+j
+] =
+k
+then process
+P
+i
+wants
+k
+instances of resource type
+R
+j
+.
+1. If
+Request
+i
+£
+Need
+i
+go to step 2. Otherwise, raise error condition, since process has exceeded its maximum claim.
+2. If
+Request
+i
+£
+Available
+, go to step 3. Otherwise
+P
+i
+must wait, since resources are not available.
+3. Pretend to allocate requested resources to
+P
+i
+by modifying the state as follows:
+Available
+=
+Request
+i
+;
+Allocation
+i
+=
+Allocation
+i
++
+Request
+i
+;
+Need
+i
+=
+Need
+i
+–
+Request
+i;;
+The safety algorithm is now run to check if the system is in a safe state with this modified state.
+If safe
+Þ
+the resources are allocated to P
+i
+.
+If unsafe
+Þ
+P
+i
+m
+ust wait, and the old resource-allocation state is restored
+We will understand how the algorithm works by an example as given below.
+18.3.5  Example of Banker’s Algorithm
+Consider 5 processes
+P
+0  through
+P
+4; 3 resource types
+A
+,
+B
+and
+C
+. There are 10 instances of
+A
+, 5 instances of
+B
+and 7 instances of
+C
+.
+The snapshot at time
+T
+0 is given below:
+Allocation
+M
+ax
+Available
+A B C
+A B C
+A B C
+P
+0
+0 1 0
+7 5 3
+3 3 2
+P
+1
+2 0 0
+3 2 2
+P
+2
+3 0 2
+9 0 2
+P
+3
+2 1 1
+2 2 2
+P
+4
+0 0 2
+4 3 3
+The content of the matrix Need is defined to be Max – Allocation. Matrix Need is given below:
+Need
+A B C
+P
+0      7 4 3
+P
+1       1 2 2
+P
+2      6 0 0
+P
+3      0 1 1
+P
+4      4 3 1
+We will first check if the system is in a safe state in the current situation. For this, the safety algorithm is run.
+Allocation
+Need              Available
+A B C
+A B C
+A B C
+P
+0
+0 1 0
+7 4 3
+3 3 2
+P
+1
+2 0 0
+1 2 2
+P
+2
+3 0 2
+6 0 0
+P
+3
+2 1 1
+0 1 1
+P
+4
+0 0 2
+4 3 1
+Vector Work is initialized to Available Therefore, Work = Available = (3,3,2)
+Finish[i] = false for i = 0,1,2,3,4 Let i = 0
+Is Need0 ≤ Work?    No, (7,4,3) is not less than or equal to (3,3,2)
+Let i = 1
+Is Need1 ≤ Work?    Yes, (1,2,2) is less than or equal to (3,3,2)
+Therefore, set Finish[1] = true.
+P
+1 added to the safe sequence <
+P
+1>
+Is Need2 ≤ Work?    No, (6,0,0) is not less than or equal to (5,3,2)
+Work = Work + Allocation1 = (3,3,2) + (2,0,0) = (5,3,2) Let i = 2
+Let i = 3
+Is Need3 ≤ Work?    Yes, (0,1,1) is less than or equal to (5,3,2)
+Therefore, set Finish[3] = true ,
+P
+3 added to safe sequence <
+P
+1,
+P
+3>
+Work = Work + Allocation3 =(5,3,2) + (2,1,1) = (7,4,3)
+Work = (7,4,4)
+Let i = 4
+Is Need4 ≤ Work? Yes, (4,3,1) is less than or equal to (7,4,3)
+Set Finish[4] = true ,
+P
+4 is added to safe sequence <
+P
+1
+,P
+3
+, P
+4 >
+Work = Work + Allocation4 = (7,4,3) + (0,0,2) = (7,4,5)
+Work = (7,4,5)
+Now, check again the processes that were not added to the safe sequence.
+P
+0
+and
+P
+2 are remaining.
+So, let i = 0
+Is Need0 ≤ Work?    Yes
+Set Finish[0] = true,
+P
+0 is added to safe sequence <
+P
+1
+,P
+3
+, P
+4
+, P
+0>
+Work = Work + Allocation0 =(7,4,5) + (0,1, 0) = (7,5,5)
+Work = (7,5,5)
+Let i = 2
+Is Need2 ≤ Work?    Yes
+Finish[0] = true ,
+P
+2 is added to safe sequence <
+P
+1
+,P
+3
+, P
+4
+, P
+0
+, P
+2 >
+Work = Work + Allocation2 =(7,5,5) + (3,0,2) = (10,5,7)
+The system is in a safe state since the sequence <
+P
+1
+,
+P
+3
+,
+P
+4
+,
+P
+2
+,
+P
+0
+> satisfies the safety requirement
+Now, let
+P
+1
+Request (1,0,2)
+First, check if Request1 £ Available (that is, (1,0,2) £ (3,3,2)) Þ
+true.
+Also, check if Request1 £ Need1 (that is (1,0,2) £ (1,2,2)) Þ
+true.
+Now, the data structures are changed as if the request of
+P
+1 is granted. The future Need of
+P
+1 is changed from (1,2,2) to (0,2,0). The Allocation of
+P
+1 is changed from (2,0,0) to (3,0,2) and the resources available are changed to (2,3,0)
+Allocation
+A B C
+Need
+A B C
+Available
+A B C
+P
+0
+0 1 0
+7 4 3
+2 3 0
+P
+1
+3 0 2
+0 2 0
+P
+2
+3 0 1
+6 0 0
+P
+3
+2 1 1
+0 1 1
+P
+4
+0 0 2
+4 3 1
+The system is  now checked for a safety sequence. Executing safety algorithm shows that the sequence <
+P
+1,
+P
+3,
+P
+4,
+P
+0,
+P
+2> satisfies the safety requirement. Therefore, the request of
+P
+1 can be granted.
+After
+P
+1’s request is granted, can request for (3,3,0) by
+P
+4 be granted?
+No, resources are not available. Only (2,3,0) is available.
+P
+4 needs 3 instances of A, but only 2 instances of A are available.
+Can request for (0,2,0) by
+P
+0 be granted?
+P
+0
+Request (0,2,0)
+Check if Request0 £ Available
+(0,2,0) £ (2,3,0) Þ
+true.
+Also, check if Request0 £ Need0 (that is (0,2,0) £ (7,4,3)) Þ
+true.
+Now,  change  the  data  structures  as  if  the  request  is  granted  and  run  the  safety algorithm to check for a safe sequence. The future Need of
+P
+0 is changed from (7,4,3) to (7,2,3).  The  Allocation  of
+P
+1  is  changed  from  (0,1,0)  to  (0,3,0)  and  the  resources available are changed from (2,3,0) to (2,1,0).
+Allocation
+A B C
+Need
+A B C
+Available
+A B C
+P
+0
+0 3 0
+7 2 3
+2 1 0
+P
+1
+3 0 2
+0 2 0
+P
+2
+3 0 1
+6 0 0
+P
+3
+2 1 1
+0 1 1
+P
+4
+0 0 2
+4 3 1
+The future need of any of the processes cannot be satisfied with the resources available. Therefore, there is no safe sequence. Therefore, it is understood that the request of
+P
+0 should not be granted.
+18.5  Summary
+This module discussed what is meant by a safe sequence. We learnt how deadlocks can be avoided when there is a single instance for all resource types. We also learnt how deadlocks can be avoided when there are multiple instances of resources using the Banker’s algorithm.
+References
+Abraham Silberschatz,  Peter  B.  Galvin,  Greg  Gagne,  “Operating  System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+
+
+=== MODULE: memory-management ===
+
+17
+Memory Management
+Mary Anitha Rajam
+20.1  Introduction
+Any program that must be executed must be brought into the main memory and placed within a process for it to run. If there is enough space in main memory, more than one process can be placed in the main memory. To increase the system performance, several processes must be kept in memory. The processes must share the memory. There are different ways to manage the main memory. In this module we learn what is meant by memory management, why memory management is needed and different issues related to memory management.
+20.2  Background
+The main memory consists of a large array of words or bytes. The CPU fetches the instructions from the memory based on the value of the program counter and executes them. In an instruction-execution cycle, an instruction is first fetched from memory. The instruction is decoded. If needed, operands are also fetched. After execution of the instructions, the results may be stored back in the memory.
+Since the main memory is not large enough to accommodate all the active processes at the same time, the processes that are not in the main memory are kept in the backing store or the disk. This collection of processes on the disk that are waiting to be brought into memory to run the program are placed in an input queue. One of these processes is selected and loaded into the main memory and is executed. After termination of the process, the main memory space allocated to the process is freed.
+User programs go through several steps before being run. The addresses in source program are represented in symbolic form (say, variable
+count
+in the program). The compiler will bind these addresses to relocatable addresses (15 bytes from the beginning of this module). Theses addresses will range from 0 to a maximum for that particular process. The loader will turn these addresses into absolute addresses (74001). For example, the relocatable address 0 can be loaded into address 74001 in the memory.
+20.3  Binding of Instructions and Data to Memory
+Address binding of instructions and data to memory addresses can happen at three different stages
+,
+compile time, load time and execution time.
+•
+Compile time
+: If memory location in which the process will be placed in main memory is known a priori, absolute code can be generated. But the code must be recompiled if starting location of the process changes.
+•
+Load time
+: If the memory location of the process is not known at compile time, binding is delayed until load time. Here,
+relocatable
+code is generated. The actual memory locations are known only when the process is loaded into memory.
+•
+Execution time:
+If the process can be moved during its execution from one memory segment to another, binding is delayed until run time. This needs hardware support for address
+maps (e.g.,
+base
+and
+limit registers
+). This is used by most general-purpose operating systems.
+20.3  Logical vs. Physical Address Space
+When a program is compiled, relocatable addresses are generated. These addresses range from 0 to a maximum. These addresses comprise the logical address space. When the program is placed in the physical memory, iit need not be placed in the same address as that of the logical address. The addresses where the program is placed in the physical memory comprise the physical address space. Thus, the logical address is generated by the CPU and is also referred to as
+virtual address
+. The physical address is the address seen by the memory unit. The logical and physical addresses are the same in compile-time and load-time address-binding schemes; logical (virtual) and physical addresses differ in execution-time address-binding
+20.4  Memory-Management Unit (MMU)
+Since the logical address and the corresponding physical address may be different, there is a need for a memory management unit that maps the logical address to physical address. The user program deals with
+logical
+addresses; it never sees the
+real
+physical addresses. Only the memory-mapping hardware converts the logical addresses to physical addresses. There are many memory management schemes available like paging, segmentation and paged segmentation.
+We now look at a simple MMU scheme and understand how the mapping is done from the logical address to the physical address (Figure 20.1). The starting address from where the process is loaded in the main memory is kept in a relocation register. The value in the relocation register is added to every address generated by a user process at the time it is sent to memory. The resultant value is the physical address. Say, a process is loaded in the main memory from address 14000. This value (14000) is stored in the relocation register. If the logical address is 346, then the physical address will be 14000+346 = 14346.
+Figure 20.1 Dynamic relocation using a relocation register (Source: [1])
+Thus, logical addresses range from 0 to
+max
+and physical addresses range from
+R
++0 to
+R
++
+max
+, where
+R
+is the starting address of the process in physical memory. The user thinks that the process runs in locations 0 to
+max
+and supplies logical addresses. Logical addresses are
+converted to physical addresses before they are used.
+20.5  Dynamic Loading
+In our discussion so far, the entire program and data of a process must be in physical memory for the process to execute. The size of a process is limited to the size of physical memory. To obtain better memory-space utilization, we can use
+dynamic loading.
+With dynamic loading, a routine is not loaded until it is called. All routines are kept on disk in a relocatable load format. Only the main program is loaded. When a routine is called, the calling routine checks if the called routine is already loaded. If not, the relocatable linking loader is called to load the routine. The loader updates the program’s address table. Control is passed to the newly loaded routine. This results in better memory-space utilization; unused routine is never loaded. This kind of loading is useful when large amounts of code are needed to handle infrequently occurring cases, say, error routines. Some types of errors may occur very rarely, but still the code for handling these types of errors should be a part of the program. If a particular type of error does not occur, the code for handling that error will not be used, and hence, that part of the program need not be loaded into memory at all. No special support from the operating system is required and can be implemented through program design. Users should design their programs in a modular way for this to work. The operating system may provide library routines to implement dynamic loading.
+20.6  Dynamic Linking
+In dynamic linking, linking of library routines is postponed until execution time. For each library-routine reference, a stub is included in the executable image. The stub is a small piece of code which is used to locate the appropriate memory-resident library routine. When the stub is executed, it replaces itself with the address of the routine, and executes the routine. Dynamic linking is particularly useful for libraries
+20.7   Swapping
+Any process that is currently being executed needs to be kept in main memory. A process may move between running state and waiting state, many times during its lifetime. When the process is in waiting state, the process is not using the CPU and hence need not be kept in main memory. When one process is in waiting state, another process can use the CPU and the process that is currently using the CPU is kept in main memory. When there are many active processes, all processes cannot be accommodated in the main memory, since the size of main memory is small. Therefore, processes that are not executing currently can be swapped temporarily out of main memory to a backing store, and then brought back into memory for continued execution. The backing store is a fast disk large enough to accommodate copies of all memory images for all users. This moving out and moving in of processes is called swapping (Fig. 20.2).
+Suppose round-robin scheduling is the CPU scheduling algorithm used. A time slice is allotted to each process. Suppose there are 10 processes that are using the CPU in a round-robin manner. The process whose time slice is completed is swapped out, if there is no enough space  in  the main  memory, and the next process is brought in.  If  priority-based scheduling is used, a low-priority process is swapped out to bring in a high-priority process. This moving out is called as roll out and moving in is called as roll in.
+In swapping, the major part of the swap time is transfer time, that is, the time required to transfer the process to from the main memory to the disk. The total transfer time is directly proportional to the amount of memory swapped. Modified versions of swapping are found on
+many systems, i.e., UNIX, Linux, and Windows.
+Fig. 20.2 Schematic View of Swapping (Source: [1])
+20.8
+Contiguous Memory Allocation
+The main memory must accommodate both the operating system and the various user processes. We therefore need to allocate different parts of the main memory in the most efficient way possible. This section will explain one common method called contiguous memory allocation.
+The main memory is usually divided into two partitions:
+–  Resident operating system, usually held in low memory with interrupt vector
+–  User processes then held in high memory
+In contiguous memory allocation, each process is contained in a single contiguous section of memory.
+20.8.1  Single-partition allocation
+In this scheme, the main memory is considered as a single big partition. Processes are brought into the main memory and can be placed at any free space in the main memory. The starting address where the process is placed in remembered, say, in a relocation-register. The relocation-register scheme is used to protect user processes from each other, and from changing operating-system code and data. The relocation register contains the value of the smallest physical address of the process. Another register called the limit register is maintained which contains the range of logical addresses (highest logical address) – each logical address must be less than the limit register.
+Any address that is generated by the CPU is checked with the contents of the limit register. The address generated must be less than the contents of the limit register. If it is less, then the address generated is added with the contents of the relocation register to get the physical address (Fig. 20.3). If the logical address generated by the CPU is not less than the value in the limit register, then a trap is given to the operating system, indicating that the address generated is an illegal address.
+Fig. 20.3 Hardware Support for Relocation and Limit Registers
+20.8.2
+M
+ultiple-partition allocation
+In multiple-partition allocation, the main memory can be divided into several fixed sized partitions. When a partition is free, a process is selected from the input queue and is loaded to the free partition.
+It is also possible to have variable-sized partitions. The memory is looked at as one large hole – block of available memory. When a process arrives, it is allocated memory from a hole large enough to accommodate it. When a process terminates, the space is freed and is added to the set of holes. As memory space for processes are allocated and freed, in due course of time, there will be a lot of holes of various sizes scattered throughout the memory. The operating system maintains information about: a) allocated partitions b) free partitions (hole).
+Consider the example shown in Figure 20.4. Initially, process 5, process 8 and process 2 are present in the main memory. Process 8 terminates and a hole is created. Process 9 is brought into the memory. Then process 10 is brought into the memory.
+Fig. 20.4 Example of contiguous memory allocation
+20.8.3
+Dynamic Storage-Allocation roblem
+When there is a list of free holes, how to satisfy a request of size
+n
+from the list of free holes.
+There are three ways in which the request can be satisfied, first-fit, best-fit and worst-fit.
+First-fit: Allocate the
+first
+hole that is big enough– Search to find the hole can start from the beginning or from where the previous search ended
+Best-fit: Allocate the
+smallest
+hole that is big enough. In this case, it is necessary to search the entire list, unless ordered by size. This produces the smallest leftover hole that is large enough to accommodate the incoming process.
+Worst-fit: Allocate the
+largest
+hole. In this case also, it is necessary to search the entire list. The search produces the largest leftover hole.
+The problem with these allocation algorithms is that these suffer from external fragmentation. Since processes are allocated and de-allocated space, in due course of time it is possible that there will be free memory space that is not contiguous. The total free memory space exists to satisfy a request,  but it  is not contiguous.  This is called external fragmentation. External fragmentation can be reduced by compaction. In compaction, memory contents are shuffled to place all free memory together in one large block. Compaction is not possible if relocation is static and is done at assembly or load time. Compaction is possible
+only
+if relocation is dynamic, and is done at execution time.
+5.3 Summary
+A process should be kept in main memory during execution. We learnt what the difference is between a logical address and a physical address. Dynamic loading and linking are possible.
+We learnt what is meant by swapping of processes, what contiguous memory allocation is and the issues related to contiguous memory allocation.
+References
+Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+
+
+=== MODULE: virtual-memory ===
+
+22
+Virtual Memory
+Mary Anitha Rajam
+25.1 Introduction
+Instructions of any process that are currently being executed must be placed in physical memory. If the entire process has to be placed in the physical memory, the size of the process becomes limited. That is, the size of the process cannot be larger than the size of the physical memory. The concept of virtual memory helps in having processes larger than the size of the physical memory. This module explains the concepts of virtual memory and demand paging, explains why page faults occur and how page faults are handled.
+25.2 Virtual Memory
+Even when an entire process is loaded into the main memory, the entire process may not be used. The code for handling certain error conditions may not be executed if such kind of errors do not occur. There can be unused space occupied by arrays, tables etc. Code for rarely used features may not be used. Even when entire program is used, all portions of the program may not be used
+at the same time.
+Hence it is not required for the entire process to be in the main memory. Rather, a part of the process can be in the main memory and the remaining process can be kept in the secondary storage device.
+Fig.25.1 Logical address space larger than physical memory (Source: [1])
+Thus, programs are not constrained by the physical memory available. More physical memory  space  is  now  available  for  more  programs.  Thus,  virtual  memory  provides  the
+separation of user logical memory from physical memory. Only part of a program needs to be in physical memory for execution. Logical address space can therefore be much larger than physical address space (Figure 25.1). This allows a large virtual memory to be available for programmers when only small physical memory is available. This also allows address spaces to be shared by several processes. Virtual memory can be implemented via demand paging or demand segmentation. In this module, we will discuss the issues related to demand paging.
+25.3 Demand Paging
+Demand paging is a paging system with swapping. Processes reside in secondary memory. When needed to be executed, processes are brought into main memory. Instead of bringing in the whole process, only the pages which are currently needed are brought in. Figure 25.2 shows program A being swapped out to the secondary storage device and program B being swapped into the main memory.
+Fig. 25.2 Swap-in and swap-out of processes (Source: [1])
+Since only pages which are needed are brought in, bringing in pages which will not be used at all is avoided. Because of this, less I/O is needed, less physical memory is needed, faster response is provided to users and more number of users can use the system at a particular time.
+To differentiate between the pages in main memory and those on disk, the valid / invalid bit is used. If the bit is set as valid, then it means that the page is valid and is present in main memory. If the bit is set as invalid, then either the page is not valid or the page is valid but not present in the main memory. Figure 25.3 shows the use of the valid/invalid bit. The process has six valid pages A – F. All the pages are kept in the secondary storage device (disk). Of these only A, C and F are present in the main memory. The valid bit in the page table is set only for these three pages. For all the remaining pages, the valid bit is not set.
+Fig. 25.3 Valid/invalid bit (Source: [1])
+25.4
+Page Faults
+When the CPU generates a logical address, the OS checks the page table. If the valid bit is set, it means that the page is in memory and the process proceeds as normal. When the process accesses a page that is not in memory, a trap is given to the OS. This is called a page fault.
+Fig. 25.4 Page fault (Source:[1])
+This page fault is not due to an invalid address error. It is a result of the OS’s failure to bring the desired page into memory. When a page fault occurs, the OS looks at another internal table (usually kept in the process control block) to decide whether the reference is actually valid or invalid. If it is an invalid reference, the process is terminated. If it is a valid reference, but just not in memory, the OS proceeds as follows: The OS gets an empty frame from free-frame list, swaps the required page from the disk into the free frame, resets the internal table and the page table. In the page table, the valid bit is set to 1 and the instruction is restarted (Figure 25.4) When a page fault occurs, the process is interrupted and the state of the process is saved. After handling page fault, process is restarted in exactly the same place and state.
+When a process starts executing, it is possible to start executing the process even with no page in memory. Then, in this case, even for the first instruction, there is a page fault. When all the needed pages are brought into memory, there are no more page faults. This is called pure demand paging. That is, a page of a process is never brought into memory until it is required.
+Programs tend to have locality of reference. That is, when a particular region of a process is being executed, pages corresponding to that region alone will be used. For example, if a particular subroutine is being executed, the pages corresponding to that subroutine alone will be executed. Thus, it is enough to have only these pages in the physical memory during that time. This is the reason for the success of demand paging.
+25.4.1 What happens if there is no free frame?
+We saw in the earlier section that a page is brought into a free frame in the physical memory from the secondary storage device. But, if a free frame is not available, a frame has to be freed in the physical memory. This is called page replacement. That is, it is needed to find some page in memory, but not really in use and swap out. The needed page is then brought into this free frame. There are a number of ways in which the victim frame can be chosen, called, page replacement algorithms, which will be discussed in the next module.
+25.5 Performance of Demand Paging
+The performance of demand paging can be analyzed by calculating the effective memory access time. When there is no page fault, the effective access time is same as the memory access time. If page fault occurs, it is necessary to read the relevant page from disk and then access the physical memory to access the desired word.
+Let p (0 £
+p
+£ 1.0) be the probability that a page fault will occur. If
+p
+= 0, there are no page faults. If
+p
+= 1, every reference is a page fault. The effective Access Time (EAT) is calculated as
+EAT = (1 –
+p
+) x memory access
++
+p x
+(page fault overhead [swap page out + swap page in+ restart overhead])
+Thus, it is seen that the effective access time depends on the page fault rate and the time required to service the page fault. A lot of overhead is involved in servicing a page fault. The following sequence of steps show the overhead involved in servicing a page fault.
+25.5.1 Servicing a page fault
+The steps involved in the servicing of a page fault are given below:
+1. Trap to the OS
+2. Save user registers and process state of the current process
+3. Determine that the interrupt was a page fault
+4. Check that the page reference was legal and determine the location of the page on disk
+5. Issue a read from the disk to a free frame
+6. Wait in a queue for the disk until read request is serviced
+7.  Wait for device seek and/or latency time
+8. Begin the transfer of page to a free frame
+9. While waiting, allocate the CPU to some other user
+10. Interrupt from the disk (I/O completed)
+11.  Save registers and process state for currently executing process (some other process is being executed now)
+12. Determine that the interrupt was from the disk
+13. Correct the page table and other tables to show that the desired page is now in memory
+14.
+Wait for the CPU to be allocated to this process again
+15. Restore the user registers, process state, new page table
+16. Restart the interrupted instruction
+Suppose that the page fault service time in a system is 25 ms and the memory access time is 100 ns, the effective memory access time
+= (1-p) x 100 + 25,000,000 x p
+= 100 + 24,999,900 x p
+Even if p = 1/1000, effective memory access time = 25,099.9 ns. When compared to the memory access time of 100ns, this is very large. Thus it is seen that effective memory access time is directly proportional to page fault rate. It is required that the page fault rate must be as small as possible.
+25.5.2  Problem:
+Consider a demand paging system with a paging disk that has an average access and transfer time of 20 milliseconds. Addresses are translated through a page table in  main memory, with an access time of 1 microsecond per memory access. Thus, each memory reference through the page table takes two memory  accesses. To improve this time, an associative memory is added that reduces access time to one memory reference, if the page-table entry is in associative memory.
+Assume that 80 percent of the accesses are in the associative memory, and that of the remaining, 10 percent (or 2 percent of the total) cause page faults. What is the effective memory access time?
+80% of the accesses are in associative memory. Therefore it is enough to have one memory access and hence the access time = 1 microseconds Of the remaining 20% of the accesses, 2% result in page faults. For this 2%, 1 microsecond is needed to access the page table in memory, 20 milliseconds to service the page fault, 1 microsecond to access the memory location. Therefore 20,002 microseconds are needed.
+For the remaining 18% 2 microseconds are needed, 1 microsecond to access the page table and 1 microsecond to access the memory location.
+Therefore, effective memory access time = 0.8 x 1 + 0.18 x 2 + 0.02 x 20,002
+= 401.2 microsecs
+25.6  Summary
+In this module, we learnt the concepts of virtual memory and demand paging. Virtual memory allows the size of the process to be larger than the size of the physical memory. The entire process need not be present in the physical memory during the execution of the process. Virtual memory can be implemented using demand paging. In demand paging, a page is brought into the memory only when a reference is made to that particular page. Whenever a reference is generated, the page table is checked if the page is valid and in memory. If yes, the page is accessed as usual. Else, a page fault is generated. The OS now checks if the page is valid and not in memory. If the page is valid and not in memory, the page is brought into the memory and the instruction is restarted.
+References
+Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”, Sixth Edition, John Wiley & Sons Inc., 2003.
+Andrew S. Tanenbaum, Herbert Bos, “Modern Operating Systems”, Fourth Edition, Pearson Education, 2014.
+Gary Nutt, “Operating Systems”, Third Edition, Pearson Education, 2009.
+
+
+=== MODULE: file-system-interface-i ===
+
+28
+File – System Interface – I
+Mary Anitha Rajam
+31.1
+Introduction
+The operating system defines a logical storage unit called a file. The files are stored in disk blocks in the disk. The mapping of files onto the disk physical devices is done by the operating system. The physical devices are nonvolatile.
+Information is stored on different storage media. For example, hard disks, pen drives etc. are used to store information. In a disk, data are stored in small units called as disk blocks. That is, the disk is logically divided into disk blocks in which data are stored. The user need not be aware that there are disk blocks in the disk where information is stored. It is enough for the users to understand information in terms of files.
+In this module we learn the uses of files and file systems, different attributes and types of files, understand file operations. We also discuss different file access methods.
+31.2  File
+A file is a named collection of related information that is recorded on secondary storage. The file is the smallest allotment on secondary storage. A file may represent programs or data. That is, a file may be a program file or a data file. The program files can be source programs, objects programs and so on. The data files can have numeric data, alphabetic data, alphanumeric data, binary data and so on.
+A file has a defined structure depending on the type of the file. For example, the text file is a sequence of characters organized into lines. A source file has a source program that has a sequence of subroutines and functions, organized as declarations followed by executable statements. An object file has a sequence of bytes organized into blocks understandable by the linker. An executable file has a series of code sections that the loader can bring into the memory and execute.
+31.3  File System
+The file system consists of a collection of files. When there are a number of files kept in the secondary memory, it is better to keep the files organized. For example, similar types of files can be grouped and the group can be given a name. This group is called a directory. Many directories can be grouped under another directory and so on. Thus, the directory structure organizes and provides information about all the files in the system. This forms the file system. To physically or logically separate large collections of directories, partitions are maintained. Each partition can have a different file system.
+31.4  File Attributes
+Each file has a number of attributes indicating some information of the file. The most common attributes are the name, type, location, size, protection bits, time, date and user
+identification.
+Name
+is the only information kept in human-readable form. This is the name given to identify the file.
+Type
+is the type of the file and is needed for systems that support different types. For example, the different types of files are text files, image files and so on.
+Location
+points to the location of the file on the disk. That is the disk block in the disk where the contents of the file are kept.
+Size
+refers to the current file size.
+Protection bits
+control who can do reading, writing, executing. Some users can read, some can write, some can execute or some can have a combination of different permissions.
+Time, date, and user identification
+– Information kept for last creation, last modification and last use
+– Data useful for protection, security, and usage monitoring.
+Information about the attributes of the files is kept in the directory structure, which is maintained on the disk.
+31.5  File Operations
+The operating system provides a number of system calls to create, write, read, reposition, delete and truncate files. We now see how each of these operations is carried out.
+31.5.1  Create
+This operation creates a new file. First, it is necessary to find if there is space for the file in the disk. Then, an entry is made for the new file in the directory. The directory entry stores information about the file like the name of the file, location of the file in disk and so on.
+31.4.2. Write
+This operation is used to write contents into a file. The system searches the directory and finds the location of the file. Using this location, contents can be written into the file. The system keeps a write pointer to the location in the file where the next write has to take place. The write pointer is updated after a write occurs.
+31.5.2  Read
+The read operation is used to read the contents of a file. The system call used for reading specifies the name of the file and where the next block must be read from. The system needs to keep a read pointer to the location in the file where the next read is to take place. The read pointer is updated after read has taken place. For a particular file, the file position pointer need not be the same for all processes that access the file. Each process maintains its own file position pointer for a particular file.
+31.5.3  File seek
+This operation is used to reposition the file pointer within the file. Whenever a read or a write operation is done, the read or write is done on the location which is pointed to by the file pointer. This value of the file pointer or the current-file-position can be modified using the seek operation. The system call used for seek searches the directory for the appropriate entry. The current-file-position maintained in the directory structure is set to the given value. This operation does not access the contents of the file kept in the disk and hence, no I/O is needed. The value of the file pointer alone is changed in the directory structure.
+31.5.4   Delete
+This operation is used to delete a file. The name of the file to be deleted is provided in
+the system call. The file is searched in the directory. The space allocated for the file in the disk is released. The directory entry created for the file is erased.
+31.5.5  Truncate
+This operation releases all the contents of the file. The file is not deleted. The file length is reset to zero so that it can be overwritten. The space allocated to the file in the disk is released.
+31.5.6  Append
+This operation is used to add new information to the end of the file. The current file position is moved to the end of the file and the contents to be added are written from that position.
+31.5.7  Rename
+The name of the file is changed to the new name provided in the system call. For this, the directory entry is modified. The old name is removed and the new name is entered.
+31.5.8  Copy
+This operation is used to make a copy of an existing file. The name of the old file and the name of the new file (copy) to be created are provided through the system call. A new file is created, contents of the old file are read and written to the new file.
+31.5.9  Get and Set attributes
+There are a number of attributes for a file like the owner of the file, size of the file, time of access and so on. There are system calls to get/set the attributes of a file.
+File operations need searching in the directory. Operations like read and write need searching the directory for the name of the file from which read/write operation has to be done. To reduce searching a directory each and every time, say, for each read and for each write, the following sequence of operations can be performed.
+The file is first opened before performing any other operation and closed after all the operations are completed. The open system call is used before any other operation to open the file. This creates an entry in the open-file table maintained by the operating system. When a file operation like read or write is requested, the file is accessed using an index into this table. Therefore, searching the directory structure for each and every operation is not needed. It is enough to use the open-file table. When the file is not used any more, the file is closed.
+A file can be opened using the open system call or it is implicitly opened during the first reference to the file. A file is automatically closed when the process that opened the file terminates or when the close system call is called.
+The syntax of the open system call is given as open(filename,   access-mode)   where    access-mode    can    be read-only, read-write, append-only, …
+The open system call searches the directory for the filename given as argument and copies the entry in the open-file table. The open system call returns a pointer to the open-file table. For further file operations, the returned pointer is used and not the file name. In multiuser systems, many users can open the same file at the same time. In UNIX, a per-process user file descriptor table and system-wide file table are used. The per-process user file descriptor table is maintained for each process. The file table is used by all the processes. For each file opened by a process, an entry is created in the user file descriptor table. For each file open in the system, there is an entry in the file table.
+Figure 31.1 shows the tables maintained by the operating system to assist in file operations. There are two processes A and B. Processes A and B have their respective user file descriptor
+(UFD) tables. The file table is a system-wide table common to all processes in the system. In UNIX, each file has a data structure called an inode. The inode has the details about the attributes of the file.
+Fig. 31.1 Operating system tables used for file operations
+Suppose process A opens a file (Figure 31.2). An entry is made in the user file descriptor table of process A. This points to an entry created in the file table. The file table entry points to an entry in the inode table corresponding to the file opened. The inode also has details about the location of the file in the disk. That is, the inode has the addresses of the disk blocks where the contents of the file are kept in the disk.
+Fig.31.2 Process A opens a file
+Suppose process B also opens the same file. Since process B opens a file, an entry is created in the user file descriptor table of process B (Figure 31.3). A new entry is created in the file table corresponding to this open. The entry in the user file descriptor table of process B points to this file table entry. The file table entry points to the same entry in the inode table. The inode table has only one entry for a particular file. Since process A and process B have opened the same file, both the processes use the same inode table entry.
+A count called the open count is maintained in the inode table. This count refers to the number of processes that have opened the file. In Figure 31.4, the count in the inode table is 2
+because  two  processes  have  opened  the  file  corresponding  to  that  inode.  The  file  table maintains details about the mode in which the file was opened (say, read-only or read-write or
+Fig.31.3 Process B opens the same file as that opened by process A
+write-only). The file table entry also has a read/write pointer, that is, the file pointer that locates the position from where the next read/write should be done. We see that each process has its own read/write pointer.
+Fig.31.4 Entries in file table and inode table when two processes open the same file
+Suppose process B closes the file (Figure 31.5). Each close decrements the count in the inode table. We see that the count in the inode table is decremented from 2 to 1. The file table entry is removed. The user file descriptor table entry is also removed.
+When process A closes the file (Figure 31.6), the count in the inode table is decremented again. Since the count becomes zero, the inode table entry is removed. The file table entry and the user file descriptor table entry are also removed.
+Fig.31. 5 Process B closes the file
+Fig.31.6 Process A also closes the file
+31.6
+File Types – Name, Extension
+Different file types are supported by operating systems. Each file type can have different extensions. Figure 31.7 shows examples of different file types and different extensions for each file type. For example a source code file can have the extensions .c or .cc or .java and so on.
+Fig.31.7 Examples of file types and extensions (Source: [1])
+31.7
+File Access Methods
+Information stored in files must be accessed. There are different methods to access files. Some systems support only one method. Some systems support multiple methods and the right one is chosen based on the application. The different methods of file access are sequential access, direct access and indexed sequential access. We learn each of these methods in this section one after the other.
+31.7.1  Sequential Access
+The sequential access is the simplest and the most common file access method. In this method, the contents of a file are accessed one after the other. That is, information is processed one record after another. The possible operations can be
+read next
+– read the next record
+write next
+– write the next record
+reset
+– reset the file pointer to the initial record
+Fig.31.8 Sequential access (Source: [1])
+Figure 31.8 shows the possible operations using sequential access method. The current file
+position is shown. From the current file position, it is possible to read the next record or write the next record or rewind back to the beginning of the file. Using the sequential access method, it is not possible to access any disk block in random.
+31.7.2  Direct Access
+The direct access method is based on the disk model of the file. File contents are stored in disk blocks in the disk. Disks allow access to any random block. Direct access also allows arbitrary blocks to be read and written.
+With direct access, the following operations are possible:
+read n
+– read the nth block
+write n
+– write to the nth block
+position to n
+– move the pointer to the nth block
+read next
+– read the next block after moving to the nth block
+write next
+– write to the next block after moving to the nth block
+rewrite n
+– rewrite the nth block
+where
+n
+is the block number relative to beginning of file
+it is possible to implement sequential access using the operations used for direct access. Figure 31.9 shows the sequential access operations and the corresponding operations in direct access method. Thus, it is possible to simulate sequential access on a direct file. But, direct access cannot be simulated on a sequential access file.
+Fig.31.9 Simulation of Sequential Access on a Direct-access File (Source: [1])
+31.7.3
+Other Access Methods
+In another access method, an index is built which contains pointers to various blocks of the file. To find a record, the index is searched, and the pointer is used to access the file and the desired record. Searching through an index is faster. When the file size becomes large, the index file also becomes large. Therefore, to make the access faster, another secondary index can be maintained for the primary index file. The primary index file will have pointers to secondary index files, and the secondary index files point to blocks of the file. Figure 31.10 shows an example of how an index file is used.
+Fig.31.10 Example of Index and Relative Files (Source: [1])
+31.8
+Summary
+A file is the basic unit of storage in the disk. In this module, we learnt different file attributes, file operations, file types and different file access methods.
+References
+Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”, Sixth Edition, John Wiley & Sons Inc., 2003.
+Andrew S. Tanenbaum, Herbert Bos, “Modern Operating Systems”, Fourth Edition, Pearson Education, 2014.
+Gary Nutt, “Operating Systems”, Third Edition, Pearson Education, 2009.
+Maurice J. Bach, “The Design of the UNIX Operating System”, Prentice hall, 1986.
+
+
+=== MODULE: disk-scheduling-algorithm ===
+
+33
+Disk Scheduling Algorithm
+Mary Anitha Rajam
+36.1
+Introduction
+The design of a file system comprises of the user and programmer interface to the file system, internal data structures and algorithms used by the operating system for the implementation of the file system and the structure of the secondary storage which accommodates the file systems. In this module, we focus on the secondary storage part of the file system. In this module, we understand the physical structure of secondary storage devices and learn and evaluate disk scheduling algorithms.
+36.2  Disk Structure
+Disks provide the bulk of secondary storage for modern computer systems. Disk drives are addressed as large 1-dimensional arrays of
+logical blocks
+, where the logical block is the smallest unit of transfer. The 1-dimensional array of logical blocks is mapped into the sectors of the disk sequentially. Sector 0 is the first sector of the first track on the outermost cylinder. Mapping proceeds in order through that track, then the rest of the tracks in that cylinder, and then through the rest of the cylinders from outermost to innermost. Likewise, logical address can be converted into cylinder number, track number and sector number.
+36.3  Disk Scheduling
+The operating system is responsible for using hardware efficiently. For the disk drives, this means having a fast access time and large disk bandwidth.
+Access time has two major components – seek time and rotational latency. Seek time is the time for the disk to move the head to the cylinder containing the desired sector. Rotational latency is the additional time for the disk to rotate the desired sector to the disk head. It is required to minimize the seek time for better efficiency.
+Disk bandwidth is the total number of bytes transferred, divided by the total time between the first request for service and the completion of the last transfer. The disk bandwidth must be as large as possible.
+When a process needs I/O from or to the disk, the process issues a system call to the operating system. The system call indicates whether the operation is input (read) or output (write), what the disk address for the transfer is (the location in the disk from where data is to be read or to where data is to be written), what the memory address for the transfer is (the location in the main memory from where data is to be moved to the disk or to where data is moved from the disk) and what the number of bytes to be transferred is.
+If the desired disk drive and controller are available, the request is serviced immediately. If the disk drive or controller is busy, the request is placed in the queue of pending requests. The operating system services the requests one after the other. When one request is completed, the operating system chooses which pending request to service next. How does the operating system make this choice? This choice is done in different ways using different algorithms called
+the disk scheduling algorithms.
+Several algorithms exist to schedule the servicing of disk I/O requests. We illustrate them with a request queue 98, 183, 37, 122, 14, 124, 65, 67 where each of these numbers represents the cylinder numbers from/to where reading/writing has to be done. Suppose there are 200 cylinders in the disk numbered from 0 to 99. The current position of the head is at cylinder number 53.
+We now look at how the disk head is moved for different disk scheduling algorithms. We also look at the total number of moves made by the disk head in each type of disk scheduling algorithm. The overhead due to rotational latency is not considered here.
+36.3.1 First-Come First-Served (FCFS)
+In the FCFS disk scheduling algorithm, the request that arrives first is serviced first. Figure 36.1 shows the movement of the disk head for this algorithm. Initially, the disk head is at cylinder 53. Then it is moved to cylinder 98, from there to 183, then to 37 and so on, servicing in the order in which the requests had arrived. We can see that there is a request for 122 and another request for 124. But, since a request arrived for 14 in between the two requests, the head had to swing back and forth unnecessarily. Similarly, it can be seen that are a lot of head movements happening back and forth unnecessarily. The head moves through 640 cylinders in total.
+The total seek time can be reduced if the head services the requests close to the current head position, before moving further,
+Fig. 36.1 Movement of the disk head for FCFS scheduling (Source: [1])
+36.3.2
+Shortest-Seek-Time-First (SSTF)
+The shortest-seek-time-first (SSTF) scheduling algorithm selects the request with the minimum seek time from the current head position. It chooses the pending request close to the current head position. Figure 36.2 shows the movements made by the disk head in the SSTF algorithm for the given sequence of requests. Initially, the head is at position 53. Of all the pending requests 98, 183, 37, 122, 14, 124, 65 and 67, the cylinder closest to 53 is 65.
+Therefore, the head moves to 65 and services the request. From 65, the closest cylinder is 67 and the head moves from 65 to 67. From 67, the closest cylinder is 37 and the head moves from 67 to 37. Similarly, the head moves to 14, 98, 122, 124 and finally to 183. The total head
+movement in this algorithm is 236 cylinders. It can be seen that the head movement is much less in this algorithm compared to that of FCFS.
+Fig. 36.2 Movement of the disk head for SSTF scheduling (Source: [1])
+But the disadvantage of this algorithm is that it may cause starvation of some requests. If requests keep arriving close to the current head position, then the requests for cylinders that are farther away from the current head position may not be serviced at all.
+36.3.3  SCAN
+In the SCAN disk scheduling algorithm, the disk arm starts at one end of the disk, and moves toward the other end, servicing requests until it gets to the other end of the disk. The head movement is then reversed and the servicing continues. This algorithm is sometimes called the
+elevator algorithm
+. Figure 36.3 shows the movements made by the disk head in the SCAN algorithm for the given sequence of requests.
+Fig. 36.3 Movement of the disk head for SCAN scheduling (Source: [1])
+Initially, the head is at position 53. The head moves towards one end of the disk servicing
+the requests for cylinders 37, 14 on the way. The head movement is then reversed and the head moves towards the other end servicing the requests for the cylinders 65, 67, 98, 122, 124 and 183 on the way. It is seen that there is a total head movement of 208 cylinders.
+In this algorithm, while the head is returning back after moving to one end, if there are many recently arrived requests close to this end, only after servicing these requests the head moves to the other end. In this case, even though the requests close to the other end had arrived much earlier, those requests would have to wait for a longer amount of time.
+36.3.4 C-SCAN
+The C-SCAN provides a more uniform wait time than SCAN. In the C-SCAN algorithm, the head moves from one end of the disk to the other servicing requests on the way. When the head reaches the other end, it immediately returns to the beginning of the disk, without servicing any requests on the return trip. This algorithm treats the cylinders as a circular list that wraps around from the last cylinder to the first one. Figure 36.4 shows the movements made by the disk head in the C-SCAN algorithm for the given sequence of requests.
+Fig. 36.4 Movement of the disk head for C-SCAN scheduling (Source: [1])
+Initially, the head is at position 53. The head moves towards one end of the disk servicing the requests for cylinders 65, 67, 98, 122, 124 and 183 on the way. The head movement is then reversed and the head moves towards the other end but does service requests in this direction. After going to the other end, the head again reverses and services the requests for the cylinders 14 and 37. Therefore, the waiting time of the requests 14 and 37 are reduced.
+In this example, we see that the head moves from cylinder 183 till the end unnecessarily, because there are no requests waiting. Similarly, the movement of the head from 0 to 14 is unnecessary. These movements of the head can be avoided. This variation was brought in the C-LOOK scheduling algorithm.
+36.3.5 C-LOOK
+The C-LOOK scheduling algorithm is a variant of the C-SCAN scheduling algorithm. In this algorithm, the arm only goes as far as the last request in each direction, then reverses direction immediately. The arm does not go all the way to the end of the disk. Figure 36.4 shows the movements made by the disk head in the C-LOOK algorithm for the given sequence of
+requests. It is seen that the head does not beyond cylinder 183. After servicing cylinder 183, it returns back. Similarly, the head does move till 0 in the reverse direction. It moves only till cylinder 14 and reverses.
+Fig. 36.5 Movement of the disk head for C-LOOK scheduling (Source: [1])
+36.3.5 Selecting a Disk-Scheduling Algorithm
+Having seen a number of disk scheduling algorithms, we now see which algorithm performs the best. SSTF is common and has a natural appeal because it increases performance over FCFS. SCAN and C-SCAN perform better for systems that place a heavy load on the disk – because less starvation. When there is heavy load in the disk, if SSTF is used, it will continue to serve the requests close to the current position of the disk. The requests that are farther away from the current position will starve.
+The performance of the algorithms depends on the number and types of requests also. Suppose there is only one outstanding request. Then all the algorithms behave like FCFS.
+The requests for disk service can also be influenced by the file-allocation method. For a contiguously allocated file, the contents of the file are stored in contiguous disk blocks and therefore, there is limited head movement.
+For linked or indexed file, the contents of a file can be kept in any disk block in the disk. This may need greater head movement when compared to contiguous allocation.
+The location of directories and index blocks is also important. The directories have the name of the file and the details present in the file control block (inode in the case of UNIX/Linux). The file control block has the addresses of the disk blocks where the contents of the file are stored. To open a file, it is necessary to search the directory structure, get the file control block, get the addresses of the disk blocks containing data, access the disk blocks and get the file’s data. If directory entry is on the first cylinder and the file’s data are on the final cylinder, greater head movement is needed. Therefore, caching directories and index blocks in main memory help to reduce disk-arm movement.
+Disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm, if necessary.
+Thus, it is seen that either SSTF or LOOK is a reasonable choice for the default algorithm. SSTF causes less head movement and LOOK works well when there is a heavy load.
+Disk-scheduling algorithms discussed here consider only the seek distances. The rotational latency is not taken into account. For modern disks, rotational latency can also be as large as the seek time. Therefore, disk-scheduling algorithms are implemented in the controller hardware
+built into the disk drive. When the operating system sends requests, the controller queues the requests and schedules them to improve both the seek time and rotational latency.
+36.4  Summary
+In this module we learnt different disk scheduling algorithms such as FCFS, SSTF, SCAN, C-SCAN and C-LOOK. We also discussed about the performance of the disk scheduling algorithms.
+References
+[1] Abraham Silberschatz, Peter B. Galvin, Greg Gagne, “Operating System Concepts”, Ninth Edition, John Wiley & Sons Inc., 2012.
+[2] Andrew S. Tanenbaum, Herbert Bos, “Modern Operating Systems”, Fourth Edition, Pearson Education, 2014.
+[3] Gary Nutt, “Operating Systems”, Third Edition, Pearson Education, 2009.

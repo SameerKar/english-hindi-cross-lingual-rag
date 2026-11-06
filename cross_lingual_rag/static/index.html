@@ -8,7 +8,10 @@
   <!-- Endlesstools Typography: Inter 400 & 500 weights, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Marked.js for High-Fidelity Markdown Parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
     :root {
@@ -55,31 +58,35 @@
     }
 
     /* --------------------------------------------------------------------------
-       Top Navigation Bar with Stage Stepper
+       Top Navigation Bar with Stage Stepper (Strictly Single-Line)
        -------------------------------------------------------------------------- */
     header.top-nav {
-      height: 52px;
-      min-height: 52px;
+      height: 48px;
+      min-height: 48px;
       background-color: rgba(8, 8, 8, 0.98);
       border-bottom: var(--border-hairline);
-      padding: 0 18px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 10px;
       z-index: 50;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .brand-lockup {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       text-decoration: none;
       color: inherit;
+      flex-shrink: 0;
     }
     .brand-glyph {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2px;
@@ -93,52 +100,65 @@
     .glyph-dot:nth-child(6) { background: #ff00b8; }
 
     .brand-title {
-      font-size: 13.5px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--color-paper-white);
+      white-space: nowrap;
     }
 
     /* Minimalist Stepper */
     .stage-stepper {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       background: #111111;
       border: var(--border-hairline);
       border-radius: var(--radius-full);
-      padding: 3px 5px;
+      padding: 2px 4px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
     .step-pill {
       display: inline-flex;
       align-items: center;
-      padding: 4px 11px;
+      gap: 4px;
+      padding: 4px 10px;
       border-radius: var(--radius-full);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 500;
       color: var(--color-ash-mute);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       user-select: none;
+      white-space: nowrap;
     }
     .step-pill:hover {
       color: var(--color-paper-white);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .step-pill:active {
+      transform: scale(0.96);
     }
     .step-pill.active {
       background: var(--color-paper-white);
       color: var(--color-obsidian-canvas);
+      transform: scale(1.03);
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
     }
     .step-pill.completed {
-      color: var(--color-signal-blue);
+      color: var(--color-accent-green);
     }
     .step-arrow {
-      color: #383838;
-      font-size: 10px;
+      display: none;
     }
 
     /* Top Telemetry */
     .top-telemetry {
       display: flex;
       align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      white-space: nowrap;
       gap: 8px;
     }
     .chip {
@@ -159,7 +179,7 @@
       background: #10b981;
     }
 
-    /* Buttons */
+    /* Buttons with Bubbly Spring Interactions */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -171,7 +191,7 @@
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.12s ease;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
       outline: none;
       border: 1px solid transparent;
       background: transparent;
@@ -179,6 +199,13 @@
       text-decoration: none;
       user-select: none;
       white-space: nowrap;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(1px) scale(0.97);
     }
     .btn-primary {
       border: var(--border-white);
@@ -224,25 +251,39 @@
     }
 
     /* --------------------------------------------------------------------------
-       Split Viewport Grid (58% Left Form / 42% Right Terminal & Guide)
+       Split Viewport Grid (Collapsible Right Terminal)
        -------------------------------------------------------------------------- */
     .viewport-grid {
       flex: 1;
       display: grid;
       grid-template-columns: 1.25fr 0.95fr;
-      height: calc(100vh - 52px);
+      height: calc(100vh - 48px);
       overflow: hidden;
+      transition: grid-template-columns 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .viewport-grid.terminal-collapsed {
+      grid-template-columns: 1fr 0fr;
+    }
+    .viewport-grid.terminal-collapsed .right-column {
+      display: none !important;
+    }
+    .viewport-grid.terminal-collapsed .left-column {
+      border-right: none;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 20px 36px;
     }
     @media (max-width: 1080px) {
       .viewport-grid { grid-template-columns: 1fr; }
-      .right-column { display: none; }
+      .right-column { display: none !important; }
     }
 
-    /* Left Column */
+    /* Left Column (Pinned Viewport with Internal Panel Scrolling) */
     .left-column {
       height: 100%;
-      overflow-y: auto;
-      padding: 22px 26px;
+      overflow: hidden;
+      padding: 14px 22px;
       border-right: var(--border-hairline);
       display: flex;
       flex-direction: column;
@@ -255,21 +296,346 @@
       display: flex;
       flex-direction: column;
       background: var(--color-obsidian-canvas);
+      transition: all 0.28s ease;
     }
 
-    /* Screen Panels */
+    /* Collapsible Details Component for Deep Information Without Clutter */
+    .collapsible-detail-card {
+      margin-top: 8px;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
+      background: rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .collapsible-detail-card summary {
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-ash-mute);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      outline: none;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    .collapsible-detail-card summary:hover {
+      color: var(--color-paper-white);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .collapsible-detail-content {
+      padding: 8px 10px;
+      border-top: var(--border-hairline);
+      font-size: 11.5px;
+    }
+
+    /* Screen Panels: Strict Viewport Height, Header & Footer Pinned */
     .screen-panel {
       display: none;
       flex: 1;
+      height: 100%;
+      max-height: 100%;
       flex-direction: column;
-      animation: fadeIn 0.15s ease;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
     .screen-panel.active {
       display: flex;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      animation: bubblyPanelPop 0.32s cubic-bezier(0.34, 1.35, 0.64, 1) forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(3px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes bubblyPanelPop {
+      0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+      70% { transform: translateY(-2px) scale(1.006); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Staging Deck Styles (Stage 4) */
+    .staging-deck {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 640px) {
+      .staging-deck { grid-template-columns: 1fr; }
+    }
+    .staging-card {
+      background: var(--color-onyx-card);
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+      padding: 12px 14px;
+      transition: all 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .staging-card.pending {
+      opacity: 0.5;
+      border-color: var(--color-slate-border);
+    }
+    .staging-card.running {
+      opacity: 1;
+      border-color: var(--color-signal-blue);
+      box-shadow: 0 0 16px rgba(29, 155, 240, 0.25);
+      animation: cardPulse 1.4s infinite ease-in-out;
+    }
+    @keyframes cardPulse {
+      0%, 100% { border-color: rgba(29, 155, 240, 0.5); }
+      50% { border-color: rgba(29, 155, 240, 1); box-shadow: 0 0 18px rgba(29, 155, 240, 0.4); }
+    }
+    .staging-card.completed {
+      opacity: 1;
+      border-color: rgba(52, 211, 153, 0.6);
+      background: rgba(52, 211, 153, 0.03);
+    }
+    .staging-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .staging-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-paper-white);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .staging-status-badge {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+    }
+    .staging-badge-pending {
+      background: rgba(149, 149, 149, 0.15);
+      color: var(--color-ash-mute);
+    }
+    .staging-badge-running {
+      background: rgba(29, 155, 240, 0.2);
+      color: var(--color-signal-blue);
+      animation: bubblyBlink 1s infinite alternate;
+    }
+    @keyframes bubblyBlink {
+      from { opacity: 0.7; }
+      to { opacity: 1; transform: scale(1.04); }
+    }
+    .staging-badge-completed {
+      background: rgba(52, 211, 153, 0.2);
+      color: var(--color-accent-green);
+      animation: checkBouncy 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes checkBouncy {
+      0% { transform: scale(0.8); }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .staging-substep {
+      font-size: 11px;
+      color: var(--color-ash-mute);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .staging-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-slate-border);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .staging-dot.active {
+      background: var(--color-signal-blue);
+      box-shadow: 0 0 8px var(--color-signal-blue);
+      animation: bubblyDot 0.8s infinite alternate ease-in-out;
+    }
+    @keyframes bubblyDot {
+      from { transform: scale(0.8); }
+      to { transform: scale(1.4); }
+    }
+    .staging-dot.done {
+      background: var(--color-accent-green);
+    }
+
+    /* Formatted Markdown Scientific Report Typography */
+    .formatted-markdown-view {
+      color: #e5e7eb;
+      font-family: var(--font-inter);
+      font-size: 12.5px;
+      line-height: 1.65;
+      padding: 16px 20px;
+    }
+    .formatted-markdown-view h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-paper-white);
+      margin: 0 0 12px 0;
+      padding-bottom: 8px;
+      border-bottom: var(--border-hairline);
+    }
+    .formatted-markdown-view h2 {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--color-paper-white);
+      margin: 18px 0 8px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .formatted-markdown-view h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #93c5fd;
+      margin: 14px 0 6px 0;
+    }
+    .formatted-markdown-view h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin: 10px 0 4px 0;
+    }
+    .formatted-markdown-view p {
+      margin-bottom: 10px;
+    }
+    .formatted-markdown-view ul, .formatted-markdown-view ol {
+      margin: 6px 0 12px 20px;
+    }
+    .formatted-markdown-view li {
+      margin-bottom: 4px;
+    }
+    .formatted-markdown-view blockquote {
+      border-left: 3px solid var(--color-signal-blue);
+      background: rgba(29, 155, 240, 0.06);
+      padding: 8px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 10px 0;
+      color: #e2e8f0;
+      font-style: italic;
+    }
+    .formatted-markdown-view code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: #232323;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .formatted-markdown-view pre {
+      background: #111111;
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+      padding: 12px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    .formatted-markdown-view pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      color: #d1d5db;
+    }
+    .formatted-markdown-view table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 11.5px;
+      border: var(--border-hairline);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .formatted-markdown-view th {
+      background: #202020;
+      color: var(--color-paper-white);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .formatted-markdown-view td {
+      padding: 7px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+    }
+    .formatted-markdown-view tr:nth-child(even) td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .formatted-markdown-view tr:hover td {
+      background: rgba(29, 155, 240, 0.07);
+    }
+    .formatted-markdown-view hr {
+      border: none;
+      border-top: var(--border-hairline);
+      margin: 18px 0;
+    }
+
+    /* CSV Data Table Interactive View */
+    .csv-table-wrapper {
+      max-height: 440px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: var(--border-hairline);
+      border-radius: var(--radius-cards);
+    }
+    .benchmark-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+    .benchmark-data-table th {
+      position: sticky;
+      top: 0;
+      background: #1f1f1f;
+      color: var(--color-paper-white);
+      padding: 8px 12px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--color-slate-border);
+      text-align: left;
+      z-index: 2;
+    }
+    .benchmark-data-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #d1d5db;
+    }
+    .benchmark-data-table tr:hover td {
+      background: rgba(29, 155, 240, 0.08);
+    }
+    .status-chip-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(52, 211, 153, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .status-chip-failure {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .csv-filter-chip.active {
+      background: var(--color-paper-white);
+      color: var(--color-obsidian-canvas);
     }
 
     .screen-header {
@@ -296,17 +662,28 @@
       color: var(--color-ash-mute);
     }
 
+    .screen-header {
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
     .screen-body {
       flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      padding-right: 4px;
     }
 
     .screen-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 18px;
-      padding-top: 12px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: var(--border-hairline);
+      flex-shrink: 0;
+      background: var(--color-obsidian-canvas);
+      z-index: 10;
     }
 
     /* Cards & Inputs */
@@ -455,52 +832,300 @@
       color: var(--color-ash-mute);
     }
 
-    /* Result Cards */
+    /* --------------------------------------------------------------------------
+       Stage 4 Results & Evidence (Clever Split Grid & Formatted Markdown)
+       -------------------------------------------------------------------------- */
+    .stage4-system-toggle-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #111111;
+      border: var(--border-hairline);
+      border-radius: var(--radius-tags);
+      padding: 6px 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toggle-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sys-toggle-pill {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--color-ash-mute);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sys-toggle-pill:hover {
+      color: var(--color-paper-white);
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: scale(1.04);
+    }
+    .sys-toggle-pill.active {
+      background: var(--color-paper-white);
+      color: #000;
+      font-weight: 600;
+      border-color: var(--color-paper-white);
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
+    }
+
     .results-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
     .result-card {
       background: var(--color-onyx-card);
       border: var(--border-hairline);
       border-radius: var(--radius-cards);
-      padding: 12px 14px;
+      padding: 14px 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .result-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
     }
     .result-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      padding-bottom: 8px;
+      border-bottom: var(--border-hairline);
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .sys-tag {
-      font-size: 10.5px;
-      font-weight: 500;
-      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
       border-radius: 4px;
+      letter-spacing: 0.02em;
     }
-    .badge-c { border: 1px solid var(--color-signal-blue); color: var(--color-signal-blue); }
-    .badge-d { border: 1px solid #34d399; color: #34d399; }
-    .badge-b { border: 1px solid #c084fc; color: #c084fc; }
-    .badge-a { border: 1px solid #fbbf24; color: #fbbf24; }
+    .badge-a { border: 1px solid #fbbf24; color: #fbbf24; background: rgba(245, 158, 11, 0.08); }
+    .badge-b { border: 1px solid #34d399; color: #34d399; background: rgba(52, 211, 153, 0.08); }
+    .badge-c { border: 1px solid var(--color-signal-blue); color: #38bdf8; background: rgba(56, 189, 248, 0.08); }
+    .badge-d { border: 1px solid #c084fc; color: #c084fc; background: rgba(192, 132, 252, 0.08); }
     .latency-pill {
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--color-ash-mute);
     }
 
-    .answer-quote {
-      background: #111111;
-      border: var(--border-hairline);
-      border-radius: var(--radius-tags);
-      padding: 9px 11px;
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: #e5e5e5;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin: 6px 0;
+    /* Clever Split Grid: Answer on Left, Metrics Rail on Right */
+    .result-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 16px;
+      align-items: start;
     }
+    @media (max-width: 960px) {
+      .result-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .result-card-main {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+    .result-card-sidebar {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Right Sidebar Metrics Card */
+    .sidebar-metrics-card {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-tags);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .metric-block-latency {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .metric-caption {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-ash-mute);
+    }
+    .metric-val-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .metric-val-big {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .metric-unit-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-ash-mute);
+    }
+    .metric-speed-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      font-weight: 500;
+      margin-top: 3px;
+      width: fit-content;
+    }
+    .speed-fast {
+      background: rgba(52, 211, 153, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+    .speed-mid {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .speed-heavy {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .sidebar-sep {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .sidebar-sec-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-ash-mute);
+      margin-bottom: 6px;
+    }
+    .latency-meter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .latency-meter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #cbd5e1;
+    }
+    .meter-num {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--color-paper-white);
+    }
+    .sidebar-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--color-ash-mute);
+      margin-bottom: 4px;
+    }
+    .sidebar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 2px;
+    }
+    .sidebar-btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 11px;
+      padding: 4px 8px;
+    }
+
+    /* Formatted Markdown Answer Container */
+    .result-answer-container {
+      background: #101010;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-tags);
+      padding: 12px 14px;
+    }
+    .result-answer-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .answer-markdown-content {
+      color: #e5e7eb;
+      font-size: 12.5px;
+      line-height: 1.68;
+      font-family: var(--font-inter);
+      word-break: break-word;
+    }
+    .answer-markdown-content p {
+      margin: 0 0 8px 0;
+    }
+    .answer-markdown-content p:last-child {
+      margin-bottom: 0;
+    }
+    .answer-markdown-content strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .answer-markdown-content em {
+      color: #fbcfe8;
+    }
+    .answer-markdown-content ul, .answer-markdown-content ol {
+      margin: 6px 0 10px 18px;
+      padding: 0;
+    }
+    .answer-markdown-content li {
+      margin-bottom: 4px;
+    }
+    .answer-markdown-content code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: #202020;
+      color: #38bdf8;
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .answer-markdown-content blockquote {
+      border-left: 3px solid var(--color-signal-blue);
+      background: rgba(29, 155, 240, 0.06);
+      padding: 6px 10px;
+      border-radius: 0 4px 4px 0;
+      margin: 8px 0;
+      color: #cbd5e1;
+    }
+    .answer-markdown-content h1, .answer-markdown-content h2, .answer-markdown-content h3, .answer-markdown-content h4 {
+      color: var(--color-paper-white);
+      margin: 10px 0 4px 0;
+      font-weight: 600;
+    }
+    .answer-markdown-content h3 { font-size: 13.5px; color: #93c5fd; }
+    .answer-markdown-content h4 { font-size: 12px; color: #cbd5e1; }
 
     .chunk-box {
       background: #101010;
@@ -522,6 +1147,54 @@
       max-height: 120px;
       overflow-y: auto;
       white-space: pre-wrap;
+    }
+
+    /* Terminal Toggle Controls (Tasteful & Refined) */
+    .btn-terminal-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      border-radius: var(--radius-tags);
+      background: var(--color-onyx-card);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e5e5e5;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-terminal-toggle:hover {
+      background: #202020;
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--color-paper-white);
+    }
+    .btn-terminal-toggle.collapsed-state {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+    .btn-terminal-toggle.collapsed-state:hover {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: #34d399;
+    }
+
+    .term-collapse-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--color-ash-mute);
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 500;
+      border-radius: var(--radius-tags);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .term-collapse-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--color-paper-white);
     }
 
     /* Document Format Badges & Folder Explorer */
@@ -646,26 +1319,32 @@
       border: 1px solid rgba(245, 158, 11, 0.25);
     }
 
+    /* Academic Digital Library Shelf & Book View */
     .folder-block {
-      background: #121212;
+      background: #111111;
       border: var(--border-hairline);
       border-radius: var(--radius-cards);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+    .folder-block:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
     .folder-header {
-      padding: 7px 11px;
+      padding: 9px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      background: #171717;
+      background: #161616;
       border-bottom: var(--border-hairline);
-      transition: background 0.12s ease;
+      transition: background 0.15s ease;
     }
     .folder-header:hover {
-      background: #1e1e1e;
+      background: #1c1c1c;
     }
     .folder-header.collapsed {
       border-bottom: none;
@@ -673,16 +1352,15 @@
     .folder-title-wrap {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 500;
+      gap: 10px;
       color: var(--color-paper-white);
     }
     .folder-files-list {
-      padding: 5px 8px;
+      padding: 6px 10px 10px 10px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
+      background: #0d0d0d;
     }
     .folder-files-list.collapsed {
       display: none;
@@ -691,20 +1369,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 5px 8px;
+      padding: 7px 10px;
       border-radius: var(--radius-tags);
-      background: #090909;
-      border: 1px solid #242424;
-      gap: 8px;
-      transition: border-color 0.12s ease;
+      background: #141414;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      gap: 10px;
+      transition: all 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
     .doc-row-item:hover {
-      border-color: var(--color-iron-border);
+      border-color: rgba(56, 189, 248, 0.35);
+      background: #191919;
+      transform: translateX(2px);
     }
     .doc-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       overflow: hidden;
       flex: 1;
     }
@@ -860,46 +1540,36 @@
 </head>
 <body>
 
-  <!-- Top Navigation & Stage Stepper -->
+  <!-- Top Navigation & Stage Stepper (Strictly Single-Line) -->
   <header class="top-nav">
     <a href="#" class="brand-lockup">
-      <div class="brand-glyph">
-        <div class="glyph-dot"></div>
-        <div class="glyph-dot"></div>
-        <div class="glyph-dot"></div>
-        <div class="glyph-dot"></div>
-        <div class="glyph-dot"></div>
-        <div class="glyph-dot"></div>
-      </div>
-      <div class="brand-title">Cross-Lingual RAG Studio</div>
+      <span style="font-size: 15px; color: #1d9bf0;">⚡</span>
+      <div class="brand-title">Cross-Lingual RAG</div>
     </a>
 
-    <!-- Stepper Navigation -->
+    <!-- Stepper Navigation with Icons -->
     <nav class="stage-stepper">
-      <div class="step-pill active" id="pill-step-1" onclick="navigateToStep(1)">1. API & Env</div>
-      <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-2" onclick="navigateToStep(2)">2. Documents</div>
-      <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-3" onclick="navigateToStep(3)">3. Query & Systems</div>
-      <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-4" onclick="navigateToStep(4)">4. Results & Evidence</div>
-      <span class="step-arrow">→</span>
-      <div class="step-pill" id="pill-step-5" onclick="navigateToStep(5)">5. Scientific Benchmark</div>
+      <div class="step-pill active" id="pill-step-1" onclick="navigateToStep(1)">⚙️ Setup</div>
+      <div class="step-pill" id="pill-step-2" onclick="navigateToStep(2)">📚 Library</div>
+      <div class="step-pill" id="pill-step-3" onclick="navigateToStep(3)">🔍 Query Studio</div>
+      <div class="step-pill" id="pill-step-4" onclick="navigateToStep(4)">✨ Evidence</div>
+      <div class="step-pill" id="pill-step-5" onclick="navigateToStep(5)">📊 Benchmark</div>
     </nav>
 
-    <!-- Telemetry Status Pills -->
+    <!-- Telemetry Status Pills & Utilities -->
     <div class="top-telemetry">
-      <div class="chip">
+      <div class="chip" title="WebSocket Live Stream Status">
         <div class="pulse-dot"></div>
         <span id="nav-socket-label">Live</span>
       </div>
-      <div class="chip">
-        📚 <span id="nav-chunks-label" style="color: var(--color-paper-white); font-weight: 500;">...</span> Chunks
+      <div class="chip" title="Total Indexed Evidentiary Chunks">
+        📚 <span id="nav-chunks-label" style="color: var(--color-paper-white); font-weight: 500;">...</span>
       </div>
-      <div class="chip" style="cursor: pointer;" onclick="navigateToStep(1)">
-        🤖 <span id="nav-mode-label" style="color: var(--color-signal-blue);">Gemini 3.1 Flash Lite</span>
+      <div class="chip" style="cursor: pointer;" onclick="navigateToStep(1)" title="Active LLM Reasoning Engine">
+        🤖 <span id="nav-mode-label" style="color: var(--color-signal-blue);">Gemini 3.1</span>
       </div>
-      <button class="btn btn-secondary btn-sm" id="btn-top-reset-corpus" onclick="restoreDefaultCorpus()" title="Wipe custom uploads and refresh everything back to original 5 textbooks">↺ Refresh Everything (5 Books)</button>
+      <button class="btn btn-ghost btn-sm" id="btn-top-reset-corpus" onclick="restoreDefaultCorpus()" title="Restore Original 5 Academic Textbooks">↺ Reset</button>
+      <button class="btn-terminal-toggle" id="btn-nav-terminal" onclick="toggleTerminalCollapse()" title="Toggle Right Live Terminal Window">💻 Terminal</button>
     </div>
   </header>
 
@@ -913,12 +1583,40 @@
       <section class="screen-panel active" id="screen-step-1">
         <div class="screen-header">
           <div class="screen-badge">Stage 1 · Setup</div>
-          <h2 class="screen-title">API & Environment</h2>
-          <p class="screen-subtitle">Connect your Gemini API key (persisted to <code>.env</code>) or use local grounded mode.</p>
+          <h2 class="screen-title">System Status & Environment</h2>
+          <p class="screen-subtitle">Google Gemini 3.1 Flash Lite API & Embedder Status</p>
         </div>
 
         <div class="screen-body">
-          <div class="onyx-card">
+          <!-- Ready Status Card (shown when env is already configured) -->
+          <div id="env-ready-card" class="onyx-card" style="display: none; border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.04);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(52, 211, 153, 0.15); display: flex; align-items: center; justify-content: center; font-size: 16px;">
+                  🟢
+                </div>
+                <div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-paper-white);">API Environment Verified & Connected</div>
+                  <div style="font-size: 11px; color: var(--color-ash-mute); margin-top: 2px;">
+                    Active Model: <strong id="env-ready-model" style="color: var(--color-accent-green);">gemini-3.1-flash-lite</strong> · Ready for Live Queries & Benchmarks
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="toggleEnvKeyEdit()" style="font-size: 11px; color: var(--color-ash-mute);">
+                ⚙️ Change Key
+              </button>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: var(--border-hairline); flex-wrap: wrap; font-size: 11px; color: var(--color-ash-mute);">
+              <span>• <strong>Provider:</strong> Google Gemini</span>
+              <span>• <strong>Temperature:</strong> 0.0 (Strict Frozen)</span>
+              <span>• <strong>Vector Stores:</strong> 4,411 Chunks Pre-warmed</span>
+              <span>• <strong>Translation:</strong> Deep-Translator / Gemini</span>
+            </div>
+          </div>
+
+          <!-- API Key Input Card (shown only if key is missing or user clicks Edit) -->
+          <div id="env-input-card" class="onyx-card">
             <div class="form-group">
               <label class="form-label">Google Gemini API Key (Gemini 3.1 Flash Lite)</label>
               <div style="display: flex; gap: 8px;">
@@ -937,7 +1635,7 @@
 
         <div class="screen-footer">
           <span style="font-size: 11.5px; color: var(--color-ash-mute);">Stage 1/5</span>
-          <button class="btn btn-solid-white" onclick="navigateToStep(2)">Continue to Documents →</button>
+          <button class="btn btn-solid-white" onclick="navigateToStep(3)">Go to Query Studio →</button>
         </div>
       </section>
 
@@ -1153,9 +1851,67 @@
         </div>
 
         <div class="screen-body">
-          <div id="execution-loader-box" style="display: none; padding: 20px; text-align: center; color: var(--color-signal-blue);">
-            <div style="font-size: 13px; font-weight: 500;">⚡ Processing query across RAG pipelines...</div>
-            <div style="font-size: 11px; color: var(--color-ash-mute); margin-top: 4px;">Translating, vector search, and synthesizing grounded answer</div>
+          <!-- Real-Time Execution Staging Deck (Sequential A -> B -> C -> D) -->
+          <div id="execution-staging-deck" class="staging-deck" style="display: none;">
+            <!-- Card A: Parametric Control Baseline -->
+            <div id="stage-card-A" class="staging-card pending">
+              <div class="staging-card-header">
+                <div class="staging-card-title">
+                  <span class="chip" style="font-size: 10px; background: rgba(245, 158, 11, 0.15); color: #fbbf24;">Sys A</span>
+                  <span>Parametric Control Baseline</span>
+                </div>
+                <span id="stage-badge-A" class="staging-status-badge staging-badge-pending">⏳ In Queue</span>
+              </div>
+              <div id="stage-detail-A" class="staging-substep">
+                <span id="stage-dot-A" class="staging-dot"></span>
+                <span id="stage-subtext-A">Waiting for query dispatch...</span>
+              </div>
+            </div>
+
+            <!-- Card B: Monolingual English RAG -->
+            <div id="stage-card-B" class="staging-card pending">
+              <div class="staging-card-header">
+                <div class="staging-card-title">
+                  <span class="chip" style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #4ade80;">Sys B</span>
+                  <span>Monolingual English Upper-Bound</span>
+                </div>
+                <span id="stage-badge-B" class="staging-status-badge staging-badge-pending">⏳ In Queue</span>
+              </div>
+              <div id="stage-detail-B" class="staging-substep">
+                <span id="stage-dot-B" class="staging-dot"></span>
+                <span id="stage-subtext-B">Waiting for query dispatch...</span>
+              </div>
+            </div>
+
+            <!-- Card C: Translation-Mediated RAG -->
+            <div id="stage-card-C" class="staging-card pending">
+              <div class="staging-card-header">
+                <div class="staging-card-title">
+                  <span class="chip" style="font-size: 10px; background: rgba(59, 130, 246, 0.15); color: #60a5fa;">Sys C</span>
+                  <span>Translation-Mediated RAG</span>
+                </div>
+                <span id="stage-badge-C" class="staging-status-badge staging-badge-pending">⏳ In Queue</span>
+              </div>
+              <div id="stage-detail-C" class="staging-substep">
+                <span id="stage-dot-C" class="staging-dot"></span>
+                <span id="stage-subtext-C">Waiting for query dispatch...</span>
+              </div>
+            </div>
+
+            <!-- Card D: Direct Multilingual RAG -->
+            <div id="stage-card-D" class="staging-card pending">
+              <div class="staging-card-header">
+                <div class="staging-card-title">
+                  <span class="chip" style="font-size: 10px; background: rgba(168, 85, 247, 0.15); color: #c084fc;">Sys D</span>
+                  <span>Direct Multilingual RAG</span>
+                </div>
+                <span id="stage-badge-D" class="staging-status-badge staging-badge-pending">⏳ In Queue</span>
+              </div>
+              <div id="stage-detail-D" class="staging-substep">
+                <span id="stage-dot-D" class="staging-dot"></span>
+                <span id="stage-subtext-D">Waiting for query dispatch...</span>
+              </div>
+            </div>
           </div>
 
           <div class="results-stack" id="results-stack-container">
@@ -1185,17 +1941,70 @@
         </div>
 
         <div class="screen-body">
-          <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center;">
             <button class="btn btn-primary btn-sm" onclick="triggerBenchmarkCommand('smoke')">⚡ Run Smoke Test (5 Questions)</button>
             <button class="btn btn-secondary btn-sm" onclick="triggerBenchmarkCommand('full')">🚀 Run Full 120-Item Benchmark</button>
             <button class="btn btn-secondary btn-sm" onclick="triggerPytestCommand()">🧪 Run 7-Point Pytest</button>
-            <a href="/api/report/download/markdown" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📥 Report (.md)</a>
-            <a href="/api/report/download/csv" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📊 Data (.csv)</a>
-            <button class="btn btn-ghost btn-sm" onclick="fetchLatestReportContent()" title="Reload latest generated report">↻ Refresh</button>
+
+            <!-- Historical Run Selector -->
+            <div style="display: inline-flex; align-items: center; gap: 6px; margin-left: auto; background: var(--bg-surface-mid); padding: 3px 8px; border-radius: var(--radius-sm); border: var(--border-hairline);">
+              <label for="select-report-history" style="font-size: 11px; font-weight: 500; color: var(--color-ash-mute); margin-bottom: 0;">📜 Run History:</label>
+              <select id="select-report-history" class="form-input" style="padding: 2px 6px; font-size: 11px; width: auto; max-width: 250px; height: 26px; border: var(--border-hairline);" onchange="onSelectReportHistory()">
+                <option value="latest">Latest Active Run</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" style="padding: 1px 6px; font-size: 11px;" onclick="fetchRunHistory()" title="Refresh historical runs list">↻</button>
+            </div>
+
+            <a id="btn-download-report-md" href="/api/report/download/markdown" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📥 Report (.md)</a>
+            <a id="btn-download-report-csv" href="/api/report/download/csv" class="btn btn-ghost btn-sm" style="border: var(--border-hairline);" download>📊 Data (.csv)</a>
+            <button class="btn btn-ghost btn-sm" onclick="reloadActiveReportView()" title="Reload currently displayed report">↻ Refresh</button>
           </div>
 
-          <div class="onyx-card" style="padding: 12px;">
-            <div id="full-scientific-report-view" style="font-family: var(--font-mono); font-size: 11px; line-height: 1.55; color: #d4d4d4; white-space: pre-wrap; max-height: 380px; overflow-y: auto;">
+          <!-- Report View Switching Tabs -->
+          <div style="display: flex; gap: 6px; margin-bottom: 10px; border-bottom: var(--border-hairline); padding-bottom: 8px;">
+            <button class="tab-pill-btn active" id="btn-tab-report-fmt" onclick="switchReportTab('formatted')">
+              📖 Formatted Scientific Report (.md)
+            </button>
+            <button class="tab-pill-btn" id="btn-tab-report-csv" onclick="switchReportTab('csv')">
+              📊 Benchmark Results Table (.csv)
+            </button>
+            <button class="tab-pill-btn" id="btn-tab-report-raw" onclick="switchReportTab('raw')">
+              📝 Raw Markdown
+            </button>
+          </div>
+
+          <!-- PANE 1: Formatted Scientific Report -->
+          <div id="pane-report-formatted" class="onyx-card" style="padding: 0; max-height: 440px; overflow-y: auto;">
+            <div id="formatted-scientific-report-view" class="formatted-markdown-view">
+              Loading benchmark report...
+            </div>
+          </div>
+
+          <!-- PANE 2: Benchmark Results Table (CSV) -->
+          <div id="pane-report-csv" class="onyx-card" style="display: none; padding: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="text" id="csv-table-search" class="form-input" placeholder="🔍 Filter questions, systems, or subjects..." style="width: 260px; height: 28px; font-size: 11px;" oninput="filterCsvTable()">
+                <span id="csv-row-count-badge" class="chip" style="font-size: 10px;">0 rows</span>
+              </div>
+              <div style="display: flex; gap: 4px;">
+                <button class="btn btn-ghost btn-sm csv-filter-chip active" onclick="setCsvSystemFilter('ALL')">All</button>
+                <button class="btn btn-ghost btn-sm csv-filter-chip" onclick="setCsvSystemFilter('A')">Sys A</button>
+                <button class="btn btn-ghost btn-sm csv-filter-chip" onclick="setCsvSystemFilter('B')">Sys B</button>
+                <button class="btn btn-ghost btn-sm csv-filter-chip" onclick="setCsvSystemFilter('C')">Sys C</button>
+                <button class="btn btn-ghost btn-sm csv-filter-chip" onclick="setCsvSystemFilter('D')">Sys D</button>
+              </div>
+            </div>
+            <div class="csv-table-wrapper" id="csv-table-container">
+              <div style="padding: 30px; text-align: center; color: var(--color-ash-mute); font-size: 12px;">
+                Loading CSV benchmark results...
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 3: Raw Markdown Source -->
+          <div id="pane-report-raw" class="onyx-card" style="display: none; padding: 12px;">
+            <div id="full-scientific-report-view" style="font-family: var(--font-mono); font-size: 11px; line-height: 1.55; color: #d4d4d4; white-space: pre-wrap; max-height: 440px; overflow-y: auto;">
               Loading benchmark report...
             </div>
           </div>
@@ -1226,8 +2035,14 @@
       <!-- Live Terminal Dock (Main Right Stage) -->
       <section class="terminal-dock">
         <div class="term-head">
-          <span>bash — live_terminal</span>
-          <button class="btn btn-ghost btn-sm" style="font-size: 10px; padding: 1px 6px;" onclick="clearLiveTerminal()">Clear</button>
+          <div style="display: flex; align-items: center; gap: 7px;">
+            <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #34d399;"></span>
+            <span>bash — live_terminal</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn btn-ghost btn-sm" style="font-size: 10px; padding: 2px 7px;" onclick="clearLiveTerminal()">Clear</button>
+            <button class="term-collapse-btn" onclick="toggleTerminalCollapse()" title="Collapse Terminal Window">◨ Collapse</button>
+          </div>
         </div>
         <div class="term-output" id="live-term-output">
           <div class="term-line">[SYSTEM] Initializing Cross-Lingual Academic RAG Studio...</div>
@@ -1310,6 +2125,7 @@
     let activeScope = 'all';
     let lastQueryRecord = null;
     let isGuideCollapsed = false;
+    let isFirstLoad = true;
 
     // Knowledge Base Explorer & Document Viewer State
     let kbTreeData = null;
@@ -1347,6 +2163,7 @@
       fetchWorkspaces();
       fetchDocumentTree();
       fetchLatestReportContent();
+      fetchRunHistory();
       setupWizardDropZone();
       updateStageTip(1);
     });
@@ -1379,6 +2196,29 @@
       } else {
         body.classList.remove('collapsed');
         icon.innerText = '[Collapse ▴]';
+      }
+    }
+
+    let isTerminalCollapsed = false;
+    function toggleTerminalCollapse() {
+      isTerminalCollapsed = !isTerminalCollapsed;
+      const grid = document.querySelector('.viewport-grid');
+      const navBtn = document.getElementById('btn-nav-terminal');
+      if (grid) {
+        grid.classList.toggle('terminal-collapsed', isTerminalCollapsed);
+      }
+      document.body.classList.toggle('terminal-is-collapsed', isTerminalCollapsed);
+
+      if (navBtn) {
+        if (isTerminalCollapsed) {
+          navBtn.className = 'btn-terminal-toggle collapsed-state';
+          navBtn.innerHTML = '💻 Open Terminal';
+          navBtn.title = 'Open Live Terminal';
+        } else {
+          navBtn.className = 'btn-terminal-toggle';
+          navBtn.innerHTML = '💻 Terminal';
+          navBtn.title = 'Collapse/Expand Live Terminal';
+        }
       }
     }
 
@@ -1427,10 +2267,20 @@
       div.innerHTML = formatted;
       out.appendChild(div);
       out.scrollTop = out.scrollHeight;
+
+      // Real-time execution staging hook
+      handleTerminalStagingUpdate(raw);
     }
 
     function clearLiveTerminal() {
       document.getElementById('live-term-output').innerHTML = '<div class="term-line">[SYSTEM] Console cleared.</div>';
+    }
+
+    function toggleEnvKeyEdit() {
+      const inputCard = document.getElementById('env-input-card');
+      if (inputCard) {
+        inputCard.style.display = (inputCard.style.display === 'none' || !inputCard.style.display) ? 'block' : 'none';
+      }
     }
 
     // Stage 1: API & Env
@@ -1439,17 +2289,102 @@
         const resp = await fetch('/api/get-env');
         const data = await resp.json();
         const mode = data.active_mode || 'Google Gemini 3.1 Flash Lite';
-        document.getElementById('env-current-mode-label').innerText = mode;
-        document.getElementById('nav-mode-label').innerText = mode;
+        const modeLabel = document.getElementById('env-current-mode-label');
+        if (modeLabel) modeLabel.innerText = mode;
+        const navLabel = document.getElementById('nav-mode-label');
+        if (navLabel) navLabel.innerText = mode;
         if (data.masked_gemini_key) {
-          document.getElementById('input-gemini-key').placeholder = `Active Key: ${data.masked_gemini_key}`;
+          const keyInput = document.getElementById('input-gemini-key');
+          if (keyInput) keyInput.placeholder = `Active Key: ${data.masked_gemini_key}`;
         }
 
         const statResp = await fetch('/api/system-status');
         const statData = await statResp.json();
-        document.getElementById('nav-chunks-label').innerText = statData.total_chunks_indexed || 0;
+        const chunksLabel = document.getElementById('nav-chunks-label');
+        if (chunksLabel) chunksLabel.innerText = statData.total_chunks_indexed || 0;
+
+        // If API key is present: streamline and move on
+        if (statData.has_gemini_key || data.has_gemini_key) {
+          const readyCard = document.getElementById('env-ready-card');
+          const inputCard = document.getElementById('env-input-card');
+          const readyModel = document.getElementById('env-ready-model');
+          if (readyModel) readyModel.innerText = statData.model_name || 'gemini-3.1-flash-lite';
+          if (readyCard) readyCard.style.display = 'block';
+          if (inputCard) inputCard.style.display = 'none';
+
+          const pill1 = document.getElementById('pill-step-1');
+          if (pill1) {
+            pill1.className = 'step-pill completed';
+            pill1.innerHTML = '✓ Stage 1 Setup';
+          }
+
+          // First-load auto-advance: if env key already exists, move on seamlessly!
+          if (isFirstLoad) {
+            isFirstLoad = false;
+            setTimeout(() => {
+              navigateToStep(3);
+              appendLiveTerminal('[SYSTEM] API Environment verified: Gemini 3.1 Flash Lite active. Advanced to Stage 3 Query Studio.');
+            }, 300);
+          }
+        }
       } catch (e) {
         console.error('Failed to fetch env status', e);
+      }
+    }
+
+    // Real-Time Query Staging Updates
+    function handleTerminalStagingUpdate(raw) {
+      if (!raw) return;
+
+      // System C
+      if (raw.includes('[SYS-C] Step 1/3') || raw.includes('[SYS-C] Translating')) {
+        setSystemStaging('C', 'running', 'Step 1/3: Translating Hindi query to English...');
+      } else if (raw.includes('[SYS-C] Translated:')) {
+        setSystemStaging('C', 'running', 'Step 2/3: English FAISS dense retrieval...');
+      } else if (raw.includes('[SYS-C] Top-1 Chunk:')) {
+        setSystemStaging('C', 'running', 'Step 3/3: Synthesizing Hindi answer citing book pages...');
+      }
+
+      // System D
+      if (raw.includes('[SYS-D] Zero-Shot Multilingual Search')) {
+        setSystemStaging('D', 'running', 'Step 1/2: Multilingual vector projection & search (0ms MT)...');
+      } else if (raw.includes('[SYS-D] Top-1 Chunk:')) {
+        setSystemStaging('D', 'running', 'Step 2/2: Cross-lingual Hindi synthesis citing pages...');
+      }
+
+      // System B
+      if (raw.includes('[SYS-B] Running Monolingual')) {
+        setSystemStaging('B', 'running', 'English FAISS retrieval & upper-bound synthesis...');
+      }
+
+      // System A
+      if (raw.includes('[SYS-A] Running Direct Parametric')) {
+        setSystemStaging('A', 'running', 'Direct LLM parametric inference (zero retrieval)...');
+      }
+    }
+
+    function setSystemStaging(sysId, status, subtext, latency) {
+      const card = document.getElementById(`stage-card-${sysId}`);
+      const badge = document.getElementById(`stage-badge-${sysId}`);
+      const dot = document.getElementById(`stage-dot-${sysId}`);
+      const text = document.getElementById(`stage-subtext-${sysId}`);
+      if (!card) return;
+
+      card.className = `staging-card ${status}`;
+      if (dot) dot.className = `staging-dot ${status === 'running' ? 'active' : (status === 'completed' ? 'done' : '')}`;
+      if (text && subtext) text.innerText = subtext;
+
+      if (badge) {
+        if (status === 'running') {
+          badge.className = 'staging-status-badge staging-badge-running';
+          badge.innerText = '⚡ Processing...';
+        } else if (status === 'completed') {
+          badge.className = 'staging-status-badge staging-badge-completed';
+          badge.innerText = `✅ Complete${latency ? ` (${latency}ms)` : ''}`;
+        } else {
+          badge.className = 'staging-status-badge staging-badge-pending';
+          badge.innerText = '⏳ In Queue';
+        }
       }
     }
 
@@ -1777,6 +2712,51 @@
       renderFolderTree(query.trim().toLowerCase());
     }
 
+    const SUBJECT_SHELVES = {
+      'algorithms': {
+        name: 'Algorithms & Data Structures',
+        icon: '📘',
+        curriculum: 'Core Computer Science Benchmark (Cormen / Kleinberg)',
+        color: '#38bdf8'
+      },
+      'automata': {
+        name: 'Automata, Languages & Computation',
+        icon: '📐',
+        curriculum: 'Formal Theory & MIT Lectures (Sipser / Hefferon)',
+        color: '#c084fc'
+      },
+      'computer_networks': {
+        name: 'Computer Networks & Systems Approach',
+        icon: '🌐',
+        curriculum: 'Protocol Stacks & Systems (Peterson & Davie)',
+        color: '#34d399'
+      },
+      'dbms': {
+        name: 'Database Management Systems & Transactions',
+        icon: '💾',
+        curriculum: 'Relational DB, SQL & ACID (Ramakrishnan / Silberschatz)',
+        color: '#fbbf24'
+      },
+      'operating_systems': {
+        name: 'Operating Systems & Kernels',
+        icon: '⚙️',
+        curriculum: 'xv6, Memory & Concurrency (Silberschatz / Arpaci-Dusseau)',
+        color: '#f87171'
+      },
+      'custom_docs': {
+        name: 'Custom Ingested Workspace',
+        icon: '📁',
+        curriculum: 'User Documents & Isolated Vector Corpus',
+        color: '#60a5fa'
+      },
+      'general': {
+        name: 'General Reference Corpus',
+        icon: '📚',
+        curriculum: 'Reference Knowledge Base',
+        color: '#a78bfa'
+      }
+    };
+
     function renderFolderTree(filter) {
       const container = document.getElementById('kb-folder-container');
       if (!container) return;
@@ -1808,16 +2788,31 @@
 
         renderedCount += filteredDocs.length;
         const totalChunksInFolder = filteredDocs.reduce((acc, d) => acc + (d.total_chunks || 0), 0);
+        const meta = SUBJECT_SHELVES[folderName] || {
+          name: folderName.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          icon: '📁',
+          curriculum: 'Academic Reference Shelf',
+          color: '#93c5fd'
+        };
 
         html += `
           <div class="folder-block" id="folder-block-${folderName}">
             <div class="folder-header" onclick="toggleFolder('${folderName}')">
               <div class="folder-title-wrap">
-                <span>📁</span>
-                <span style="font-family: var(--font-mono);">${folderName}/</span>
-                <span class="chip" style="font-size: 9.5px; padding: 1px 5px;">${filteredDocs.length} file${filteredDocs.length !== 1 ? 's' : ''} · ${totalChunksInFolder} chunks</span>
+                <span style="font-size: 16px;">${meta.icon}</span>
+                <div>
+                  <div style="font-size: 12px; font-weight: 600; color: var(--color-paper-white);">${meta.name}</div>
+                  <div style="font-size: 10px; color: var(--color-ash-mute); margin-top: 1px;">
+                    ${meta.curriculum} · <code style="color: ${meta.color};">${folderName}/</code>
+                  </div>
+                </div>
               </div>
-              <span id="folder-caret-${folderName}" style="font-size: 10px; color: var(--color-ash-mute);">▾</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="chip" style="font-size: 10px; padding: 2px 7px;">
+                  📖 ${filteredDocs.length} Book${filteredDocs.length !== 1 ? 's' : ''} · 🧩 ${totalChunksInFolder} Chunks
+                </span>
+                <span id="folder-caret-${folderName}" style="font-size: 11px; color: var(--color-ash-mute);">▾</span>
+              </div>
             </div>
             <div class="folder-files-list" id="folder-list-${folderName}">
         `;
@@ -1836,18 +2831,20 @@
             <div class="doc-row-item">
               <div class="doc-info">
                 <span class="badge-tag ${badgeClass}">${doc.type}</span>
-                <span class="doc-filename" title="${doc.name}">${doc.name}</span>
-                <div class="doc-meta-pills">
-                  <span>${doc.size_formatted}</span>
-                  <span>•</span>
-                  <span>${doc.total_pages} pg</span>
-                  <span>•</span>
-                  <span>${doc.total_chunks} chunks</span>
+                <div style="overflow: hidden; min-width: 0;">
+                  <div class="doc-filename" title="${doc.name}">${doc.name}</div>
+                  <div class="doc-meta-pills" style="margin-top: 2px;">
+                    <span>📦 ${doc.size_formatted}</span>
+                    <span>•</span>
+                    <span>📄 ${doc.total_pages} pg</span>
+                    <span>•</span>
+                    <span>🧩 ${doc.total_chunks} chunks</span>
+                  </div>
                 </div>
               </div>
               <div class="doc-actions">
-                <button class="btn btn-secondary btn-sm" style="font-size: 10.5px; padding: 2px 7px;" onclick="openDocViewer('${viewUrl}', '${rawUrl}')">👁️ View</button>
-                <a href="${rawUrl}" target="_blank" class="btn btn-ghost btn-sm" style="font-size: 10.5px; padding: 2px 6px;" title="Open raw file in new tab">↗️</a>
+                <button class="btn btn-secondary btn-sm" style="font-size: 10.5px; padding: 3px 8px;" onclick="openDocViewer('${viewUrl}', '${rawUrl}')">👁️ Read & Inspect</button>
+                <a href="${rawUrl}" target="_blank" class="btn btn-ghost btn-sm" style="font-size: 11px; padding: 2px 7px;" title="Open raw file in new tab">↗️</a>
               </div>
             </div>
           `;
@@ -1952,6 +2949,17 @@
         textView.innerText = 'No content available.';
         return;
       }
+
+      // If document is Markdown and no search query is active, render rich formatted markdown
+      if (activeModalDoc.extension === '.md' && !searchQuery.trim()) {
+        const fullMd = activeModalDoc.pages.map(p => p.text || '').join('\n\n');
+        textView.className = 'formatted-markdown-view';
+        textView.innerHTML = renderMarkdownToHtml(fullMd);
+        const countLabel = document.getElementById('doc-search-count-label');
+        if (countLabel) countLabel.innerText = 'Rendered Markdown';
+        return;
+      }
+      textView.className = '';
 
       let html = '';
       const query = searchQuery.trim().toLowerCase();
@@ -2117,8 +3125,23 @@
 
       navigateToStep(4);
 
-      const loaderBox = document.getElementById('execution-loader-box');
-      loaderBox.style.display = 'block';
+      // Show and initialize staging deck (Sequential Order: A -> B -> C -> D)
+      const stagingDeck = document.getElementById('execution-staging-deck');
+      if (stagingDeck) stagingDeck.style.display = 'grid';
+
+      ['A', 'B', 'C', 'D'].forEach(sysId => {
+        const card = document.getElementById(`stage-card-${sysId}`);
+        if (!card) return;
+        if (systems.includes(sysId)) {
+          card.style.display = 'block';
+          setSystemStaging(sysId, 'pending', 'Waiting for query dispatch...');
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const container = document.getElementById('results-stack-container');
+      container.innerHTML = '<div style="text-align: center; color: var(--color-ash-mute); padding: 30px; font-size: 12.5px;">⚡ Processing pipelines across dense vector indices & Gemini...</div>';
 
       try {
         const resp = await fetch('/api/query', {
@@ -2149,6 +3172,15 @@
             results: data.results
           };
           document.getElementById('btn-download-live-report').style.display = 'inline-flex';
+
+          // Mark completed status on staging cards (Sequential A -> B -> C -> D)
+          ['A', 'B', 'C', 'D'].forEach(sysId => {
+            if (data.results[sysId]) {
+              const lat = data.results[sysId].latencies?.total_latency_ms?.toFixed(1) || '0.0';
+              setSystemStaging(sysId, 'completed', `Completed in ${lat} ms with citations`, lat);
+            }
+          });
+
           renderStage4Results(data.results);
         } else {
           const errMsg = data.error || (data.detail ? JSON.stringify(data.detail) : 'Query execution failed.');
@@ -2158,96 +3190,212 @@
       } catch (err) {
         alert('Query network error: ' + err.message);
         appendLiveTerminal(`[ERROR] Network error: ${err.message}`);
-      } finally {
-        loaderBox.style.display = 'none';
       }
     }
 
     // --------------------------------------------------------------------------
-    // Stage 4: Results & Citations
+    // Stage 4: Results & Citations (Sequential ABCD, Formatted Markdown, Side Metrics)
     // --------------------------------------------------------------------------
-    function renderStage4Results(results) {
-      const container = document.getElementById('results-stack-container');
-      container.innerHTML = '';
+    let stage4ResultsCache = null;
+    let activeStage4Filter = 'ALL';
 
-      if (results.C) container.appendChild(createResultCard('C', 'SYSTEM C · TRANSLATION RAG', 'badge-c', results.C));
-      if (results.D) container.appendChild(createResultCard('D', 'SYSTEM D · DIRECT MULTILINGUAL RAG', 'badge-d', results.D));
-      if (results.B) container.appendChild(createResultCard('B', 'SYSTEM B · MONOLINGUAL ENGLISH RAG', 'badge-b', results.B));
-      if (results.A) container.appendChild(createResultCard('A', 'SYSTEM A · DIRECT PARAMETRIC BASELINE', 'badge-a', results.A));
+    function getSystemMeta(sysId) {
+      switch (sysId) {
+        case 'A':
+          return {
+            seq: 'System 1 of 4',
+            name: 'SYSTEM A · DIRECT PARAMETRIC BASELINE',
+            icon: '🧠',
+            badge: 'badge-a',
+            role: 'Zero-Retrieval Control Baseline (LLM Parametric Memory)',
+            embed: 'None (Direct Inference)',
+            speedTag: 'Parametric Baseline',
+            speedClass: 'speed-fast'
+          };
+        case 'B':
+          return {
+            seq: 'System 2 of 4',
+            name: 'SYSTEM B · MONOLINGUAL ENGLISH RAG',
+            icon: '🇬🇧',
+            badge: 'badge-b',
+            role: 'Monolingual Upper-Bound Baseline',
+            embed: 'all-mpnet-base-v2 (768d)',
+            speedTag: 'Monolingual RAG',
+            speedClass: 'speed-mid'
+          };
+        case 'C':
+          return {
+            seq: 'System 3 of 4',
+            name: 'SYSTEM C · TRANSLATION-MEDIATED RAG',
+            icon: '🌐',
+            badge: 'badge-c',
+            role: 'Hindi → MT → all-mpnet (768d) → Intermediate EN → Hindi',
+            embed: 'all-mpnet-base-v2 (768d)',
+            speedTag: '2-Pass MT Pipeline',
+            speedClass: 'speed-heavy'
+          };
+        case 'D':
+          return {
+            seq: 'System 4 of 4',
+            name: 'SYSTEM D · DIRECT MULTILINGUAL RAG',
+            icon: '⚡',
+            badge: 'badge-d',
+            role: 'Zero-MT Multilingual FAISS → Direct Hindi Synthesis',
+            embed: 'paraphrase-multilingual (384d)',
+            speedTag: '⚡ Ultra-Fast Zero-MT',
+            speedClass: 'speed-fast'
+          };
+        default:
+          return {
+            seq: `System ${sysId}`,
+            name: `SYSTEM ${sysId}`,
+            icon: '🔬',
+            badge: 'badge-c',
+            role: 'RAG Pipeline',
+            embed: 'FAISS Dense Index',
+            speedTag: 'Standard RAG',
+            speedClass: 'speed-mid'
+          };
+      }
     }
 
-    function createResultCard(sysId, title, badgeClass, data) {
+    function renderStage4Results(results) {
+      stage4ResultsCache = results;
+      const container = document.getElementById('results-stack-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      // Strict sequential order: A -> B -> C -> D
+      const sequentialOrder = ['A', 'B', 'C', 'D'];
+
+      // Quick System Toggle Bar (All, A, B, C, D)
+      const toggleBar = document.createElement('div');
+      toggleBar.className = 'stage4-system-toggle-bar';
+      
+      const pillsHtml = sequentialOrder.map(sysId => {
+        if (!results[sysId]) return '';
+        const meta = getSystemMeta(sysId);
+        const isActive = activeStage4Filter === sysId;
+        return `<button class="sys-toggle-pill ${isActive ? 'active' : ''}" onclick="filterStage4System('${sysId}')">${meta.icon} Sys ${sysId}</button>`;
+      }).join('');
+
+      toggleBar.innerHTML = `
+        <div class="toggle-bar-left">
+          <span style="font-size: 11px; font-weight: 500; color: var(--color-ash-mute);">Sequential Systems:</span>
+          <button class="sys-toggle-pill ${activeStage4Filter === 'ALL' ? 'active' : ''}" onclick="filterStage4System('ALL')">🌐 All (A → B → C → D)</button>
+          ${pillsHtml}
+        </div>
+        <div style="font-size: 10.5px; color: var(--color-ash-mute);">
+          Sequential Order (A → B → C → D) · Formatted Markdown & Side Metrics
+        </div>
+      `;
+      container.appendChild(toggleBar);
+
+      // Render cards in sequential order A, B, C, D
+      let renderedAny = false;
+      sequentialOrder.forEach(sysId => {
+        if (results[sysId]) {
+          if (activeStage4Filter === 'ALL' || activeStage4Filter === sysId) {
+            renderedAny = true;
+            container.appendChild(createResultCard(sysId, results[sysId]));
+          }
+        }
+      });
+
+      if (!renderedAny) {
+        container.innerHTML += '<div style="text-align: center; color: var(--color-ash-mute); padding: 30px; font-size: 12.5px;">No results matching the selected system.</div>';
+      }
+    }
+
+    function filterStage4System(sysId) {
+      activeStage4Filter = sysId;
+      if (stage4ResultsCache) {
+        renderStage4Results(stage4ResultsCache);
+      }
+    }
+
+    function createResultCard(sysId, data) {
       const card = document.createElement('div');
+      card.id = `result-card-${sysId}`;
       card.className = 'result-card';
+      card.style.animation = 'bubblyPanelPop 0.35s cubic-bezier(0.34, 1.4, 0.64, 1) forwards';
 
+      const meta = getSystemMeta(sysId);
       const lat = (data.latencies && data.latencies.total_latency_ms) ? data.latencies.total_latency_ms.toFixed(1) : '0.0';
-      const transQ = data.translated_question ? `<div style="font-size: 11px; color: var(--color-ash-mute); margin-bottom: 4px;">Translated: <span style="color: var(--color-signal-blue); font-family: var(--font-mono);">${data.translated_question}</span></div>` : '';
+      const chunkList = data.retrieved_chunks_details || [];
+      const modelName = data.model_name || data.actual_provider || 'gemini-3.1-flash-lite';
+      const modelShort = modelName.replace('google/', '').replace('models/', '');
 
-      // Intermediate English Answer for System C
+      // Latencies
+      const tLat = data.latencies ? data.latencies.translation_latency_ms : undefined;
+      const rLat = data.latencies ? data.latencies.retrieval_latency_ms : undefined;
+      const gLat = data.latencies ? data.latencies.generation_latency_ms : undefined;
+
+      // Translation Notice (for System C)
+      let transQHtml = '';
+      if (data.translated_question) {
+        transQHtml = `
+          <div style="font-size: 11.5px; color: var(--color-ash-mute); background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-tags); padding: 6px 10px; margin-bottom: 8px;">
+            <span style="color: #93c5fd; font-weight: 500;">🌐 Hindi Query Translated to English (MT):</span>
+            <div style="color: var(--color-paper-white); font-family: var(--font-mono); margin-top: 2px;">${escapeHtml(data.translated_question)}</div>
+          </div>
+        `;
+      }
+
+      // Intermediate English Answer for System C (collapsible)
       let intermediateHtml = '';
       if (data.intermediate_answer_en) {
         intermediateHtml = `
-          <div class="intermediate-answer-box">
-            <div class="intermediate-answer-title">Step 2/3 · Intermediate English Answer (Grounded Synthesis Before Final Hindi):</div>
-            <div style="color: #cbd5e1; font-style: italic;">"${escapeHtml(data.intermediate_answer_en)}"</div>
-          </div>
+          <details class="collapsible-detail-card" style="margin-top: 6px;">
+            <summary>
+              <span>🔤 Step 2/3: Intermediate English Synthesis (Grounded Before Final Hindi)</span>
+              <span style="font-size: 10px; color: var(--color-signal-blue);">[Inspect EN]</span>
+            </summary>
+            <div class="collapsible-detail-content">
+              <div class="answer-markdown-content" style="color: #cbd5e1; font-style: italic;">
+                ${renderMarkdownToHtml(data.intermediate_answer_en)}
+              </div>
+            </div>
+          </details>
         `;
       }
 
-      // Latency Breakdown
-      let latencyBreakdownHtml = '';
-      if (data.latencies) {
-        const tLat = data.latencies.translation_latency_ms;
-        const rLat = data.latencies.retrieval_latency_ms;
-        const gLat = data.latencies.generation_latency_ms;
-        latencyBreakdownHtml = `
-          <div class="latency-pills-row">
-            ${tLat !== undefined && tLat > 0 ? `<span class="latency-subpill">Translation: ${tLat.toFixed(1)}ms</span>` : (sysId === 'D' ? `<span class="latency-subpill" style="color:#34d399;">Zero MT Latency (0ms)</span>` : '')}
-            ${rLat !== undefined ? `<span class="latency-subpill">Retrieval: ${rLat.toFixed(1)}ms</span>` : ''}
-            ${gLat !== undefined ? `<span class="latency-subpill">Generation: ${gLat.toFixed(1)}ms</span>` : ''}
-            <span class="latency-subpill" style="color: var(--color-paper-white);">Total: ${lat}ms</span>
-          </div>
-        `;
-      }
-
-      // Model & Language Validation Badges
-      const modelLabel = data.model_name || data.actual_provider || '';
-      const fallbackNotice = data.fallback_used ? `<span class="badge-tag" style="background:#ef444422; color:#f87171; border:1px solid #ef444444;">Fallback: ${data.fallback_reason || 'Local'}</span>` : '';
-      let langBadge = '';
-      if (sysId !== 'B') {
-        const err = data.error_message || '';
-        const isWarn = err.includes('Language check warning');
-        if (isWarn) {
-          langBadge = `<span class="lang-badge lang-badge-warn" title="${escapeHtml(err)}">⚠️ Low Devanagari Script</span>`;
-        } else {
-          langBadge = `<span class="lang-badge lang-badge-ok">✓ Hindi Verified</span>`;
-        }
-      }
-
-      // Evidentiary Chunks
+      // Evidentiary Chunks (collapsible)
       let chunksHtml = '';
-      const chunkList = data.retrieved_chunks_details || [];
       if (chunkList.length > 0) {
-        chunksHtml = '<div style="margin-top: 8px; font-size: 10.5px; font-weight: 500; color: var(--color-ash-mute); text-transform: uppercase;">Top Evidentiary Chunks:</div>';
+        let chunkBoxesHtml = '';
         chunkList.slice(0, 3).forEach((c, idx) => {
           const score = typeof c.score === 'number' ? c.score.toFixed(4) : c.score;
           const pct = typeof c.relevance_pct === 'number' ? c.relevance_pct.toFixed(1) : (score * 100).toFixed(1);
           const uid = `chunk_${sysId}_${idx}`;
-          chunksHtml += `
-            <div class="chunk-box">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-                <span><strong>#${idx + 1}</strong> · 📄 Page ${c.page || 1} · <span style="color: var(--color-paper-white);">${c.doc_id || ''}</span></span>
+          const chunksHtmlSnippet = escapeHtml((c.text || '').substring(0, 140));
+          chunkBoxesHtml += `
+            <div class="chunk-box" style="margin-top: 6px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                <span><strong>#${idx + 1}</strong> · 📄 Page ${c.page || 1} · <span style="color: var(--color-paper-white); font-weight: 500;">${c.doc_id || ''}</span></span>
                 <span style="font-family: var(--font-mono); color: var(--color-signal-blue); font-size: 10.5px;">Score: ${score} (${pct}%)</span>
               </div>
-              <div style="color: #999; line-height: 1.45;" id="${uid}_snippet">${escapeHtml((c.text || '').substring(0, 130))}...</div>
-              <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+              <div style="color: #999; line-height: 1.45;" id="${uid}_snippet">${chunksHtmlSnippet}...</div>
+              <div style="display: flex; justify-content: space-between; margin-top: 5px;">
                 <button class="btn btn-ghost btn-sm" style="padding: 0; font-size: 10px; color: var(--color-signal-blue);" onclick="toggleChunk('${uid}', this)">[+ View Full Passage]</button>
-                <button class="btn btn-secondary btn-sm" style="padding: 1px 5px; font-size: 10px;" onclick="copyText('${uid}_full')">📋 Copy</button>
+                <button class="btn btn-secondary btn-sm" style="padding: 1px 6px; font-size: 10px;" onclick="copyText('${uid}_full')">📋 Copy</button>
               </div>
               <div class="chunk-full" id="${uid}_full">${escapeHtml(c.text || '')}</div>
             </div>
           `;
         });
+
+        chunksHtml = `
+          <details class="collapsible-detail-card" style="margin-top: 8px;">
+            <summary>
+              <span>📚 Top Evidentiary Passages (${chunkList.length} retrieved with cosine scores)</span>
+              <span style="font-size: 10px; color: var(--color-signal-blue);">[Inspect Citations]</span>
+            </summary>
+            <div class="collapsible-detail-content">
+              ${chunkBoxesHtml}
+            </div>
+          </details>
+        `;
       } else if (sysId === 'A') {
         chunksHtml = `
           <div class="chunk-box" style="border-left: 2px solid #fbbf24; background: #131109; margin-top: 8px; padding: 8px 10px;">
@@ -2259,25 +3407,171 @@
         `;
       }
 
-      card.innerHTML = `
-        <div class="result-head" style="align-items: flex-start;">
-          <div>
-            <span class="sys-tag ${badgeClass}">${title}</span>
-            ${modelLabel ? `<span class="badge-tag" style="margin-left: 6px; background: #1a1a1a; color: #aaa; border: 1px solid #333;">${modelLabel}</span>` : ''}
-            ${fallbackNotice}
-            ${langBadge}
+      // Script validation badge
+      let langBadgeHtml = '';
+      if (sysId !== 'B') {
+        const err = data.error_message || '';
+        const isWarn = err.includes('Language check warning');
+        if (isWarn) {
+          langBadgeHtml = `<span class="lang-badge lang-badge-warn" title="${escapeHtml(err)}">⚠️ Low Devanagari</span>`;
+        } else {
+          langBadgeHtml = `<span class="lang-badge lang-badge-ok">✓ Hindi Verified</span>`;
+        }
+      } else {
+        langBadgeHtml = `<span class="lang-badge" style="background: rgba(148, 163, 184, 0.1); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25);">🇬🇧 English Synthesis</span>`;
+      }
+
+      // Fallback chip
+      const fallbackHtml = data.fallback_used ? `<span class="badge-tag" style="background:#ef444422; color:#f87171; border:1px solid #ef444444;">Fallback: ${data.fallback_reason || 'Local'}</span>` : '';
+
+      // Latency Breakdown Rows for Sidebar
+      let latencyRowsHtml = '';
+      if (tLat !== undefined && tLat > 0) {
+        latencyRowsHtml += `
+          <div class="latency-meter-row">
+            <span>Translation (MT):</span>
+            <span class="meter-num">${tLat.toFixed(1)} ms</span>
           </div>
-          <span class="latency-pill">${lat} ms</span>
+        `;
+      } else if (sysId === 'D') {
+        latencyRowsHtml += `
+          <div class="latency-meter-row">
+            <span>Translation:</span>
+            <span class="meter-num" style="color: #34d399;">0 ms (Zero-MT)</span>
+          </div>
+        `;
+      }
+      if (rLat !== undefined) {
+        latencyRowsHtml += `
+          <div class="latency-meter-row">
+            <span>Dense Retrieval:</span>
+            <span class="meter-num">${rLat.toFixed(1)} ms</span>
+          </div>
+        `;
+      }
+      if (gLat !== undefined) {
+        latencyRowsHtml += `
+          <div class="latency-meter-row">
+            <span>LLM Generation:</span>
+            <span class="meter-num">${gLat.toFixed(1)} ms</span>
+          </div>
+        `;
+      }
+
+      // Card Header
+      const headerHtml = `
+        <div class="result-head">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span class="sys-tag ${meta.badge}">${meta.icon} ${meta.name}</span>
+            <span class="chip" style="font-size: 10px; padding: 2px 6px;">${meta.seq}</span>
+            ${fallbackHtml}
+            ${langBadgeHtml}
+          </div>
+          <div style="font-size: 11px; color: var(--color-ash-mute); font-family: var(--font-mono);">
+            ${meta.role}
+          </div>
         </div>
-        ${latencyBreakdownHtml}
-        ${transQ}
-        ${intermediateHtml}
-        <div class="answer-quote" style="margin-top: 8px;">
-          ${escapeHtml(data.generated_answer || 'No answer generated.')}
-        </div>
-        ${chunksHtml}
       `;
+
+      // Answer in Formatted Markdown
+      const parsedMarkdownAnswer = renderMarkdownToHtml(data.generated_answer || 'No answer generated.');
+
+      card.innerHTML = `
+        ${headerHtml}
+        <div class="result-card-grid">
+          <!-- LEFT MAIN: Formatted Markdown Answer & Deep Evidence -->
+          <div class="result-card-main">
+            ${transQHtml}
+            <div class="result-answer-container">
+              <div class="result-answer-label">
+                <span>📝 Synthesized Response (Formatted Markdown):</span>
+              </div>
+              <div class="answer-markdown-content" id="answer-text-${sysId}">
+                ${parsedMarkdownAnswer}
+              </div>
+            </div>
+            ${intermediateHtml}
+            ${chunksHtml}
+          </div>
+
+          <!-- RIGHT SIDEBAR: Time Taken & All Functionalities Like A Card -->
+          <div class="result-card-sidebar">
+            <div class="sidebar-metrics-card">
+              <!-- Latency Display -->
+              <div class="metric-block-latency">
+                <div class="metric-caption">TOTAL LATENCY</div>
+                <div class="metric-val-row">
+                  <span class="metric-val-big">${lat}</span>
+                  <span class="metric-unit-tag">ms</span>
+                </div>
+                <div class="metric-speed-badge ${meta.speedClass}">${meta.speedTag}</div>
+              </div>
+
+              <div class="sidebar-sep"></div>
+
+              <!-- Pipeline Latencies -->
+              <div>
+                <div class="sidebar-sec-label">⏱️ STAGE LATENCIES</div>
+                <div class="latency-meter-list">
+                  ${latencyRowsHtml}
+                </div>
+              </div>
+
+              <div class="sidebar-sep"></div>
+
+              <!-- Specs -->
+              <div>
+                <div class="sidebar-sec-label">⚙️ PIPELINE DETAILS</div>
+                <div class="sidebar-info-row">
+                  <span>Engine:</span>
+                  <span style="color: var(--color-paper-white); font-weight: 500;" title="${modelName}">${modelShort}</span>
+                </div>
+                <div class="sidebar-info-row">
+                  <span>Vectors:</span>
+                  <span style="color: #93c5fd; font-family: var(--font-mono); font-size: 10px;">${meta.embed}</span>
+                </div>
+                <div class="sidebar-info-row">
+                  <span>Citations:</span>
+                  <span style="color: var(--color-paper-white); font-weight: 500;">${chunkList.length > 0 ? `${chunkList.length} Passages` : '0 (Parametric)'}</span>
+                </div>
+              </div>
+
+              <div class="sidebar-sep"></div>
+
+              <!-- Actions -->
+              <div class="sidebar-actions">
+                <button class="btn btn-solid-white btn-sm sidebar-btn" onclick="copyCardAnswer('${sysId}')" title="Copy synthesized answer to clipboard">
+                  📋 Copy Answer
+                </button>
+                ${chunkList.length > 0 ? `
+                  <button class="btn btn-secondary btn-sm sidebar-btn" onclick="toggleCardCitations('${sysId}')" title="Toggle evidentiary citations">
+                    🔍 View Citations
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
       return card;
+    }
+
+    function copyCardAnswer(sysId) {
+      if (!stage4ResultsCache || !stage4ResultsCache[sysId]) return;
+      const ans = stage4ResultsCache[sysId].generated_answer || '';
+      navigator.clipboard.writeText(ans).then(() => {
+        alert(`System ${sysId} answer copied to clipboard!`);
+      });
+    }
+
+    function toggleCardCitations(sysId) {
+      const card = document.getElementById(`result-card-${sysId}`);
+      if (!card) return;
+      const details = card.querySelectorAll('details.collapsible-detail-card');
+      details.forEach(d => {
+        d.open = !d.open;
+      });
     }
 
     function toggleChunk(uid, btn) {
@@ -2323,20 +3617,360 @@
     }
 
     // --------------------------------------------------------------------------
-    // Stage 5: Scientific Benchmark & Reports
+    // Stage 5: Scientific Benchmark & Reports & Historical Archives
     // --------------------------------------------------------------------------
-    async function fetchLatestReportContent() {
-      const view = document.getElementById('full-scientific-report-view');
+    let selectedRunId = 'latest';
+
+    async function fetchRunHistory() {
+      const select = document.getElementById('select-report-history');
+      if (!select) return;
       try {
-        const resp = await fetch('/api/report/latest');
+        const resp = await fetch('/api/reports/history');
         const data = await resp.json();
-        if (data.success && data.markdown) {
-          view.innerText = data.markdown;
-        } else {
-          view.innerText = 'No benchmark report generated yet. Run a smoke test or full benchmark above.';
+        if (data.success && Array.isArray(data.runs)) {
+          const prevVal = select.value || 'latest';
+          select.innerHTML = '';
+          data.runs.forEach(run => {
+            const opt = document.createElement('option');
+            opt.value = run.run_id;
+            let label = run.name || run.run_id;
+            if (run.total_questions) {
+              label += ` (${run.total_questions} Qs)`;
+            }
+            if (run.timestamp) {
+              label += ` - ${run.timestamp}`;
+            }
+            opt.textContent = label;
+            select.appendChild(opt);
+          });
+          if (Array.from(select.options).some(o => o.value === prevVal)) {
+            select.value = prevVal;
+          } else {
+            select.value = 'latest';
+          }
+          selectedRunId = select.value;
+          updateReportDownloadLinks(selectedRunId);
         }
       } catch (e) {
-        view.innerText = 'Failed to load report: ' + e.message;
+        console.warn('Failed to fetch run history:', e);
+      }
+    }
+
+    function onSelectReportHistory() {
+      const select = document.getElementById('select-report-history');
+      if (!select) return;
+      selectedRunId = select.value || 'latest';
+      updateReportDownloadLinks(selectedRunId);
+      fetchReportForRun(selectedRunId);
+    }
+
+    function updateReportDownloadLinks(runId) {
+      const mdBtn = document.getElementById('btn-download-report-md');
+      const csvBtn = document.getElementById('btn-download-report-csv');
+      if (mdBtn) {
+        mdBtn.href = `/api/report/download/markdown?run_id=${encodeURIComponent(runId)}`;
+      }
+      if (csvBtn) {
+        csvBtn.href = `/api/report/download/csv?run_id=${encodeURIComponent(runId)}`;
+      }
+    }
+
+    function reloadActiveReportView() {
+      fetchReportForRun(selectedRunId);
+    }
+
+    async function fetchLatestReportContent() {
+      fetchReportForRun('latest');
+    }
+
+    // --------------------------------------------------------------------------
+    // Markdown Rendering Engine (Marked.js with High-Fidelity Fallback)
+    // --------------------------------------------------------------------------
+    function renderMarkdownToHtml(markdown) {
+      if (!markdown || !markdown.trim()) {
+        return '<p style="color: var(--color-ash-mute); font-style: italic;">No report content available.</p>';
+      }
+
+      // 1. If Marked.js is loaded
+      if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        try {
+          return marked.parse(markdown);
+        } catch (e) {
+          console.warn('Marked.js parse failed, falling back:', e);
+        }
+      }
+
+      // 2. High-Fidelity Built-in Fallback Markdown Parser
+      return fallbackMarkdownParser(markdown);
+    }
+
+    function fallbackMarkdownParser(md) {
+      let html = '';
+      const lines = md.split(/\r?\n/);
+      let inTable = false;
+      let inCodeBlock = false;
+      let tableHtml = '';
+      let codeBlockContent = '';
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // Code block
+        if (line.startsWith('```')) {
+          if (inCodeBlock) {
+            html += `<pre><code>${escapeHtml(codeBlockContent)}</code></pre>`;
+            codeBlockContent = '';
+            inCodeBlock = false;
+          } else {
+            inCodeBlock = true;
+          }
+          continue;
+        }
+        if (inCodeBlock) {
+          codeBlockContent += line + '\n';
+          continue;
+        }
+
+        // Table
+        if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+          const cells = line.split('|').slice(1, -1).map(c => c.trim());
+          if (line.includes('---')) {
+            continue; // separator line
+          }
+          if (!inTable) {
+            inTable = true;
+            tableHtml = '<table><thead><tr>' + cells.map(c => `<th>${formatInlineMd(c)}</th>`).join('') + '</tr></thead><tbody>';
+          } else {
+            tableHtml += '<tr>' + cells.map(c => `<td>${formatInlineMd(c)}</td>`).join('') + '</tr>';
+          }
+          continue;
+        } else if (inTable) {
+          inTable = false;
+          tableHtml += '</tbody></table>';
+          html += tableHtml;
+          tableHtml = '';
+        }
+
+        // Headers
+        if (line.startsWith('# ')) {
+          html += `<h1>${formatInlineMd(line.slice(2))}</h1>`;
+        } else if (line.startsWith('## ')) {
+          html += `<h2>${formatInlineMd(line.slice(3))}</h2>`;
+        } else if (line.startsWith('### ')) {
+          html += `<h3>${formatInlineMd(line.slice(4))}</h3>`;
+        } else if (line.startsWith('#### ')) {
+          html += `<h4>${formatInlineMd(line.slice(5))}</h4>`;
+        } else if (line.startsWith('> ')) {
+          html += `<blockquote>${formatInlineMd(line.slice(2))}</blockquote>`;
+        } else if (line.trim() === '---' || line.trim() === '***') {
+          html += '<hr>';
+        } else if (line.startsWith('- ') || line.startsWith('* ')) {
+          html += `<ul><li>${formatInlineMd(line.slice(2))}</li></ul>`;
+        } else if (/^\d+\.\s/.test(line)) {
+          const content = line.replace(/^\d+\.\s/, '');
+          html += `<ol><li>${formatInlineMd(content)}</li></ol>`;
+        } else if (line.trim()) {
+          html += `<p>${formatInlineMd(line)}</p>`;
+        }
+      }
+
+      if (inTable) {
+        tableHtml += '</tbody></table>';
+        html += tableHtml;
+      }
+      if (inCodeBlock) {
+        html += `<pre><code>${escapeHtml(codeBlockContent)}</code></pre>`;
+      }
+
+      return html;
+    }
+
+    function formatInlineMd(text) {
+      let t = escapeHtml(text);
+      t = t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      t = t.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return t;
+    }
+
+    // --------------------------------------------------------------------------
+    // CSV Benchmark Results Table Engine
+    // --------------------------------------------------------------------------
+    let currentCsvData = null;
+    let currentCsvSystemFilter = 'ALL';
+
+    async function loadAndRenderCsvTable(runId = 'latest') {
+      const container = document.getElementById('csv-table-container');
+      const badge = document.getElementById('csv-row-count-badge');
+      if (!container) return;
+
+      container.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--color-ash-mute); font-size: 12px;">⏳ Loading benchmark CSV results...</div>';
+
+      try {
+        const resp = await fetch(`/api/report/download/csv?run_id=${encodeURIComponent(runId)}`);
+        if (!resp.ok) {
+          container.innerHTML = `<div style="padding: 20px; color: #f87171;">CSV results not found for run: ${runId}</div>`;
+          return;
+        }
+        const csvText = await resp.text();
+        currentCsvData = parseCsvText(csvText);
+        filterAndRenderCsvTable();
+      } catch (e) {
+        container.innerHTML = `<div style="padding: 20px; color: #f87171;">Failed to load CSV: ${e.message}</div>`;
+      }
+    }
+
+    function parseCsvText(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length === 0) return { headers: [], rows: [] };
+
+      function parseLine(l) {
+        const row = [];
+        let insideQuote = false;
+        let entry = '';
+        for (let i = 0; i < l.length; i++) {
+          const c = l[i];
+          if (c === '"') {
+            if (insideQuote && l[i + 1] === '"') {
+              entry += '"';
+              i++;
+            } else {
+              insideQuote = !insideQuote;
+            }
+          } else if (c === ',' && !insideQuote) {
+            row.push(entry.trim());
+            entry = '';
+          } else {
+            entry += c;
+          }
+        }
+        row.push(entry.trim());
+        return row;
+      }
+
+      const headers = parseLine(lines[0]);
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        rows.push(parseLine(lines[i]));
+      }
+      return { headers, rows };
+    }
+
+    function setCsvSystemFilter(sys) {
+      currentCsvSystemFilter = sys;
+      document.querySelectorAll('.csv-filter-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(sys) || (sys === 'ALL' && btn.innerText === 'All'));
+      });
+      filterAndRenderCsvTable();
+    }
+
+    function filterCsvTable() {
+      filterAndRenderCsvTable();
+    }
+
+    function filterAndRenderCsvTable() {
+      const container = document.getElementById('csv-table-container');
+      const badge = document.getElementById('csv-row-count-badge');
+      if (!container || !currentCsvData) return;
+
+      const searchInput = document.getElementById('csv-table-search');
+      const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+      const { headers, rows } = currentCsvData;
+      const sysIdx = headers.findIndex(h => h.toLowerCase() === 'system' || h.toLowerCase() === 'system_id');
+      const statusIdx = headers.findIndex(h => h.toLowerCase().includes('status'));
+
+      const filteredRows = rows.filter(r => {
+        if (currentCsvSystemFilter !== 'ALL' && sysIdx !== -1) {
+          if (r[sysIdx] !== currentCsvSystemFilter) return false;
+        }
+        if (q) {
+          return r.some(cell => cell.toLowerCase().includes(q));
+        }
+        return true;
+      });
+
+      if (badge) badge.innerText = `${filteredRows.length} of ${rows.length} rows`;
+
+      if (filteredRows.length === 0) {
+        container.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--color-ash-mute); font-size: 12px;">No rows matching the filter.</div>';
+        return;
+      }
+
+      let html = '<table class="benchmark-data-table"><thead><tr>';
+      headers.forEach(h => {
+        html += `<th>${escapeHtml(h.replace(/_/g, ' ').toUpperCase())}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      filteredRows.forEach(row => {
+        html += '<tr>';
+        row.forEach((cell, idx) => {
+          let cellHtml = escapeHtml(cell);
+          if (idx === statusIdx || cell === 'SUCCESS' || cell === 'FAILURE') {
+            if (cell === 'SUCCESS') {
+              cellHtml = '<span class="status-chip-success">✓ SUCCESS</span>';
+            } else if (cell === 'FAILURE') {
+              cellHtml = '<span class="status-chip-failure">✕ FAILURE</span>';
+            }
+          }
+          html += `<td>${cellHtml}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function switchReportTab(tab) {
+      const paneFmt = document.getElementById('pane-report-formatted');
+      const paneCsv = document.getElementById('pane-report-csv');
+      const paneRaw = document.getElementById('pane-report-raw');
+
+      const btnFmt = document.getElementById('btn-tab-report-fmt');
+      const btnCsv = document.getElementById('btn-tab-report-csv');
+      const btnRaw = document.getElementById('btn-tab-report-raw');
+
+      if (btnFmt) btnFmt.classList.toggle('active', tab === 'formatted');
+      if (btnCsv) btnCsv.classList.toggle('active', tab === 'csv');
+      if (btnRaw) btnRaw.classList.toggle('active', tab === 'raw');
+
+      if (paneFmt) paneFmt.style.display = tab === 'formatted' ? 'block' : 'none';
+      if (paneCsv) paneCsv.style.display = tab === 'csv' ? 'block' : 'none';
+      if (paneRaw) paneRaw.style.display = tab === 'raw' ? 'block' : 'none';
+
+      if (tab === 'csv') {
+        loadAndRenderCsvTable(selectedRunId);
+      }
+    }
+
+    async function fetchReportForRun(runId = 'latest') {
+      const formattedView = document.getElementById('formatted-scientific-report-view');
+      const rawView = document.getElementById('full-scientific-report-view');
+      try {
+        if (formattedView) formattedView.innerHTML = `<div style="padding: 20px; color: var(--color-signal-blue);">⏳ Loading report for [${runId}]...</div>`;
+        if (rawView) rawView.innerText = `Loading report for [${runId}]...`;
+
+        const resp = await fetch(`/api/report/latest?run_id=${encodeURIComponent(runId)}`);
+        const data = await resp.json();
+        if (data.success && data.markdown) {
+          if (formattedView) formattedView.innerHTML = renderMarkdownToHtml(data.markdown);
+          if (rawView) rawView.innerText = data.markdown;
+        } else {
+          const msg = `<div style="padding: 20px; color: var(--color-ash-mute); font-style: italic;">No benchmark report generated yet for [${runId}]. Run a smoke test or full benchmark above.</div>`;
+          if (formattedView) formattedView.innerHTML = msg;
+          if (rawView) rawView.innerText = `No benchmark report generated yet for [${runId}].`;
+        }
+
+        const paneCsv = document.getElementById('pane-report-csv');
+        if (paneCsv && paneCsv.style.display !== 'none') {
+          loadAndRenderCsvTable(runId);
+        }
+      } catch (e) {
+        if (formattedView) formattedView.innerHTML = `<div style="color: #f87171; padding: 20px;">Failed to load report: ${e.message}</div>`;
+        if (rawView) rawView.innerText = 'Failed to load report: ' + e.message;
       }
     }
 
@@ -2358,7 +3992,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mode: mode, limit: limit, strict: false })
         });
-        await fetchLatestReportContent();
+        await fetchRunHistory();
+        await fetchReportForRun('latest');
       } catch (e) {
         alert('Benchmark trigger failed: ' + e.message);
       }

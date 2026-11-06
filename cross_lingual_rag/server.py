@@ -954,22 +954,90 @@ async def run_benchmark_command(req: Optional[BenchmarkRunRequest] = None):
 
 
 # ---------------------------------------------------------------------------
-# Report Generation & Download Endpoints
+# Report Generation & History Endpoints
 # ---------------------------------------------------------------------------
 
-@app.get("/api/report/latest")
-async def get_latest_report():
+@app.get("/api/reports/history")
+async def get_reports_history():
     """
-    Returns the latest scientific evaluation report in Markdown and summary metrics.
-    If the report file doesn't exist yet, it automatically runs the evaluation harness.
+    Returns the persistent history of all benchmark runs and evaluation reports.
     """
     cfg = load_config()
-    report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
-    csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+    root = get_project_root()
+    archive_base = root / "results" / "archive" / "runs"
+    manifest_file = archive_base / "history_manifest.json"
 
-    if not report_path.exists():
-        harness = EvaluationHarness(cfg)
-        harness.run_evaluation()
+    runs = []
+    # 1. Add current active run
+    latest_md = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+    latest_csv = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+    latest_obs = Path(cfg["paths"]["results_summary_dir"]) / "complete_project_observations.json"
+    latest_mtime = ""
+    total_active = 0
+    if latest_md.exists():
+        latest_mtime = datetime.fromtimestamp(latest_md.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+    if latest_obs.exists():
+        try:
+            with open(latest_obs, "r", encoding="utf-8") as f:
+                d = json.load(f)
+                total_active = d.get("total_pipeline_runs", 0)
+        except Exception:
+            pass
+
+    runs.append({
+        "run_id": "latest",
+        "name": "Current Active Results (Latest)",
+        "timestamp": latest_mtime or "Active",
+        "has_markdown": latest_md.exists(),
+        "has_csv": latest_csv.exists(),
+        "total_runs": total_active
+    })
+
+    # 2. Add archived historical runs
+    if manifest_file.exists():
+        try:
+            with open(manifest_file, "r", encoding="utf-8") as f:
+                archived = json.load(f)
+                for item in archived:
+                    if item.get("run_id") != "latest":
+                        runs.append(item)
+        except Exception as e:
+            print(f"[Warning] Failed to read history manifest: {e}")
+    elif archive_base.exists():
+        for p in sorted(archive_base.iterdir(), reverse=True):
+            if p.is_dir() and p.name.startswith("run_"):
+                runs.append({
+                    "run_id": p.name,
+                    "name": f"Run {p.name.replace('run_', '').replace('_', ' ').title()}",
+                    "timestamp": datetime.fromtimestamp(p.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S"),
+                    "has_markdown": (p / "evaluation_report.md").exists(),
+                    "has_csv": (p / "benchmark_results.csv").exists(),
+                    "total_runs": 0
+                })
+
+    return {"success": True, "runs": runs}
+
+
+@app.get("/api/report/latest")
+async def get_latest_report(run_id: str = "latest"):
+    """
+    Returns the scientific evaluation report in Markdown and summary metrics.
+    Supports querying 'latest' or any specific historical 'run_id'.
+    """
+    cfg = load_config()
+    root = get_project_root()
+
+    if run_id and run_id != "latest":
+        run_dir = root / "results" / "archive" / "runs" / run_id
+        report_path = run_dir / "evaluation_report.md"
+        csv_path = run_dir / "benchmark_results.csv"
+    else:
+        report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+        csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+
+        if not report_path.exists():
+            harness = EvaluationHarness(cfg)
+            harness.run_evaluation()
 
     content = ""
     if report_path.exists():
@@ -983,6 +1051,7 @@ async def get_latest_report():
 
     return {
         "success": True,
+        "run_id": run_id,
         "markdown": content,
         "last_updated": mtime_str,
         "has_csv": csv_path.exists(),
@@ -991,36 +1060,48 @@ async def get_latest_report():
 
 
 @app.get("/api/report/download/markdown")
-async def download_report_markdown():
-    """Downloads the evaluation_report.md file as an attachment."""
+async def download_report_markdown(run_id: str = "latest"):
+    """Downloads the evaluation_report.md file as an attachment for the specified run."""
     cfg = load_config()
-    report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+    root = get_project_root()
+
+    if run_id and run_id != "latest":
+        report_path = root / "results" / "archive" / "runs" / run_id / "evaluation_report.md"
+    else:
+        report_path = Path(cfg["paths"]["results_summary_dir"]) / "evaluation_report.md"
+        if not report_path.exists():
+            harness = EvaluationHarness(cfg)
+            harness.run_evaluation()
+
     if not report_path.exists():
-        harness = EvaluationHarness(cfg)
-        harness.run_evaluation()
-    if not report_path.exists():
-        return JSONResponse(status_code=404, content={"error": "Report not found"})
+        return JSONResponse(status_code=404, content={"error": f"Report not found for run: {run_id}"})
     return FileResponse(
         str(report_path),
         media_type="text/markdown",
-        filename="cross_lingual_rag_evaluation_report.md"
+        filename=f"evaluation_report_{run_id}.md"
     )
 
 
 @app.get("/api/report/download/csv")
-async def download_report_csv():
-    """Downloads the consolidated benchmark_results.csv as an attachment."""
+async def download_report_csv(run_id: str = "latest"):
+    """Downloads the consolidated benchmark_results.csv as an attachment for the specified run."""
     cfg = load_config()
-    csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+    root = get_project_root()
+
+    if run_id and run_id != "latest":
+        csv_path = root / "results" / "archive" / "runs" / run_id / "benchmark_results.csv"
+    else:
+        csv_path = Path(cfg["paths"]["results_csv_dir"]) / "benchmark_results.csv"
+        if not csv_path.exists():
+            harness = EvaluationHarness(cfg)
+            harness.run_evaluation()
+
     if not csv_path.exists():
-        harness = EvaluationHarness(cfg)
-        harness.run_evaluation()
-    if not csv_path.exists():
-        return JSONResponse(status_code=404, content={"error": "Benchmark CSV not found"})
+        return JSONResponse(status_code=404, content={"error": f"Benchmark CSV not found for run: {run_id}"})
     return FileResponse(
         str(csv_path),
         media_type="text/csv",
-        filename="cross_lingual_rag_benchmark_results.csv"
+        filename=f"benchmark_results_{run_id}.csv"
     )
 
 

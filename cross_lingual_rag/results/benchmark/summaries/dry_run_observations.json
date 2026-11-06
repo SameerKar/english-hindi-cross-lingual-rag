@@ -1,0 +1,89 @@
+{
+  "timestamp_utc": "2026-11-05T15:09:01.969692+00:00",
+  "pytest_verification": {
+    "passed": true,
+    "return_code": 0,
+    "duration_sec": 63.2,
+    "stdout_summary": "======================== 7 passed in 60.08s (0:01:00) ========================="
+  },
+  "total_benchmark_questions": 5,
+  "total_pipeline_runs": 20,
+  "system_metrics_summary": {
+    "A": {
+      "num_questions": 5,
+      "recall_at_1": null,
+      "recall_at_3": null,
+      "recall_at_5": null,
+      "mrr": null,
+      "ndcg_at_5": null,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 0.0,
+      "mean_generation_latency_ms": 3109.3,
+      "mean_total_latency_ms": 3109.41,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 5
+      }
+    },
+    "B": {
+      "num_questions": 5,
+      "recall_at_1": 0.6,
+      "recall_at_3": 0.8,
+      "recall_at_5": 1.0,
+      "mrr": 0.74,
+      "ndcg_at_5": 0.8036,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 92.13,
+      "mean_generation_latency_ms": 3118.17,
+      "mean_total_latency_ms": 3210.52,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 5
+      }
+    },
+    "C": {
+      "num_questions": 5,
+      "recall_at_1": 0.6,
+      "recall_at_3": 0.8,
+      "recall_at_5": 1.0,
+      "mrr": 0.74,
+      "ndcg_at_5": 0.8036,
+      "mean_translation_latency_ms": 10142.43,
+      "mean_retrieval_latency_ms": 45.69,
+      "mean_generation_latency_ms": 6051.16,
+      "mean_total_latency_ms": 16239.69,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 0,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 2,
+        "clean_success": 3
+      }
+    },
+    "D": {
+      "num_questions": 5,
+      "recall_at_1": 0.6,
+      "recall_at_3": 0.8,
+      "recall_at_5": 0.8,
+      "mrr": 0.7,
+      "ndcg_at_5": 0.7262,
+      "mean_translation_latency_ms": 0.0,
+      "mean_retrieval_latency_ms": 29.36,
+      "mean_generation_latency_ms": 10108.82,
+      "mean_total_latency_ms": 10201.26,
+      "error_counts": {
+        "E1_translation_drift": 0,
+        "E2_retrieval_failure": 1,
+        "E3_generation_failure": 0,
+        "E4_language_failure": 0,
+        "clean_success": 4
+      }
+    }
+  }
+}

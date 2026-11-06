@@ -1,12 +1,12 @@
 {
   "mode": "reference",
   "workspace_id": null,
-  "total_chunks": 15,
+  "total_chunks": 4411,
   "english_model": "sentence-transformers/all-mpnet-base-v2",
   "english_dimension": 768,
   "multilingual_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "multilingual_dimension": 384,
   "normalized": true,
   "device": "cpu",
-  "built_at": "2026-11-03T15:52:31.467606"
+  "built_at": "2026-11-06T01:22:37.317887"
 }
